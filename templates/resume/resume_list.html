@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}My Resumes - AI Resume Builder{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="bi bi-file-earmark-text"></i> My Resumes</h2>
+                <a href="{% url 'generate_resume' %}" class="btn btn-success">
+                    <i class="bi bi-plus-circle"></i> Generate New Resume
+                </a>
+            </div>
+
+            {% if resumes %}
+                <div class="row g-4">
+                    {% for resume in resumes %}
+                        <div class="col-md-6">
+                            <div class="card h-100 shadow-sm hover-lift">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="bi bi-file-text"></i> {{ resume.title }}
+                                    </h5>
+                                    <p class="card-text text-muted small mb-3">
+                                        <i class="bi bi-calendar"></i> Generated on {{ resume.created_at|date:"F d, Y" }}
+                                        {% if resume.template %}
+                                            <span class="badge bg-primary ms-2">
+                                                <i class="bi bi-palette"></i> {{ resume.template|title }}
+                                            </span>
+                                        {% endif %}
+                                    </p>
+                                    
+                                    <div class="preview-text mb-3">
+                                        {{ resume.content|truncatewords:30 }}
+                                    </div>
+
+                                    <div class="d-flex gap-2 flex-wrap">
+                                        <a href="{% url 'resume_view' resume.pk %}" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-eye"></i> View
+                                        </a>
+                                        <a href="{% url 'resume_download_pdf' resume.pk %}" class="btn btn-sm btn-success">
+                                            <i class="bi bi-download"></i> Download PDF
+                                        </a>
+                                        <a href="{% url 'resume_delete' resume.pk %}" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {% if is_paginated %}
+                    <nav aria-label="Page navigation" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1">First</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                                </li>
+                            {% endif %}
+
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                                </span>
+                            </li>
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            {% else %}
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="bi bi-file-earmark-text display-1 text-muted mb-3"></i>
+                        <h4>No Resumes Yet</h4>
+                        <p class="text-muted mb-4">
+                            You haven't generated any resumes yet. Start by creating your first AI-powered resume!
+                        </p>
+                        <a href="{% url 'generate_resume' %}" class="btn btn-success btn-lg">
+                            <i class="bi bi-plus-circle"></i> Generate Your First Resume
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="mt-4">
+                <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+}
+
+.preview-text {
+    font-size: 0.9rem;
+    color: #6c757d;
+    line-height: 1.5;
+    border-left: 3px solid #0d6efd;
+    padding-left: 10px;
+}
+</style>
+{% endblock %}

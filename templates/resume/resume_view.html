@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ resume.title }} - AI Resume Builder{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0"><i class="bi bi-file-earmark-text"></i> {{ resume.title }}</h3>
+                    <div class="action-buttons">
+                        <a href="{% url 'resume_download_pdf' resume.pk %}" class="btn btn-success">
+                            <i class="bi bi-download"></i> Download PDF
+                        </a>
+                        <a href="{% url 'resume_list' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-list"></i> All Resumes
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted">
+                            <i class="bi bi-calendar"></i> Generated on {{ resume.created_at|date:"F d, Y at h:i A" }}
+                        </small>
+                        {% if resume.template %}
+                            <span class="badge bg-primary ms-2">
+                                <i class="bi bi-palette"></i> {{ resume.template|title }} Template
+                            </span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="resume-content">
+                        {{ resume.content|linebreaks }}
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'resume_download_pdf' resume.pk %}" class="btn btn-success">
+                            <i class="bi bi-download"></i> Download as PDF
+                        </a>
+                        <a href="{% url 'generate_resume' %}" class="btn btn-primary">
+                            <i class="bi bi-magic"></i> Generate New Resume
+                        </a>
+                        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to Dashboard
+                        </a>
+                        <form method="post" action="{% url 'resume_delete' resume.pk %}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this resume?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

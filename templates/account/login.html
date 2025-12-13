@@ -1,0 +1,1362 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Login - AI Resume Builder{% endblock %}
+
+{% block messages %}
+    {# Override base.html messages block to prevent duplicate display #}
+{% endblock %}
+
+{% block content %}
+<!-- Animated Particle Background -->
+<canvas id="particles-canvas-login"></canvas>
+<!-- Three.js 3D container (home-like background) -->
+<div id="three-container"></div>
+<!-- Floating decorative moving elements (subtle, non-interactive) -->
+<div id="floating-elements" aria-hidden="true">
+    <div class="float-elem e1"></div>
+    <div class="float-elem e2"></div>
+    <div class="float-elem e3"></div>
+    <div class="float-elem e4"></div>
+</div>
+
+<div class="futuristic-login-container">
+    <div class="container">
+    <div class="row align-items-center justify-content-center py-5" style="min-height: calc(100vh - 120px); margin-top: 80px;">
+        <!-- Left Side - Information -->
+        <div class="col-lg-5 mb-4 mb-lg-0">
+            <div class="login-info-section animate-fade-in">
+                <h1 class="hero-title-login mb-4" style="color: #ffffff !important;">
+                    <i class="bi bi-box-arrow-in-right"></i> Welcome Back!
+                </h1>
+                <p class="hero-subtitle-login mb-5" style="color: #ffffff !important;">
+                    Access your AI-powered resume builder and continue crafting your professional future
+                </p>
+                
+                <div class="feature-list">
+                    <div class="feature-card-3d-login mb-3">
+                        <div class="feature-icon-3d-login me-3">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <div>
+                            <h5 class="feature-title-login mb-2" style="color: #ffffff !important;">Secure & Encrypted</h5>
+                            <p class="feature-desc-login mb-0" style="color: #ffffff !important;">Your data is protected with enterprise-grade security</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card-3d-login mb-3">
+                        <div class="feature-icon-3d-login me-3">
+                            <i class="bi bi-robot"></i>
+                        </div>
+                        <div>
+                            <h5 class="feature-title-login mb-2" style="color: #ffffff !important;">AI-Powered Tools</h5>
+                            <p class="feature-desc-login mb-0" style="color: #ffffff !important;">Smart resume generation at your fingertips</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card-3d-login mb-3">
+                        <div class="feature-icon-3d-login me-3">
+                            <i class="bi bi-lightning-charge-fill"></i>
+                        </div>
+                        <div>
+                            <h5 class="feature-title-login mb-2" style="color: #ffffff !important;">Instant Access</h5>
+                            <p class="feature-desc-login mb-0" style="color: #ffffff !important;">Pick up exactly where you left off</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Side - Login Form -->
+        <div class="col-lg-6">
+            <div class="glass-card-login animate-slide-in">
+                <div class="card-header-login text-center py-4">
+                    <h3 class="card-title-login mb-2"><i class="bi bi-box-arrow-in-right me-2"></i>Login to Your Account</h3>
+                    <p class="card-subtitle-login mb-0" style="color: #ffffff !important;">Enter your credentials to continue your journey</p>
+                </div>
+                <div class="card-body-login p-4 p-md-5">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                <strong>
+                                    {% if message.tags == 'success' %}
+                                        <i class="bi bi-check-circle-fill"></i> Success!
+                                    {% elif message.tags == 'error' or message.tags == 'danger' %}
+                                        <i class="bi bi-exclamation-triangle-fill"></i> Error!
+                                    {% else %}
+                                        <i class="bi bi-info-circle-fill"></i> Info
+                                    {% endif %}
+                                </strong>
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong><i class="bi bi-exclamation-triangle-fill"></i> Login Failed!</strong>
+                            <ul class="mb-0 mt-2">
+                                {% for error in form.non_field_errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endif %}
+                    
+                    <form method="post" action="{% url 'account_login' %}" id="loginForm" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Email/Username Field -->
+                        <div class="mb-3">
+                            <label for="id_login" class="form-label">
+                                <i class="bi bi-envelope"></i> Email <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" name="login" class="form-control form-control-lg" 
+                                   id="id_login" placeholder="your.email@example.com" 
+                                   value="{{ form.login.value|default:'' }}" required autofocus>
+                            {% if form.login.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.login.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Password Field -->
+                        <div class="mb-3">
+                            <label for="id_password" class="form-label">
+                                <i class="bi bi-lock"></i> Password <span class="text-danger">*</span>
+                            </label>
+                            <div class="password-wrapper position-relative">
+                                <input type="password" name="password" class="form-control form-control-lg" 
+                                       id="id_password" placeholder="Enter your password" required>
+                                <button type="button" class="password-toggle-btn position-absolute" tabindex="0" aria-pressed="false" aria-label="Show password">
+                                    <i class="bi bi-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            {% if form.password.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.password.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Remember Me -->
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="id_remember" name="remember">
+                                <label class="form-check-label" for="id_remember">
+                                    Remember me on this device
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Forgot Password Link -->
+                        <div class="text-end mb-3">
+                            <a href="{% url 'password_reset_request' %}" class="text-decoration-none small fw-bold forgot-password-btn">
+                                <i class="bi bi-question-circle"></i> Forgot your password?
+                            </a>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" class="btn btn-lg text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="bi bi-box-arrow-in-right"></i> Login
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <hr class="my-4">
+                    
+                    <p class="text-center mb-0" style="color: #ffffff !important;">
+                        Don't have an account? 
+                        <a href="{% url 'account_signup' %}" class="fw-bold text-decoration-none create-account-btn">
+                            Create one now <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<!-- Back to Home Button -->
+<a href="{% url 'home' %}" class="btn-back-home">
+    <i class="bi bi-house-door-fill me-2"></i>Back to Home
+</a>
+
+<style>
+/* ============================================
+   FUTURISTIC LOGIN PAGE STYLES
+   ============================================ */
+:root {
+    --primary-color: #00d4ff;
+    --secondary-color: #7b2cbf;
+    --accent-color: #ff006e;
+    --dark-bg: #0a0e27;
+    --darker-bg: #050816;
+    --text-light: #e2e8f0;
+    --text-muted: #ffffff;
+}
+
+/* Animated Particle Background */
+#particles-canvas-login {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        /* Mixed gradient combining A,B,C,D,E palettes for a richer blue-night background */
+        background: linear-gradient(135deg,
+            #050816 0%,    /* deep near-black */
+            #0a0e27 12%,   /* login dark */
+            #032b6b 30%,   /* darker navy */
+            #064ea8 48%,   /* rich blue */
+            #0652ff 66%,   /* electric blue */
+            #00d4ff 82%,   /* cyan accent */
+            #0b3d91 100%   /* flat accent */
+        );
+}
+
+#three-container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Floating moving decorative elements */
+#floating-elements{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* sits above three-container but below content */
+    pointer-events: none;
+    overflow: visible;
+}
+.float-elem{
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(18px);
+    opacity: 0.7;
+    transform: translate3d(0,0,0);
+    will-change: transform, opacity;
+}
+.float-elem.e1{ width: 240px; height: 240px; left: 8%; top: 10%; background: radial-gradient(circle at 30% 30%, rgba(102,126,234,0.9), rgba(118,75,162,0.5)); animation: float1 12s ease-in-out infinite; }
+.float-elem.e2{ width: 160px; height: 160px; right: 10%; top: 18%; background: radial-gradient(circle at 70% 30%, rgba(0,212,255,0.85), rgba(102,126,234,0.35)); animation: float2 10s ease-in-out infinite; }
+.float-elem.e3{ width: 200px; height: 200px; left: 18%; bottom: 12%; background: radial-gradient(circle at 20% 80%, rgba(255,0,146,0.85), rgba(123,44,191,0.28)); animation: float3 14s ease-in-out infinite; }
+.float-elem.e4{ width: 120px; height: 120px; right: 22%; bottom: 20%; background: radial-gradient(circle at 60% 60%, rgba(0,212,255,0.6), rgba(102,126,234,0.22)); animation: float4 9s ease-in-out infinite; }
+
+@keyframes float1{
+    0%{ transform: translateY(0) translateX(0) scale(1); opacity:0.78 }
+    50%{ transform: translateY(-30px) translateX(12px) scale(1.03); opacity:0.95 }
+    100%{ transform: translateY(0) translateX(0) scale(1); opacity:0.78 }
+}
+@keyframes float2{
+    0%{ transform: translateY(0) translateX(0) scale(1); opacity:0.6 }
+    50%{ transform: translateY(-22px) translateX(-8px) scale(1.04); opacity:0.85 }
+    100%{ transform: translateY(0) translateX(0) scale(1); opacity:0.6 }
+}
+@keyframes float3{
+    0%{ transform: translateY(0) translateX(0) scale(1); opacity:0.72 }
+    50%{ transform: translateY(-40px) translateX(18px) scale(1.02); opacity:0.9 }
+    100%{ transform: translateY(0) translateX(0) scale(1); opacity:0.72 }
+}
+@keyframes float4{
+    0%{ transform: translateY(0) translateX(0) scale(1); opacity:0.65 }
+    50%{ transform: translateY(-18px) translateX(6px) scale(1.06); opacity:0.9 }
+    100%{ transform: translateY(0) translateX(0) scale(1); opacity:0.65 }
+}
+
+/* Theme adjustments: subtle contrast for light theme */
+[data-bs-theme='light'] .float-elem.e1,
+[data-bs-theme='light'] .float-elem.e2,
+[data-bs-theme='light'] .float-elem.e3,
+[data-bs-theme='light'] .float-elem.e4{
+    filter: blur(12px);
+    opacity: 0.6;
+}
+
+@media (max-width: 768px){
+    .float-elem.e1{ width: 140px; height: 140px; left: 4%; top: 6%; }
+    .float-elem.e2{ width: 100px; height: 100px; right: 6%; top: 12%; }
+    .float-elem.e3{ width: 120px; height: 120px; left: 10%; bottom: 8%; }
+    .float-elem.e4{ width: 80px; height: 80px; right: 10%; bottom: 14%; }
+}
+
+.futuristic-login-container {
+    position: relative;
+    z-index: 1;
+    min-height: calc(100vh - 120px);
+}
+
+/* Ensure navbar is visible */
+.navbar { position: sticky; top: 0; z-index: 9999; }
+
+body {
+    background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 50%, var(--darker-bg) 100%);
+}
+
+.navbar {
+    /* glassmorphism header similar to homepage */
+    background: linear-gradient(135deg, rgba(102,126,234,0.12), rgba(118,75,162,0.12));
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.navbar .nav-link,
+.navbar .navbar-brand {
+    color: #ffffff !important;
+}
+
+.navbar .dropdown-menu {
+    background: rgba(10, 14, 39, 0.98) !important;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.navbar .dropdown-item {
+    color: #e2e8f0 !important;
+}
+
+.navbar .dropdown-item:hover {
+    background: rgba(0, 212, 255, 0.2) !important;
+    color: #00d4ff !important;
+}
+
+/* Ensure decorative icons/logos are visible across themes */
+[data-bs-theme='dark'] .icon-wrapper i,
+[data-bs-theme='dark'] .feature-icon i,
+[data-bs-theme='dark'] .bi,
+body.dark-theme .icon-wrapper i,
+body.dark-theme .feature-icon i {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+
+[data-bs-theme='light'] .icon-wrapper i,
+[data-bs-theme='light'] .feature-icon i,
+body.light-theme .icon-wrapper i,
+body.light-theme .feature-icon i {
+    color: #111 !important;
+    fill: #111 !important;
+}
+
+/* Force entry icons/logos in the login panel to be white for consistent contrast */
+.futuristic-login-container .input-group-text,
+.futuristic-login-container .input-group-text i,
+.futuristic-login-container .form-label i,
+.futuristic-login-container .feature-icon-3d-login i,
+.futuristic-login-container .bi,
+.futuristic-login-container .password-toggle-btn i,
+.futuristic-login-container .create-account-btn i {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+
+/* Slightly adjust input-group background/border within login panel for contrast */
+.futuristic-login-container .input-group-text { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.04); }
+
+/* Hero Title & Subtitle */
+.hero-title-login {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 900;
+    color: #ffffff;
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(123, 44, 191, 0.6), 0 4px 20px rgba(0, 0, 0, 0.5);
+    animation: titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.3); }
+}
+
+.hero-subtitle-login {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--text-light);
+    font-weight: 400;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 212, 255, 0.3);
+    line-height: 1.6;
+}
+
+/* Ensure feature titles and descriptions are clearly visible across themes */
+.feature-title-login {
+    color: rgba(255,255,255,0.95) !important;
+}
+.feature-desc-login {
+    color: rgba(255,255,255,0.95) !important;
+}
+
+/* Light theme overrides */
+[data-bs-theme='light'] .feature-title-login,
+body.light-theme .feature-title-login,
+body[data-theme='light'] .feature-title-login,
+[data-bs-theme='light'] .feature-desc-login,
+body.light-theme .feature-desc-login,
+body[data-theme='light'] .feature-desc-login {
+    color: #111 !important;
+}
+
+/* Glass Card */
+.glass-card-login {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 60px rgba(0, 212, 255, 0.1);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-login:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), 0 0 80px rgba(0, 212, 255, 0.2);
+    transform: translateY(-5px);
+}
+
+/* Card Header */
+.card-header-login {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-header-login::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: shimmer 4s infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-30px, -30px); }
+}
+
+.card-title-login {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    position: relative;
+    z-index: 1;
+}
+
+.card-subtitle-login {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-size: 0.95rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Ensure subtitle color adapts to theme explicitly */
+[data-bs-theme='light'] .card-subtitle-login,
+body.light-theme .card-subtitle-login,
+body[data-theme='light'] .card-subtitle-login {
+    color: #111 !important;
+}
+
+.card-body-login {
+    background: rgba(15, 23, 42, 0.6);
+}
+
+/* Feature Cards */
+.feature-card-3d-login {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 16px;
+    padding: 1.25rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.feature-card-3d-login:nth-child(1) { animation-delay: 0.1s; }
+.feature-card-3d-login:nth-child(2) { animation-delay: 0.2s; }
+.feature-card-3d-login:nth-child(3) { animation-delay: 0.3s; }
+
+.feature-card-3d-login:hover {
+    transform: translateX(10px);
+    border-color: var(--primary-color);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+}
+
+.feature-icon-3d-login {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.feature-title-login {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.feature-desc-login {
+    color: var(--text-muted) !important;
+    font-size: 0.9rem;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Make general muted/grey text appear white on this page (with light-theme overrides) */
+.text-muted,
+.muted-text,
+small.text-muted,
+.lead,
+.form-text {
+    color: #ffffff !important;
+}
+
+/* Respect light theme: make these darker for contrast when theme is light */
+[data-bs-theme='light'] .text-muted,
+body.light-theme .text-muted,
+body[data-theme='light'] .text-muted,
+[data-bs-theme='light'] .muted-text,
+body.light-theme .muted-text,
+body[data-theme='light'] .muted-text,
+[data-bs-theme='light'] small.text-muted,
+body.light-theme small.text-muted,
+body[data-theme='light'] small.text-muted,
+[data-bs-theme='light'] .form-text,
+body.light-theme .form-text,
+body[data-theme='light'] .form-text {
+    color: #111 !important;
+}
+
+/* Form Styling */
+.form-control, .form-select {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 2px solid rgba(0, 212, 255, 0.2);
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: #ffffff !important;
+    font-size: 0.95rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Theme-aware overrides: ensure clear contrast in dark and light modes */
+[data-bs-theme="dark"] .card-body-login,
+[data-bs-theme="dark"] .card-header-login,
+[data-bs-theme="dark"] .glass-card-login,
+[data-bs-theme="dark"] .login-info-section,
+[data-bs-theme="dark"] .feature-card-3d-login {
+    color: rgba(255,255,255,0.95) !important;
+}
+
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select,
+[data-bs-theme="dark"] .form-label,
+[data-bs-theme="dark"] .form-text,
+[data-bs-theme="dark"] .feature-desc-login,
+[data-bs-theme="dark"] .feature-title-login {
+    color: rgba(255,255,255,0.95) !important;
+}
+
+/* Ensure left info panel headings and feature texts are visible by default on dark backgrounds.
+   Default to white (most pages here use dark background). Light theme will override below. */
+.login-info-section .hero-title-login,
+.login-info-section .hero-subtitle-login,
+.login-info-section .feature-title-login,
+.login-info-section .feature-desc-login,
+.feature-card-3d-login {
+    color: rgba(255,255,255,0.98) !important;
+}
+
+/* If a light theme is active, force these to dark for contrast */
+[data-bs-theme='light'] .login-info-section .hero-title-login,
+[data-bs-theme='light'] .login-info-section .hero-subtitle-login,
+[data-bs-theme='light'] .login-info-section .feature-title-login,
+[data-bs-theme='light'] .login-info-section .feature-desc-login,
+[data-bs-theme='light'] .feature-card-3d-login {
+    color: #111 !important;
+}
+
+/* Ensure small footer prompt in card body is visible on dark backgrounds */
+.card-body-login p {
+    color: rgba(255,255,255,0.95) !important;
+}
+
+[data-bs-theme='light'] .card-body-login p {
+    color: #111 !important;
+}
+
+[data-bs-theme="dark"] .form-control::placeholder {
+    color: rgba(255,255,255,0.9) !important;
+}
+
+/* Light theme overrides */
+[data-bs-theme="light"] .form-control,
+[data-bs-theme="light"] .form-label,
+[data-bs-theme="light"] .form-text,
+[data-bs-theme="light"] .feature-desc-login,
+[data-bs-theme="light"] .feature-title-login,
+[data-bs-theme="light"] .card-body-login {
+    color: #111 !important;
+}
+
+[data-bs-theme="light"] .form-control::placeholder {
+    color: rgba(17,17,17,0.45) !important;
+}
+
+/* Small page fade-in for professional effect (use requested animation) */
+body { animation: fadeIn 0.6s ease-in-out; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Placeholder inherit rule and vendors */
+::placeholder { color: inherit; opacity: 0.8; }
+::-webkit-input-placeholder { color: inherit; opacity: 0.8; }
+:-ms-input-placeholder { color: inherit; opacity: 0.8; }
+
+/* Theme class selectors to support body.dark-theme / body.light-theme and data-theme attributes */
+body.dark-theme, body[data-theme='dark'], [data-bs-theme='dark'] {
+    color: #fff;
+}
+body.dark-theme input, body.dark-theme label, body.dark-theme p, body.dark-theme h1, body.dark-theme h2,
+body[data-theme='dark'] input, body[data-theme='dark'] label, body[data-theme='dark'] p, body[data-theme='dark'] h1, body[data-theme='dark'] h2,
+[data-bs-theme='dark'] input, [data-bs-theme='dark'] label, [data-bs-theme='dark'] p, [data-bs-theme='dark'] h1, [data-bs-theme='dark'] h2 {
+    color: #fff !important;
+}
+
+body.light-theme, body[data-theme='light'], [data-bs-theme='light'] {
+    color: #111;
+}
+body.light-theme input, body.light-theme label, body.light-theme p, body.light-theme h1, body.light-theme h2,
+body[data-theme='light'] input, body[data-theme='light'] label, body[data-theme='light'] p, body[data-theme='light'] h1, body[data-theme='light'] h2,
+[data-bs-theme='light'] input, [data-bs-theme='light'] label, [data-bs-theme='light'] p, [data-bs-theme='light'] h1, [data-bs-theme='light'] h2 {
+    color: #111 !important;
+}
+
+/* Autofill styling */
+.form-control:-webkit-autofill,
+.form-control:-webkit-autofill:hover,
+.form-control:-webkit-autofill:focus {
+    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.05) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.form-control:focus, .form-select:focus {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.15), 0 0 20px rgba(0, 212, 255, 0.2);
+    transform: translateY(-2px);
+    color: #ffffff !important;
+}
+
+.form-control:hover {
+    border-color: rgba(0, 212, 255, 0.4);
+}
+
+.form-label {
+    color: var(--text-light) !important;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.form-check-label {
+    color: var(--text-light) !important;
+    font-size: 0.9rem;
+}
+
+.form-check-input {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(0, 212, 255, 0.3);
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Password Toggle */
+.password-wrapper {
+    position: relative;
+}
+
+.password-toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    /* larger touch target */
+    width: 40px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 6px;
+    color: var(--primary-color);
+    z-index: 10;
+    transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.password-toggle-btn:hover {
+    background: rgba(255,255,255,0.07);
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+.password-toggle-btn:focus,
+.password-toggle-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(102,126,234,0.18);
+    transform: translateY(-50%) scale(1.02);
+}
+[data-bs-theme='dark'] .password-toggle-btn {
+    background: rgba(255,255,255,0.06) !important;
+    border-color: rgba(255,255,255,0.12) !important;
+    color: #ffffff !important;
+}
+[data-bs-theme='dark'] .password-toggle-btn i {
+    color: #ffffff !important;
+}
+
+[data-bs-theme='light'] .password-toggle-btn {
+    background: rgba(0,0,0,0.04) !important;
+    border-color: rgba(0,0,0,0.06) !important;
+    color: #0d6efd !important;
+}
+[data-bs-theme='light'] .password-toggle-btn i {
+    color: #0d6efd !important;
+}
+
+/* Ensure the eye icon is visible and slightly larger */
+.password-toggle-btn i {
+    font-size: 1.05rem;
+    line-height: 1;
+    display: inline-block;
+    color: var(--primary-color) !important;
+}
+
+.password-toggle-btn {
+    z-index: 20; /* above inputs and other overlays */
+}
+
+/* Theme overrides for the eye button */
+[data-bs-theme='light'] .password-toggle-btn {
+    background: rgba(0,0,0,0.04);
+    border-color: rgba(0,0,0,0.06);
+    color: #0d6efd;
+}
+[data-bs-theme='light'] .password-toggle-btn:hover {
+    background: rgba(0,0,0,0.06);
+}
+
+.password-wrapper input {
+    padding-right: 50px;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 12px 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+}
+
+/* "Create one now" button-style link */
+.create-account-btn {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff !important;
+    box-shadow: 0 8px 24px rgba(118,75,162,0.18);
+    transition: transform 240ms ease, box-shadow 240ms ease, opacity 200ms ease;
+    text-decoration: none !important;
+    margin-left: 6px;
+    font-weight: 700;
+}
+
+.create-account-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(102,126,234,0.22);
+    opacity: 0.98;
+}
+
+/* Theme-aware adjustments */
+[data-bs-theme='light'] .create-account-btn {
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+    color: #fff !important;
+}
+[data-bs-theme='dark'] .create-account-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff !important;
+}
+
+/* Forgot password small button/link */
+.forgot-password-btn {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 10px;
+    background: transparent;
+    color: #cfe8ff !important;
+    transition: all 180ms ease;
+    text-decoration: none !important;
+}
+
+.forgot-password-btn:hover {
+    background: rgba(255,255,255,0.04);
+    color: #fff !important;
+    transform: translateY(-2px);
+}
+
+[data-bs-theme='light'] .forgot-password-btn {
+    color: #0d6efd !important;
+}
+
+/* Alerts */
+.alert {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 12px;
+    color: #ffffff;
+    animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert-success {
+    background: rgba(40, 167, 69, 0.2);
+    border-color: #28a745;
+    color: #d4edda;
+}
+
+.alert-danger {
+    background: rgba(220, 53, 69, 0.2);
+    border-color: #dc3545;
+    color: #f8d7da;
+}
+
+.invalid-feedback {
+    color: #ff6b9d;
+    font-size: 0.875rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    display: none !important;
+}
+
+.invalid-feedback.d-block {
+    display: block !important;
+}
+
+/* Only show validation after form interaction */
+.was-validated .form-control:invalid ~ .invalid-feedback,
+.form-control.is-invalid ~ .invalid-feedback {
+    display: block !important;
+}
+
+/* Back to Home Button */
+.btn-back-home {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: #fff !important;
+    padding: 12px 24px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+    transition: all 0.3s;
+    z-index: 999;
+    font-size: 0.9rem;
+}
+
+.btn-back-home:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.5);
+    color: #fff;
+}
+
+/* Animations */
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.animate-slide-in {
+    animation: slideIn 0.8s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Links */
+.card-body-login a,
+.login-info-section a {
+    color: var(--primary-color);
+    transition: all 0.3s;
+}
+
+.card-body-login a:hover,
+.login-info-section a:hover {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+}
+
+/* Footer styling */
+.footer {
+    background: var(--darker-bg) !important;
+    border-top: 1px solid rgba(0, 212, 255, 0.1);
+    color: var(--text-light) !important;
+}
+
+.footer p {
+    color: var(--text-light) !important;
+}
+
+.footer .text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .hero-title-login {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle-login {
+        font-size: 1rem;
+    }
+    
+    .feature-card-3d-login {
+        padding: 1rem;
+    }
+    
+    .btn-back-home {
+        bottom: 1rem;
+        left: 1rem;
+        font-size: 0.85rem;
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .card-body-login {
+        padding: 2rem 1.5rem !important;
+    }
+    
+    .feature-icon-3d-login {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+}
+
+/* FORCE: Make login page text white (override any light-theme rules) */
+.futuristic-login-container,
+.futuristic-login-container h1,
+.futuristic-login-container h2,
+.futuristic-login-container h3,
+.futuristic-login-container h4,
+.futuristic-login-container p,
+.futuristic-login-container label,
+.futuristic-login-container a,
+.futuristic-login-container small,
+.futuristic-login-container .form-label,
+.futuristic-login-container .form-text,
+.futuristic-login-container .text-muted,
+.futuristic-login-container .feature-desc-login,
+.futuristic-login-container .feature-title-login {
+    color: #ffffff !important;
+}
+
+.futuristic-login-container .form-control,
+.futuristic-login-container .form-select,
+.futuristic-login-container ::placeholder {
+    color: #ffffff !important;
+}
+
+.futuristic-login-container a {
+    color: var(--primary-color) !important;
+}
+
+/* Icon enhancements: colored backgrounds, subtle glow and lift on hover */
+.feature-icon-3d-login {
+    background: linear-gradient(135deg, rgba(0,212,255,0.18), rgba(123,44,191,0.18));
+    border: 1px solid rgba(0,212,255,0.12);
+    transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+}
+
+.feature-icon-3d-login i,
+.feature-icon i,
+.icon-wrapper i {
+    color: #ffffff !important;
+    font-size: 1.25rem;
+    line-height: 1;
+    display: inline-block;
+    filter: drop-shadow(0 8px 18px rgba(0,212,255,0.12));
+}
+
+.feature-card-3d-login:hover .feature-icon-3d-login,
+.feature-item:hover .feature-icon {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 16px 40px rgba(0,212,255,0.12), 0 6px 18px rgba(123,44,191,0.08);
+    background: linear-gradient(135deg, rgba(0,212,255,0.32), rgba(123,44,191,0.28));
+}
+
+/* Colored accents per-icon (keeps structure simple and accessible) */
+.feature-card-3d-login:nth-child(1) .feature-icon-3d-login { background: linear-gradient(135deg,#06b6d4,#7b2cbf); }
+.feature-card-3d-login:nth-child(2) .feature-icon-3d-login { background: linear-gradient(135deg,#ff7ab6,#8b5cf6); }
+.feature-card-3d-login:nth-child(3) .feature-icon-3d-login { background: linear-gradient(135deg,#ffd166,#ff6b6b); }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Fade-in effect: add page-visible class to body so CSS can transition opacity
+    document.body.classList.add('page-visible');
+    // Clear POST data warning - replace history state if coming from POST
+    if (window.history.replaceState && window.performance) {
+        const navEntries = window.performance.getEntriesByType('navigation');
+        if (navEntries.length > 0 && navEntries[0].type === 'reload') {
+            // User refreshed after POST - redirect to clean URL
+            window.history.replaceState(null, null, window.location.pathname);
+        }
+    }
+    
+    // If user is already logged in (check navbar), redirect to dashboard
+    const userDropdown = document.querySelector('#navbarDropdown');
+    if (userDropdown) {
+        // User is authenticated, redirect to dashboard
+        window.location.href = '/dashboard/';
+        return;
+    }
+    
+    // Prevent validation warnings on page load; show them only on blur or submit
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        // Use HTML5 constraint validation manually — keep novalidate on form (template already sets it)
+        // Validate a single field and show feedback (server-side feedback remains untouched)
+        function validateFieldOnBlur(field) {
+            const feedback = field.closest('.mb-3') ? field.closest('.mb-3').querySelector('.invalid-feedback') : null;
+            // Use simple validity checks: required + type
+            let invalid = false;
+            if (field.hasAttribute('required') && !field.value.trim()) invalid = true;
+            if (!invalid && field.type === 'email') {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!re.test(field.value)) invalid = true;
+            }
+
+            if (invalid) {
+                field.classList.add('is-invalid');
+                if (feedback) {
+                    feedback.classList.add('d-block');
+                }
+            } else {
+                field.classList.remove('is-invalid');
+                field.classList.add('is-valid');
+                if (feedback) {
+                    feedback.classList.remove('d-block');
+                }
+            }
+        }
+
+        // Attach blur listeners to required inputs
+        loginForm.querySelectorAll('input').forEach(function(field) {
+            field.addEventListener('blur', function() {
+                validateFieldOnBlur(field);
+            });
+
+            // Remove invalid state while typing after blur
+            field.addEventListener('input', function() {
+                if (field.classList.contains('is-invalid') && field.value.trim()) {
+                    field.classList.remove('is-invalid');
+                    const feedback = field.closest('.mb-3') ? field.closest('.mb-3').querySelector('.invalid-feedback') : null;
+                    if (feedback) feedback.classList.remove('d-block');
+                }
+            });
+        });
+
+        // On submit, perform client-side checks and allow Django to do server-side validation
+        loginForm.addEventListener('submit', function(e) {
+            let ok = true;
+            loginForm.querySelectorAll('input[required]').forEach(function(field) {
+                // run same check as blur
+                const prevInvalid = field.classList.contains('is-invalid');
+                validateFieldOnBlur(field);
+                if (field.classList.contains('is-invalid')) ok = false;
+            });
+            if (!ok) {
+                e.preventDefault();
+                const firstError = loginForm.querySelector('.is-invalid');
+                if (firstError && firstError.focus) firstError.focus();
+            }
+        });
+    }
+    
+    // Password toggle functionality (accessible)
+    document.querySelectorAll('.password-toggle-btn').forEach(function(btn) {
+        function togglePasswordBtn() {
+            const wrapper = btn.closest('.password-wrapper') || btn.parentElement;
+            const input = wrapper ? wrapper.querySelector('input') : null;
+            const icon = btn.querySelector('i');
+            if (!input || !icon) return;
+
+            const isHidden = input.type === 'password';
+            if (isHidden) {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+                btn.setAttribute('aria-pressed', 'true');
+                btn.setAttribute('aria-label', 'Hide password');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+                btn.setAttribute('aria-pressed', 'false');
+                btn.setAttribute('aria-label', 'Show password');
+            }
+            btn.focus();
+        }
+
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            togglePasswordBtn();
+        });
+
+        btn.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                togglePasswordBtn();
+            }
+        });
+    });
+    
+    // Check if there's a CSRF error in the URL (from redirect)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('csrf_error') === '1') {
+        // Show a user-friendly message
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert alert-warning alert-dismissible fade show';
+        alertDiv.innerHTML = `
+            <strong><i class="bi bi-exclamation-triangle-fill"></i> Session Expired</strong>
+            <p class="mb-0 mt-2">Your session has expired. Please try logging in again.</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        const cardBody = document.querySelector('.card-body');
+        cardBody.insertBefore(alertDiv, cardBody.firstChild);
+        
+        // Remove the csrf_error parameter from URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
+    // ============================================
+    // PARTICLE ANIMATION BACKGROUND
+    // ============================================
+    const canvas = document.getElementById('particles-canvas-login');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const particles = [];
+        const particleCount = 80;
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            
+            draw() {
+                ctx.fillStyle = `rgba(0, 212, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        function init() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 120) {
+                        ctx.strokeStyle = `rgba(0, 212, 255, ${0.15 * (1 - distance / 120)})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        
+        init();
+        animate();
+        
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    }
+});
+</script>
+<!-- Toast container for nicer notifications (Bootstrap Toast) -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 11000;">
+    <div id="globalToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="globalToastBody"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+<script>
+    // Show Bootstrap toast when there is a success message in the page (e.g., redirected after signup)
+    (function() {
+        try {
+            const successAlert = document.querySelector('.alert-success');
+            if (successAlert) {
+                const toastEl = document.getElementById('globalToast');
+                const toastBody = document.getElementById('globalToastBody');
+                if (toastEl && toastBody) {
+                    // Use the alert content as toast message
+                    toastBody.innerHTML = successAlert.innerHTML;
+                    // Hide the original alert to avoid duplication
+                    successAlert.remove();
+                    const bsToast = new bootstrap.Toast(toastEl, { delay: 5000 });
+                    bsToast.show();
+                }
+            }
+        } catch (e) {
+            // Fail silently; toast is enhancement only
+            console.warn('Toast init failed', e);
+        }
+    })();
+</script>
+<!-- Three.js and GSAP for home-like background animation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="{% static 'js/home-animations.js' %}"></script>
+{% endblock %}

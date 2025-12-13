@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}AI Resume Builder - Transform Your Career with AI-Powered Resumes{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--primary-color:#00d4ff;--secondary-color:#7b2cbf;--accent-color:#ff006e;--dark-bg:#0a0e27;--darker-bg:#050816;--text-light:#e2e8f0;--text-muted:#94a3b8}
+body{font-family:'Inter',sans-serif;overflow-x:hidden;background:#fff}
+.main-content{background:var(--darker-bg);color:var(--text-light)}
+.navbar{background:rgba(10,14,39,0.95)!important;backdrop-filter:blur(10px);border-bottom:1px solid rgba(0,212,255,0.1);z-index:1000!important}
+.navbar .dropdown-menu{background:rgba(10,14,39,0.98)!important;border:1px solid rgba(0,212,255,0.3);backdrop-filter:blur(10px)}
+.navbar .dropdown-item{color:#e2e8f0!important;transition:all 0.3s}
+.navbar .dropdown-item:hover{background:rgba(0,212,255,0.2)!important;color:#00d4ff!important}
+.navbar .dropdown-divider{border-color:rgba(0,212,255,0.2)}
+.futuristic-hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,#0a0e27 0%,#1a1f3a 50%,#0a0e27 100%)}
+#particles-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1}
+#three-container{position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;pointer-events:none}
+.hero-content{position:relative;z-index:10;text-align:center;padding:2rem;max-width:1200px;margin:0 auto}
+.hero-title{font-family:'Poppins',sans-serif;font-size:clamp(2.5rem,8vw,5rem);font-weight:900;color:#ffffff;text-shadow:0 0 30px rgba(0,212,255,0.8),0 0 60px rgba(123,44,191,0.6),0 4px 20px rgba(0,0,0,0.5);margin-bottom:1.5rem;animation:titleGlow 3s ease-in-out infinite}
+@keyframes titleGlow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.3)}}
+.hero-subtitle{font-size:clamp(1.1rem,3vw,1.5rem);color:#ffffff;margin-bottom:2rem;font-weight:400;text-shadow:0 2px 15px rgba(0,0,0,0.8),0 0 20px rgba(0,212,255,0.3)}
+.hero-description{font-size:clamp(0.95rem,2vw,1.1rem);color:#ffffff;max-width:800px;margin:0 auto 3rem;line-height:1.8;text-shadow:0 2px 15px rgba(0,0,0,0.8),0 0 15px rgba(0,212,255,0.2);font-weight:400}
+.btn-futuristic{position:relative;padding:1rem 2.5rem;font-size:1.1rem;font-weight:600;border:2px solid var(--primary-color);background:linear-gradient(135deg,rgba(0,212,255,0.1),rgba(123,44,191,0.1));color:var(--primary-color);border-radius:50px;cursor:pointer;overflow:hidden;transition:all 0.3s ease;text-decoration:none;display:inline-block;margin:0.5rem;backdrop-filter:blur(10px)}
+.btn-futuristic:hover{transform:translateY(-3px);box-shadow:0 10px 40px rgba(0,212,255,0.4);color:#fff;background:linear-gradient(135deg,var(--primary-color),var(--secondary-color))}
+.btn-primary-glow{background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));border:none;color:#fff;box-shadow:0 5px 25px rgba(0,212,255,0.3)}
+.btn-primary-glow:hover{box-shadow:0 10px 50px rgba(0,212,255,0.6);transform:translateY(-5px)}
+.features-section{position:relative;padding:8rem 0;background:linear-gradient(180deg,var(--darker-bg) 0%,var(--dark-bg) 100%);overflow:hidden}
+.section-title{font-family:'Poppins',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:800;text-align:center;margin-bottom:1rem;color:#ffffff;text-shadow:0 0 30px rgba(0,212,255,0.8),0 0 50px rgba(123,44,191,0.5),0 4px 15px rgba(0,0,0,0.6)}
+.section-subtitle{text-align:center;font-size:1.2rem;color:#ffffff;margin-bottom:4rem;text-shadow:0 2px 15px rgba(0,0,0,0.8),0 0 20px rgba(0,212,255,0.3);font-weight:400}
+.feature-card-3d{background:rgba(15,23,42,0.8);backdrop-filter:blur(10px);border:1px solid rgba(0,212,255,0.2);border-radius:20px;padding:2.5rem;transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);cursor:pointer;position:relative;overflow:hidden;height:100%}
+.feature-card-3d:hover{transform:translateY(-15px) scale(1.02);border-color:var(--primary-color);box-shadow:0 20px 60px rgba(0,212,255,0.3)}
+.feature-icon-3d{width:80px;height:80px;background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin-bottom:1.5rem;box-shadow:0 10px 30px rgba(0,212,255,0.3);transition:all 0.4s;color:#fff}
+.feature-card-3d:hover .feature-icon-3d{transform:rotateY(360deg) scale(1.1);box-shadow:0 15px 50px rgba(0,212,255,0.5)}
+.feature-title{font-family:'Poppins',sans-serif;font-size:1.5rem;font-weight:700;margin-bottom:1rem;color:#ffffff;text-shadow:0 2px 12px rgba(0,0,0,0.8),0 0 15px rgba(0,212,255,0.3)}
+.feature-description{color:#ffffff;line-height:1.7;font-size:1rem;text-shadow:0 1px 10px rgba(0,0,0,0.6);font-weight:400}
+.how-it-works-section{padding:8rem 0;background:var(--dark-bg);position:relative;overflow:hidden}
+.step-card{background:rgba(15,23,42,0.8);backdrop-filter:blur(10px);border:1px solid rgba(0,212,255,0.2);border-radius:20px;padding:3rem 2rem;text-align:center;transition:all 0.4s;position:relative;height:100%}
+.step-card:hover{transform:translateY(-10px);border-color:var(--primary-color);box-shadow:0 20px 60px rgba(0,212,255,0.3)}
+.step-number{width:100px;height:100px;background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:3rem;font-weight:900;margin:0 auto 2rem;box-shadow:0 10px 40px rgba(0,212,255,0.4);animation:pulse 2s infinite;color:#fff}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.step-title{font-family:'Poppins',sans-serif;font-size:1.8rem;font-weight:700;margin-bottom:1rem;color:#ffffff;text-shadow:0 2px 12px rgba(0,0,0,0.8),0 0 15px rgba(0,212,255,0.3)}
+.step-description{color:#ffffff;line-height:1.7;font-size:1.05rem;text-shadow:0 1px 10px rgba(0,0,0,0.6);font-weight:400}
+.cta-section{padding:8rem 0;background:linear-gradient(135deg,var(--primary-color) 0%,var(--secondary-color) 50%,var(--accent-color) 100%);position:relative;overflow:hidden}
+.cta-content{position:relative;z-index:2;text-align:center}
+.cta-title{font-family:'Poppins',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:900;color:#fff;margin-bottom:1.5rem;text-shadow:0 5px 20px rgba(0,0,0,0.3)}
+.cta-subtitle{font-size:1.3rem;color:rgba(255,255,255,0.9);margin-bottom:3rem;max-width:700px;margin-left:auto;margin-right:auto}
+.btn-cta{padding:1.2rem 3rem;font-size:1.2rem;font-weight:700;background:#fff;color:var(--secondary-color);border:none;border-radius:50px;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block;box-shadow:0 10px 40px rgba(0,0,0,0.3)}
+.btn-cta:hover{transform:translateY(-5px) scale(1.05);box-shadow:0 15px 60px rgba(0,0,0,0.4);color:var(--secondary-color)}
+.footer{background:var(--darker-bg)!important;border-top:1px solid rgba(0,212,255,0.1);padding:3rem 0!important}
+.stats-section{padding:6rem 0;background:rgba(15,23,42,0.8);backdrop-filter:blur(10px)}
+.stat-item{text-align:center;padding:2rem}
+.stat-number{font-size:3.5rem;font-weight:900;color:#ffffff;text-shadow:0 0 30px rgba(0,212,255,0.9),0 0 50px rgba(123,44,191,0.6),0 4px 15px rgba(0,0,0,0.6);margin-bottom:0.5rem}
+.stat-label{font-size:1.1rem;color:#ffffff;font-weight:500;text-shadow:0 2px 12px rgba(0,0,0,0.8),0 0 15px rgba(0,212,255,0.3)}
+@media (max-width:768px){.hero-title{font-size:2.5rem}.hero-subtitle{font-size:1.1rem}.btn-futuristic{padding:0.8rem 1.8rem;font-size:1rem}.features-section,.how-it-works-section,.cta-section{padding:4rem 0}}
+.futuristic-hero *,.features-section *,.how-it-works-section *,.stats-section *{color:#ffffff!important}
+.futuristic-hero h1,.futuristic-hero h2,.futuristic-hero h3,.futuristic-hero p{color:#ffffff!important}
+.features-section h1,.features-section h2,.features-section h3,.features-section p{color:#ffffff!important}
+.how-it-works-section h1,.how-it-works-section h2,.how-it-works-section h3,.how-it-works-section p{color:#ffffff!important}
+.stats-section h1,.stats-section h2,.stats-section h3,.stats-section p,.stats-section div{color:#ffffff!important}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="futuristic-hero">
+<canvas id="particles-canvas"></canvas>
+<div id="three-container"></div>
+<div class="hero-content">
+<h1 class="hero-title">AI-Powered Resume Builder</h1>
+<p class="hero-subtitle">Transform Your Career with Intelligent Resume Generation</p>
+<p class="hero-description">Harness the power of advanced AI to create stunning, personalized resumes that stand out. Our cutting-edge technology analyzes your unique skills and experiences to craft the perfect resume, cover letter, and portfolio—tailored specifically for your dream job.</p>
+<div class="hero-buttons">
+{% if user.is_authenticated %}
+<a href="{% url 'dashboard' %}" class="btn-futuristic btn-primary-glow"><i class="bi bi-speedometer2"></i> Go to Dashboard</a>
+<a href="{% url 'generate_resume' %}" class="btn-futuristic"><i class="bi bi-magic"></i> Generate Resume</a>
+{% else %}
+<a href="{% url 'account_signup' %}" class="btn-futuristic btn-primary-glow"><i class="bi bi-rocket-takeoff"></i> Start Building Free</a>
+<a href="{% url 'account_login' %}" class="btn-futuristic"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+{% endif %}
+</div>
+</div>
+</section>
+
+<section class="stats-section">
+<div class="container">
+<div class="row">
+<div class="col-md-3 col-6"><div class="stat-item"><div class="stat-number" data-target="1000">0</div><div class="stat-label">Resumes Created</div></div></div>
+<div class="col-md-3 col-6"><div class="stat-item"><div class="stat-number" data-target="500">0</div><div class="stat-label">Happy Users</div></div></div>
+<div class="col-md-3 col-6"><div class="stat-item"><div class="stat-number" data-target="95">0</div><div class="stat-label">Success Rate %</div></div></div>
+<div class="col-md-3 col-6"><div class="stat-item"><div class="stat-number" data-target="6">0</div><div class="stat-label">Templates Available</div></div></div>
+</div>
+</div>
+</section>
+
+<section class="features-section">
+<div class="container">
+<h2 class="section-title">Powerful AI Features</h2>
+<p class="section-subtitle">Everything you need to create the perfect resume</p>
+<div class="row g-4">
+<div class="col-md-4">
+<div class="feature-card-3d">
+<div class="feature-icon-3d"><i class="bi bi-robot"></i></div>
+<h3 class="feature-title">AI-Tailored Content</h3>
+<p class="feature-description">Our advanced AI analyzes your unique skills and experiences to create personalized resumes that showcase your individual strengths and achievements.</p>
+</div>
+</div>
+<div class="col-md-4">
+<div class="feature-card-3d">
+<div class="feature-icon-3d"><i class="bi bi-palette"></i></div>
+<h3 class="feature-title">Professional Templates</h3>
+<p class="feature-description">Choose from 24+ stunning templates designed by professionals. Each template is ATS-friendly and optimized for maximum impact.</p>
+</div>
+</div>
+<div class="col-md-4">
+<div class="feature-card-3d">
+<div class="feature-icon-3d"><i class="bi bi-file-earmark-pdf"></i></div>
+<h3 class="feature-title">Instant PDF Export</h3>
+<p class="feature-description">Download your resume as a high-quality PDF with one click. Ready to send to employers or upload to job portals instantly.</p>
+</div>
+</div>
+<div class="col-md-4">
+<div class="feature-card-3d">
+<div class="feature-icon-3d"><i class="bi bi-briefcase"></i></div>
+<h3 class="feature-title">Portfolio Builder</h3>
+<p class="feature-description">Create stunning portfolios alongside your resume. Showcase all your projects and skills in one place to maximize opportunities.</p>
+</div>
+</div>
+<div class="col-md-4">
+<div class="feature-card-3d">
+<div class="feature-icon-3d"><i class="bi bi-envelope-paper"></i></div>
+<h3 class="feature-title">Smart Cover Letters</h3>
+<p class="feature-description">Generate personalized cover letters tailored to specific jobs. Stand out with compelling, customized applications every time.</p>
+</div>
+</div>
+<div class="col-md-4">
+<div class="feature-card-3d">
+<div class="feature-icon-3d"><i class="bi bi-shield-check"></i></div>
+<h3 class="feature-title">Secure & Private</h3>
+<p class="feature-description">Your data is encrypted and secure. We never share your information with third parties. Your privacy is our priority.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="how-it-works-section">
+<div class="container">
+<h2 class="section-title">How It Works</h2>
+<p class="section-subtitle">Get your perfect resume in 3 simple steps</p>
+<div class="row g-4">
+<div class="col-md-4">
+<div class="step-card">
+<div class="step-number">1</div>
+<h3 class="step-title">Enter Your Details</h3>
+<p class="step-description">Sign up and fill in your personal information, education, work experience, and projects. Our intuitive interface makes it easy.</p>
+</div>
+</div>
+<div class="col-md-4">
+<div class="step-card">
+<div class="step-number">2</div>
+<h3 class="step-title">AI Generates Resume</h3>
+<p class="step-description">Our advanced AI analyzes your data and creates a professional, personalized resume optimized for your target role.</p>
+</div>
+</div>
+<div class="col-md-4">
+<div class="step-card">
+<div class="step-number">3</div>
+<h3 class="step-title">Download & Apply</h3>
+<p class="step-description">Download your resume as PDF and start applying to your dream jobs. Update anytime with one click.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="cta-section">
+<div class="cta-content">
+<h2 class="cta-title">Ready to Transform Your Career?</h2>
+<p class="cta-subtitle">Join thousands of professionals who have landed their dream jobs with AI-powered resumes</p>
+{% if not user.is_authenticated %}
+<a href="{% url 'account_signup' %}" class="btn-cta"><i class="bi bi-rocket-takeoff"></i> Start Building Your Resume - Free\!</a>
+{% else %}
+<a href="{% url 'generate_resume' %}" class="btn-cta"><i class="bi bi-magic"></i> Generate Your Resume Now</a>
+{% endif %}
+</div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="{% static 'js/home-animations.js' %}"></script>
+{% endblock %}

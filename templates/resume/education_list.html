@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Education - AI Resume Builder{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-mortarboard"></i> Education</h2>
+        <a href="{% url 'education_add' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add Education
+        </a>
+    </div>
+
+    {% if educations %}
+        <div class="row g-4">
+            {% for education in educations %}
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ education.get_degree_display }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ education.field_of_study }}</h6>
+                            <p class="mb-1"><strong>{{ education.institution }}</strong></p>
+                            <p class="date-range mb-2">
+                                <i class="bi bi-calendar"></i>
+                                {{ education.start_date|date:"M Y" }} - 
+                                {% if education.currently_studying %}
+                                    <span class="badge bg-success">Currently Studying</span>
+                                {% else %}
+                                    {{ education.end_date|date:"M Y" }}
+                                {% endif %}
+                            </p>
+                            {% if education.grade %}
+                                <p class="mb-2"><i class="bi bi-award"></i> Grade: {{ education.grade }}</p>
+                            {% endif %}
+                            {% if education.description %}
+                                <p class="small text-muted">{{ education.description|truncatewords:20 }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="action-buttons">
+                                <a href="{% url 'education_edit' education.pk %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <a href="{% url 'education_delete' education.pk %}" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i> Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-inbox"></i>
+            <h4>No Education Entries</h4>
+            <p>Add your educational background to build your resume.</p>
+            <a href="{% url 'education_add' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Add Your First Education
+            </a>
+        </div>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

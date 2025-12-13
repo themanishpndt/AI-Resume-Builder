@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Delete Account" %}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0"><i class="bi bi-exclamation-triangle-fill"></i> {% trans "Delete Your Account" %}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h5 class="alert-heading">{% trans "Warning: This action cannot be undone!" %}</h5>
+                        <p class="mb-0">
+                            {% trans "Deleting your account will permanently remove all your data including your profile, resumes, and other related information. This action cannot be undone. You will be able to create a new account with the same email address if you choose to return." %}
+                        </p>
+                    </div>
+                    
+                    <p>{% trans "Are you sure you want to delete your account?" %}</p>
+                    
+                    <form method="post" action="{% url 'delete_account' %}" id="deleteAccountForm">
+                        {% csrf_token %}
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="confirmDelete" required>
+                            <label class="form-check-label" for="confirmDelete">
+                                {% trans "Yes, I understand that this will permanently delete my account and all associated data." %}
+                            </label>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'profile_edit' %}" class="btn btn-outline-secondary me-md-2">
+                                <i class="bi bi-arrow-left"></i> {% trans "Cancel" %}
+                            </a>
+                            <button type="submit" class="btn btn-danger" id="deleteButton" disabled>
+                                <i class="bi bi-trash"></i> {% trans "Delete My Account" %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const confirmCheckbox = document.getElementById('confirmDelete');
+    const deleteButton = document.getElementById('deleteButton');
+    
+    confirmCheckbox.addEventListener('change', function() {
+        deleteButton.disabled = !this.checked;
+    });
+    
+    // Double confirmation before submitting
+    document.getElementById('deleteAccountForm').addEventListener('submit', function(e) {
+        if (!confirm('{% trans "Are you absolutely sure you want to delete your account? This cannot be undone!" %}')) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% endblock %}

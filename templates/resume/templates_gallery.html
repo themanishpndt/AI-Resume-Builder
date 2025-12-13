@@ -1,0 +1,1201 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Resume Templates - AI Resume Builder{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 py-3">
+    <!-- Page Header -->
+    <div class="row mb-3">
+        <div class="col-12 text-center">
+            <h2 class="mb-2 fw-bold">
+                <i class="bi bi-file-earmark-text text-primary"></i> Resume Templates
+            </h2>
+            <p class="text-muted mb-2">Choose from our collection of ATS-friendly templates</p>
+            <!-- Filter Options -->
+            <div class="d-flex justify-content-center gap-2 flex-wrap mb-2">
+                <button class="btn btn-sm btn-outline-primary active" data-filter="all" onclick="filterTemplates('all')">
+                    <i class="bi bi-grid-3x3"></i> All
+                </button>
+                <button class="btn btn-sm btn-outline-primary" data-filter="modern" onclick="filterTemplates('modern')">
+                    <i class="bi bi-stars"></i> Modern
+                </button>
+                <button class="btn btn-sm btn-outline-primary" data-filter="traditional" onclick="filterTemplates('traditional')">
+                    <i class="bi bi-briefcase"></i> Traditional
+                </button>
+                <button class="btn btn-sm btn-outline-primary" data-filter="creative" onclick="filterTemplates('creative')">
+                    <i class="bi bi-palette"></i> Creative
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Templates Grid -->
+    <div class="row g-3" id="templatesContainer">
+        {% for template in templates %}
+        <div class="col-lg-4 col-md-6 template-item" data-category="{{ template.category }}">
+            <div class="card template-card shadow-sm">
+                <!-- Template Preview with HTML Example -->
+                <div class="template-preview">
+                    <div class="template-example" id="template-{{ template.id }}">
+                        <!-- Dynamic template preview will be generated -->
+                    </div>
+                    <div class="template-overlay">
+                        <button class="btn btn-light btn-lg" 
+                                onclick="showPreview('{{ template.id }}', '{{ template.name }}')"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#previewModal"
+                                style="color: #000000 !important; font-weight: 700; background-color: #ffffff !important;">
+                            <i class="bi bi-eye" style="color: #000000;"></i> <span style="color: #000000;">Full Preview</span>
+                        </button>
+                        <a href="{% url 'generate_resume' %}?template={{ template.id }}" 
+                           class="btn btn-success btn-lg"
+                           style="color: #ffffff !important; font-weight: 700; background-color: #198754 !important;">
+                            <i class="bi bi-lightning-fill" style="color: #ffffff;"></i> <span style="color: #ffffff;">Use Template</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Template Details -->
+                <div class="card-body p-2">
+                    <h5 class="card-title mb-1">{{ template.name }}</h5>
+                    <p class="card-text text-muted small mb-2">{{ template.description }}</p>
+                    
+                    <!-- Features -->
+                    <div class="template-features mb-2">
+                        <h6 class="small text-uppercase text-muted mb-1">
+                            <i class="bi bi-check-circle"></i> Features
+                        </h6>
+                        <ul class="list-unstyled small mb-0">
+                            {% for feature in template.features %}
+                            <li class="mb-0">
+                                <i class="bi bi-check text-success"></i> {{ feature }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <!-- Best For -->
+                    <div class="template-best-for">
+                        <h6 class="small text-uppercase text-muted mb-1">
+                            <i class="bi bi-star"></i> Best For
+                        </h6>
+                        <div class="d-flex flex-wrap gap-1">
+                            {% for profession in template.best_for %}
+                            <span class="badge bg-secondary">{{ profession }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card Footer -->
+                <div class="card-footer">
+                    <div class="d-grid gap-2">
+                        <button onclick="showPreview('{{ template.id }}', '{{ template.name }}')"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#previewModal"
+                                class="btn btn-outline-primary btn-sm"
+                                style="color: #0d6efd !important; font-weight: 600; border: 2px solid #0d6efd;">
+                            <i class="bi bi-eye" style="color: #0d6efd;"></i> <span style="color: #0d6efd;">Preview</span>
+                        </button>
+                        <a href="{% url 'generate_resume' %}?template={{ template.id }}" 
+                           class="btn btn-primary btn-sm"
+                           style="color: #ffffff !important; font-weight: 600; background-color: #0d6efd !important;">
+                            <i class="bi bi-lightning-fill" style="color: #ffffff;"></i> <span style="color: #ffffff;">Use Template</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Info Section -->
+    <div class="row mt-3 mb-2">
+        <div class="col-12">
+            <div class="card bg-light border-0 shadow-sm">
+                <div class="card-body py-3">
+                    <h5 class="text-center mb-3 fw-bold">
+                        <i class="bi bi-info-circle"></i> How It Works
+                    </h5>
+                    <div class="row g-2">
+                        <div class="col-md-3 text-center">
+                            <i class="bi bi-1-circle-fill text-primary" style="font-size: 1.5rem;"></i>
+                            <h6 class="fw-bold mt-2 mb-1" style="font-size: 0.9rem;">Choose Template</h6>
+                            <p class="small text-muted mb-0" style="font-size: 0.75rem;">Select your favorite design</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <i class="bi bi-2-circle-fill text-primary" style="font-size: 1.5rem;"></i>
+                            <h6 class="fw-bold mt-2 mb-1" style="font-size: 0.9rem;">Complete Profile</h6>
+                            <p class="small text-muted mb-0" style="font-size: 0.75rem;">Add your information</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <i class="bi bi-3-circle-fill text-primary" style="font-size: 1.5rem;"></i>
+                            <h6 class="fw-bold mt-2 mb-1" style="font-size: 0.9rem;">AI Generation</h6>
+                            <p class="small text-muted mb-0" style="font-size: 0.75rem;">AI creates your resume</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <i class="bi bi-4-circle-fill text-primary" style="font-size: 1.5rem;"></i>
+                            <h6 class="fw-bold mt-2 mb-1" style="font-size: 0.9rem;">Download & Share</h6>
+                            <p class="small text-muted mb-0" style="font-size: 0.75rem;">Get PDF and apply</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="row mb-3">
+        <div class="col-lg-10 mx-auto">
+            <h5 class="text-center mb-2 fw-bold">Frequently Asked Questions</h5>
+            <div class="accordion accordion-flush" id="templateFAQ">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            Can I switch templates after creating my resume?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#templateFAQ">
+                        <div class="accordion-body">
+                            Yes! You can generate multiple resumes with different templates. Simply go to the generate page and select a new template.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            Are these templates ATS-friendly?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#templateFAQ">
+                        <div class="accordion-body">
+                            Yes, all our templates are designed to be ATS (Applicant Tracking System) friendly, ensuring your resume can be properly parsed by recruitment software.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            Can I customize the templates?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#templateFAQ">
+                        <div class="accordion-body">
+                            The templates automatically adapt to your content and profile information. You can also edit the generated content before downloading.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                            Which template should I choose?
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#templateFAQ">
+                        <div class="accordion-body">
+                            Choose based on your industry and career level. Creative fields can use bold designs, while corporate roles work better with traditional formats. Entry-level candidates may prefer minimal designs.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="row mt-4 mb-4" style="position: relative; z-index: 100;">
+        <div class="col-12">
+            <div class="card bg-gradient text-white shadow-lg" style="border: none; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="card-body py-5 px-4">
+                    <h3 class="mb-3 text-center fw-bold" style="color: #ffffff; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">Ready to Create Your Professional Resume?</h3>
+                    <p class="lead mb-4 text-center" style="color: #ffffff;">Complete your profile and let our AI create a stunning resume for you</p>
+                    <div class="d-flex gap-3 justify-content-center flex-wrap">
+                        <a href="{% url 'profile_edit' %}" 
+                           class="btn btn-light btn-lg px-5 py-3 cta-button" 
+                           style="font-size: 1.15rem; font-weight: 700; color: #667eea !important; background-color: #ffffff !important; border: none; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s ease; text-decoration: none;">
+                            <i class="bi bi-person-fill" style="color: #667eea;"></i> Complete Profile
+                        </a>
+                        <a href="{% url 'generate_resume' %}" 
+                           class="btn btn-lg px-5 py-3 cta-button" 
+                           style="font-size: 1.15rem; font-weight: 700; color: #000000 !important; background-color: #ffc107 !important; border: none; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s ease; text-decoration: none;">
+                            <i class="bi bi-lightning-fill" style="color: #000000 !important;"></i> <span style="color: #000000 !important;">Generate Resume</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Single Preview Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="previewModalLabel">
+                    <i class="bi bi-eye"></i> Template Preview
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- Preview Content -->
+                        <div class="col-lg-8 p-4" style="background: #f8f9fa;">
+                            <div class="resume-preview-container bg-white shadow-sm" id="modalPreviewContent">
+                                <!-- Dynamic preview content will be loaded here -->
+                            </div>
+                        </div>
+                        <!-- Template Info Sidebar -->
+                        <div class="col-lg-4 p-4">
+                            <div id="modalTemplateInfo">
+                                <!-- Dynamic template info will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x"></i> Close
+                </button>
+                <button type="button" class="btn btn-outline-primary" onclick="downloadPreview()">
+                    <i class="bi bi-download"></i> Download Sample
+                </button>
+                <a href="#" id="useTemplateBtn" class="btn btn-primary">
+                    <i class="bi bi-lightning-fill"></i> Use This Template
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Page Layout */
+body {
+    overflow-x: hidden;
+}
+
+/* Template Cards */
+.template-card {
+    transition: all 0.3s ease;
+    overflow: hidden;
+    border-radius: 8px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #dee2e6 !important;
+}
+
+.template-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Template Preview Area */
+.template-preview {
+    position: relative;
+    overflow: hidden;
+    background: #f0f2f5;
+    height: 320px;
+    cursor: pointer;
+    border-bottom: 2px solid #dee2e6;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.template-example {
+    width: 794px; /* A4 width in pixels at 96 DPI */
+    height: 1123px; /* A4 height in pixels at 96 DPI */
+    transform: scale(0.28);
+    transform-origin: top center;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -397px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    overflow: hidden;
+}
+
+/* Hover Overlay */
+.template-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(13, 110, 253, 0.96);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    gap: 15px;
+    padding: 20px;
+    z-index: 10;
+}
+
+.template-overlay .btn {
+    min-width: 200px;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    padding: 12px 24px;
+    font-size: 1rem;
+}
+
+.template-overlay .btn-light {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: none !important;
+}
+
+.template-overlay .btn-light i,
+.template-overlay .btn-light span {
+    color: #000000 !important;
+}
+
+.template-overlay .btn-success {
+    background-color: #198754 !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.template-overlay .btn-success i,
+.template-overlay .btn-success span {
+    color: #ffffff !important;
+}
+
+.template-card:hover .template-overlay {
+    opacity: 1;
+}
+
+/* Card Body */
+.card-body {
+    flex: 1;
+    padding: 0.75rem;
+    overflow: hidden;
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.card-text {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+/* Template Features */
+.template-features {
+    margin-bottom: 0.5rem;
+}
+
+.template-features h6 {
+    font-size: 0.7rem;
+    margin-bottom: 0.25rem;
+}
+
+.template-features ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.template-features ul li {
+    padding: 0.15rem 0;
+    font-size: 0.75rem;
+    line-height: 1.3;
+}
+
+/* Best For Section */
+.template-best-for h6 {
+    font-size: 0.7rem;
+    margin-bottom: 0.25rem;
+}
+
+.template-best-for .badge {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.5rem;
+    font-weight: 500;
+}
+
+/* Card Footer */
+.card-footer {
+    padding: 0.75rem;
+    background: #fff !important;
+    border-top: 1px solid #e9ecef !important;
+    margin-top: auto;
+}
+
+.card-footer .btn {
+    font-weight: 600;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.card-footer .btn i {
+    margin-right: 4px;
+}
+
+/* Filter Buttons */
+.btn-outline-primary {
+    border-width: 2px;
+}
+
+.btn-outline-primary.active {
+    background-color: #0d6efd !important;
+    color: white !important;
+    border-color: #0d6efd !important;
+}
+
+/* Hidden class for filtering */
+.hidden {
+    display: none !important;
+}
+
+/* CTA Button Hover Effects */
+.cta-button {
+    position: relative;
+    overflow: hidden;
+    transform: translateY(0);
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3) !important;
+}
+
+.cta-button:active {
+    transform: translateY(-1px);
+}
+
+/* Gradient Background Animation */
+.bg-gradient {
+    background-size: 200% 200%;
+    animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Modal Improvements */
+.modal-dialog {
+    max-width: 90%;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+/* Resume Preview Container */
+.resume-preview-container {
+    padding: 2rem;
+    background: white;
+    min-height: 600px;
+    border-radius: 8px;
+}
+
+.resume-preview {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+/* Filter Buttons */
+.btn-outline-primary.active {
+    background-color: var(--bs-primary);
+    color: white;
+}
+
+/* Fade animation for template items */
+.template-item {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.template-item.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Template Styles */
+.template-modern {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.template-classic {
+    font-family: Georgia, 'Times New Roman', serif;
+}
+
+.template-creative {
+    font-family: 'Arial', sans-serif;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .template-preview {
+        height: 300px;
+    }
+    
+    .template-example {
+        transform: scale(0.35);
+    }
+}
+</style>
+
+<script>
+// Template data with HTML examples
+const templateData = {
+    modern: {
+        name: 'Modern Professional',
+        category: 'modern',
+        html: `
+            <div style="width: 210mm; min-height: 297mm; padding: 15mm; background: white; font-family: 'Arial', sans-serif; font-size: 11pt; color: #2c3e50; line-height: 1.5;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 25px; margin: -15mm -15mm 25px -15mm; text-align: center; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.03)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.03)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.02)"/><circle cx="10" cy="50" r="0.5" fill="rgba(255,255,255,0.02)"/><circle cx="90" cy="50" r="0.5" fill="rgba(255,255,255,0.02)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');"></div>
+                    <h1 style="margin: 0 0 8px 0; font-size: 28pt; color: white; font-weight: bold; letter-spacing: 3px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); position: relative; z-index: 2;">John Doe</h1>
+                    <p style="margin: 8px 0; font-size: 12pt; color: rgba(255,255,255,0.9); font-weight: 500; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); position: relative; z-index: 2;">Senior Software Engineer</p>
+                    <div style="font-size: 10pt; color: rgba(255,255,255,0.8); margin: 12px 0 0 0; display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; position: relative; z-index: 2;">
+                        <p style="margin: 0; display: flex; align-items: center;">📧 john.doe@email.com</p>
+                        <p style="margin: 0; display: flex; align-items: center;">📱 +1 234-567-8900</p>
+                        <p style="margin: 0; display: flex; align-items: center;">🔗 linkedin.com/in/johndoe</p>
+                        <p style="margin: 0; display: flex; align-items: center;">📍 San Francisco, CA</p>
+                    </div>
+                </div>
+                
+                <h2 style="font-size: 13pt; color: #2c3e50; margin-top: 25px; margin-bottom: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #667eea; padding-bottom: 6px;">PROFESSIONAL SUMMARY</h2>
+                <p style="margin: 10px 0; color: #34495e; font-weight: 400; text-align: justify; line-height: 1.6;">
+                    Results-driven Software Engineer with 5+ years of experience in full-stack development. Expertise in Python, JavaScript, and cloud technologies. Proven track record of delivering scalable applications and leading cross-functional teams.
+                </p>
+                
+                <h2 style="font-size: 13pt; color: #2c3e50; margin-top: 25px; margin-bottom: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #667eea; padding-bottom: 6px;">EXPERIENCE</h2>
+                <div style="margin-bottom: 18px; padding: 12px; background: white; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #ecf0f1; position: relative;">
+                    <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #667eea, #764ba2); border-radius: 6px 0 0 6px;"></div>
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 6px; padding-left: 12px;">
+                        <div>
+                            <h3 style="margin: 0 0 4px 0; font-size: 11pt; color: #2c3e50; font-weight: bold;">Senior Software Engineer</h3>
+                            <p style="margin: 0; color: #7f8c8d; font-size: 9pt;">Tech Corp Inc.</p>
+                        </div>
+                        <span style="color: #7f8c8d; font-size: 9pt; background: #ecf0f1; padding: 4px 10px; border-radius: 15px; font-weight: 600;">2021 - Present</span>
+                    </div>
+                    <ul style="margin: 10px 0; padding-left: 20px; font-size: 9pt; line-height: 1.6; color: #34495e;">
+                        <li style="margin: 4px 0;">Led development of microservices architecture serving 1M+ users</li>
+                        <li style="margin: 4px 0;">Improved application performance by 40% through optimization</li>
+                        <li style="margin: 4px 0;">Mentored team of 5 junior developers</li>
+                    </ul>
+                </div>
+                <div style="margin-bottom: 18px; padding: 12px; background: white; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #ecf0f1; position: relative;">
+                    <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #667eea, #764ba2); border-radius: 6px 0 0 6px;"></div>
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 6px; padding-left: 12px;">
+                        <div>
+                            <h3 style="margin: 0 0 4px 0; font-size: 11pt; color: #2c3e50; font-weight: bold;">Software Engineer</h3>
+                            <p style="margin: 0; color: #7f8c8d; font-size: 9pt;">StartUp Solutions</p>
+                        </div>
+                        <span style="color: #7f8c8d; font-size: 9pt; background: #ecf0f1; padding: 4px 10px; border-radius: 15px; font-weight: 600;">2019 - 2021</span>
+                    </div>
+                    <ul style="margin: 10px 0; padding-left: 20px; font-size: 9pt; line-height: 1.6; color: #34495e;">
+                        <li style="margin: 4px 0;">Built RESTful APIs using Django and Flask</li>
+                        <li style="margin: 4px 0;">Implemented CI/CD pipelines reducing deployment time by 60%</li>
+                    </ul>
+                </div>
+                
+                <h2 style="font-size: 13pt; color: #2c3e50; margin-top: 25px; margin-bottom: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #667eea; padding-bottom: 6px;">EDUCATION</h2>
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 6px;">
+                    <div>
+                        <h3 style="margin: 0 0 4px 0; font-size: 11pt; color: #2c3e50; font-weight: bold;">Bachelor of Science in Computer Science</h3>
+                        <p style="margin: 0; color: #7f8c8d; font-size: 9pt;">University of Technology</p>
+                    </div>
+                    <span style="color: #7f8c8d; font-size: 9pt; background: #ecf0f1; padding: 4px 10px; border-radius: 15px; font-weight: 600;">2015 - 2019</span>
+                </div>
+                
+                <h2 style="font-size: 13pt; color: #2c3e50; margin-top: 25px; margin-bottom: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #667eea; padding-bottom: 6px;">SKILLS</h2>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 6px 12px; border-radius: 20px; font-size: 9pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">Python</span>
+                    <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 6px 12px; border-radius: 20px; font-size: 9pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">JavaScript</span>
+                    <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 6px 12px; border-radius: 20px; font-size: 9pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">React</span>
+                    <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 6px 12px; border-radius: 20px; font-size: 9pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">Django</span>
+                    <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 6px 12px; border-radius: 20px; font-size: 9pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">AWS</span>
+                    <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 6px 12px; border-radius: 20px; font-size: 9pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">Docker</span>
+                </div>
+            </div>
+        `
+    },
+    classic: {
+        name: 'Classic Traditional',
+        category: 'traditional',
+        html: `
+            <div style="width: 210mm; min-height: 297mm; padding: 20mm; background: white; font-family: 'Times New Roman', serif; font-size: 11pt; color: #2c3e50; line-height: 1.5;">
+                <div style="text-align: center; margin-bottom: 30px; border-bottom: 4px double #2c3e50; padding-bottom: 20px;">
+                    <h1 style="margin: 0; color: #2c3e50; font-size: 32pt; font-weight: bold; letter-spacing: 3px;">JOHN DOE</h1>
+                    <p style="margin: 8px 0; color: #34495e; font-size: 14pt; font-weight: 600;">Senior Software Engineer</p>
+                    <p style="margin: 6px 0; color: #2c3e50; font-size: 10pt;">
+                        john.doe@email.com • +1 234-567-8900 • San Francisco, CA
+                    </p>
+                </div>
+                
+                <h2 style="color: #2c3e50; font-size: 13pt; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; border-bottom: 2px solid #2c3e50; padding-bottom: 6px;">Professional Summary</h2>
+                <p style="color: #2c3e50; line-height: 1.6; font-size: 10pt; text-align: justify; margin: 8px 0;">
+                    Accomplished Software Engineer with over five years of progressive experience in developing 
+                    robust, scalable applications. Demonstrated expertise in modern web technologies and agile 
+                    methodologies. Committed to delivering high-quality solutions that exceed client expectations.
+                </p>
+                
+                <h2 style="color: #2c3e50; font-size: 13pt; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-top: 25px; margin-bottom: 12px; border-bottom: 2px solid #2c3e50; padding-bottom: 6px;">Professional Experience</h2>
+                <div style="margin-bottom: 20px;">
+                    <div style="margin-bottom: 6px; overflow: hidden;">
+                        <strong style="font-size: 11pt; color: #2c3e50; font-weight: bold;">Senior Software Engineer</strong>
+                        <span style="float: right; color: #34495e; font-size: 10pt; font-weight: 600;">2021 - Present</span>
+                    </div>
+                    <p style="margin: 4px 0; color: #34495e; font-size: 9pt; font-style: italic;">Tech Corp Inc., San Francisco, CA</p>
+                    <ul style="margin: 10px 0 0 25px; padding: 0; color: #2c3e50; font-size: 9pt; line-height: 1.6;">
+                        <li style="margin: 4px 0;">Spearheaded the development of microservices architecture, enhancing system scalability</li>
+                        <li style="margin: 4px 0;">Optimized application performance, achieving a 40% improvement in response time</li>
+                        <li style="margin: 4px 0;">Provided technical leadership and mentorship to junior development staff</li>
+                    </ul>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <div style="margin-bottom: 6px; overflow: hidden;">
+                        <strong style="font-size: 11pt; color: #2c3e50; font-weight: bold;">Software Engineer</strong>
+                        <span style="float: right; color: #34495e; font-size: 10pt; font-weight: 600;">2019 - 2021</span>
+                    </div>
+                    <p style="margin: 4px 0; color: #34495e; font-size: 9pt; font-style: italic;">StartUp Solutions, San Francisco, CA</p>
+                    <ul style="margin: 10px 0 0 25px; padding: 0; color: #2c3e50; font-size: 9pt; line-height: 1.6;">
+                        <li style="margin: 4px 0;">Developed RESTful APIs utilizing Django and Flask frameworks</li>
+                        <li style="margin: 4px 0;">Established CI/CD pipelines, reducing deployment time by 60%</li>
+                    </ul>
+                </div>
+                
+                <h2 style="color: #2c3e50; font-size: 13pt; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-top: 25px; margin-bottom: 12px; border-bottom: 2px solid #2c3e50; padding-bottom: 6px;">Education</h2>
+                <div style="overflow: hidden;">
+                    <strong style="font-size: 11pt; color: #2c3e50; font-weight: bold;">Bachelor of Science in Computer Science</strong>
+                    <span style="float: right; color: #34495e; font-size: 10pt; font-weight: 600;">2015 - 2019</span>
+                    <p style="margin: 4px 0; color: #34495e; font-size: 9pt; font-style: italic;">University of Technology</p>
+                    <p style="margin: 6px 0; color: #2c3e50; font-size: 9pt;">GPA: 3.8/4.0</p>
+                </div>
+                
+                <h2 style="color: #2c3e50; font-size: 13pt; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-top: 25px; margin-bottom: 12px; border-bottom: 2px solid #2c3e50; padding-bottom: 6px;">Technical Skills</h2>
+                <p style="color: #2c3e50; font-size: 9pt; line-height: 1.8; margin: 8px 0;">
+                    <strong>Programming Languages:</strong> Python, JavaScript, TypeScript, Java<br>
+                    <strong>Frameworks & Libraries:</strong> Django, React, Node.js, Flask<br>
+                    <strong>Cloud & DevOps:</strong> AWS, Docker, Kubernetes, CI/CD<br>
+                    <strong>Databases:</strong> PostgreSQL, MongoDB, Redis
+                </p>
+            </div>
+        `
+    },
+    creative: {
+        name: 'Creative Bold',
+        category: 'creative',
+        html: `
+            <div style="width: 210mm; min-height: 297mm; background: white; font-family: 'Arial', sans-serif; display: flex; font-size: 10pt; color: #2c3e50; line-height: 1.4;">
+                <div style="width: 35%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; color: white; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(255,255,255,0.08) 8px, rgba(255,255,255,0.08) 16px);"></div>
+                    <div style="text-align: center; margin-bottom: 25px; position: relative; z-index: 2;">
+                        <div style="width: 100px; height: 100px; border-radius: 50%; background: white; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: bold; color: #667eea;">JD</div>
+                        <h1 style="margin: 0; font-size: 24pt; font-weight: bold; letter-spacing: 2px;">JOHN DOE</h1>
+                        <p style="margin: 6px 0; font-size: 12pt; opacity: 0.95; font-weight: 600;">Software Engineer</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 22px; position: relative; z-index: 2;">
+                        <h2 style="font-size: 14pt; font-weight: bold; margin-bottom: 10px; border-bottom: 3px solid rgba(255,255,255,0.4); padding-bottom: 6px;">CONTACT</h2>
+                        <p style="font-size: 10pt; line-height: 1.7; margin: 6px 0; font-weight: 500;">
+                            📧 john.doe@email.com<br>
+                            📱 +1 234-567-8900<br>
+                            📍 San Francisco, CA<br>
+                            💼 linkedin.com/in/johndoe<br>
+                            🌐 github.com/johndoe
+                        </p>
+                    </div>
+                    
+                    <div style="margin-bottom: 22px; position: relative; z-index: 2;">
+                        <h2 style="font-size: 14pt; font-weight: bold; margin-bottom: 10px; border-bottom: 3px solid rgba(255,255,255,0.4); padding-bottom: 6px;">SKILLS</h2>
+                        <div style="margin-bottom: 12px;">
+                            <p style="font-size: 11pt; margin: 6px 0; font-weight: bold;">Python</p>
+                            <div style="background: rgba(255,255,255,0.3); height: 8px; border-radius: 4px;"><div style="background: white; width: 90%; height: 100%; border-radius: 4px;"></div></div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <p style="font-size: 11pt; margin: 6px 0; font-weight: bold;">JavaScript</p>
+                            <div style="background: rgba(255,255,255,0.3); height: 8px; border-radius: 4px;"><div style="background: white; width: 85%; height: 100%; border-radius: 4px;"></div></div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <p style="font-size: 11pt; margin: 6px 0; font-weight: bold;">React</p>
+                            <div style="background: rgba(255,255,255,0.3); height: 8px; border-radius: 4px;"><div style="background: white; width: 80%; height: 100%; border-radius: 4px;"></div></div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <p style="font-size: 11pt; margin: 6px 0; font-weight: bold;">AWS</p>
+                            <div style="background: rgba(255,255,255,0.3); height: 8px; border-radius: 4px;"><div style="background: white; width: 75%; height: 100%; border-radius: 4px;"></div></div>
+                        </div>
+                    </div>
+                    
+                    <div style="position: relative; z-index: 2;">
+                        <h2 style="font-size: 14pt; font-weight: bold; margin-bottom: 10px; border-bottom: 3px solid rgba(255,255,255,0.4); padding-bottom: 6px;">LANGUAGES</h2>
+                        <p style="font-size: 11pt; line-height: 1.8; margin: 6px 0; font-weight: 500;">English - Native</p>
+                        <p style="font-size: 11pt; line-height: 1.8; margin: 6px 0; font-weight: 500;">Spanish - Professional</p>
+                    </div>
+                </div>
+                
+                <div style="width: 65%; padding: 22px;">
+                    <div style="margin-bottom: 22px;">
+                        <h2 style="color: #667eea; font-size: 18pt; font-weight: bold; margin-bottom: 10px; border-bottom: 4px solid #667eea; padding-bottom: 6px; display: inline-block;">ABOUT ME</h2>
+                        <p style="color: #2c3e50; line-height: 1.6; font-size: 10pt;">
+                            Creative and results-driven Software Engineer passionate about building innovative solutions. 
+                            5+ years of experience in full-stack development with a strong focus on user experience and 
+                            scalable architecture.
+                        </p>
+                    </div>
+                    
+                    <div style="margin-bottom: 22px;">
+                        <h2 style="color: #667eea; font-size: 18pt; font-weight: bold; margin-bottom: 12px; border-bottom: 4px solid #667eea; padding-bottom: 6px; display: inline-block;">EXPERIENCE</h2>
+                        <div style="margin-bottom: 18px; padding-left: 15px; border-left: 4px solid #667eea;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <h3 style="margin: 0; font-size: 12pt; font-weight: bold; color: #2c3e50;">Senior Software Engineer</h3>
+                                <span style="color: #495057; font-size: 9pt; font-weight: 600;">2021 - Present</span>
+                            </div>
+                            <p style="margin: 4px 0 8px 0; color: #667eea; font-size: 10pt; font-weight: bold;">Tech Corp Inc.</p>
+                            <ul style="margin: 8px 0; padding-left: 15px; color: #2c3e50; font-size: 9pt; line-height: 1.5;">
+                                <li>Led development of microservices architecture</li>
+                                <li>Improved performance by 40%</li>
+                                <li>Mentored 5 junior developers</li>
+                            </ul>
+                        </div>
+                        <div style="margin-bottom: 18px; padding-left: 15px; border-left: 4px solid #667eea;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <h3 style="margin: 0; font-size: 12pt; font-weight: bold; color: #2c3e50;">Software Engineer</h3>
+                                <span style="color: #495057; font-size: 9pt; font-weight: 600;">2019 - 2021</span>
+                            </div>
+                            <p style="margin: 4px 0 8px 0; color: #667eea; font-size: 10pt; font-weight: bold;">StartUp Solutions</p>
+                            <ul style="margin: 8px 0; padding-left: 15px; color: #2c3e50; font-size: 9pt; line-height: 1.5;">
+                                <li>Built RESTful APIs with Django</li>
+                                <li>Reduced deployment time by 60%</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 22px;">
+                        <h2 style="color: #667eea; font-size: 18pt; font-weight: bold; margin-bottom: 12px; border-bottom: 4px solid #667eea; padding-bottom: 6px; display: inline-block;">EDUCATION</h2>
+                        <div style="padding-left: 15px; border-left: 4px solid #667eea;">
+                            <h3 style="margin: 0; font-size: 12pt; font-weight: bold; color: #2c3e50;">B.S. Computer Science</h3>
+                            <p style="margin: 4px 0; color: #667eea; font-size: 10pt; font-weight: bold;">University of Technology</p>
+                            <span style="color: #495057; font-size: 9pt; font-weight: 600;">2015 - 2019</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h2 style="color: #667eea; font-size: 18pt; font-weight: bold; margin-bottom: 12px; border-bottom: 4px solid #667eea; padding-bottom: 6px; display: inline-block;">PROJECTS</h2>
+                        <div style="margin-bottom: 15px;">
+                            <h3 style="margin: 0 0 6px 0; font-size: 11pt; font-weight: bold; color: #2c3e50;">E-Commerce Platform</h3>
+                            <p style="margin: 0; color: #2c3e50; font-size: 9pt; line-height: 1.5;">
+                                Built scalable e-commerce solution handling 100K+ daily transactions using React and Django.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 6px 0; font-size: 11pt; font-weight: bold; color: #2c3e50;">AI Task Manager</h3>
+                            <p style="margin: 0; color: #2c3e50; font-size: 9pt; line-height: 1.5;">
+                                Developed AI-powered task management tool using machine learning algorithms.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `
+    },
+    minimal: {
+        name: 'Minimal Clean',
+        category: 'modern',
+        html: `
+            <div style="width: 210mm; min-height: 297mm; padding: 30mm 25mm; background: white; font-family: 'Helvetica', Arial, sans-serif;">
+                <div style="margin-bottom: 40px;">
+                    <h1 style="margin: 0 0 8px 0; color: #1a1a1a; font-size: 56px; font-weight: 400; letter-spacing: -1px;">John Doe</h1>
+                    <p style="margin: 0 0 12px 0; color: #444; font-size: 24px; font-weight: 300;">Software Engineer</p>
+                    <p style="margin: 0; color: #666; font-size: 17px;">
+                        john.doe@email.com  •  +1 234-567-8900  •  San Francisco, CA
+                    </p>
+                </div>
+                
+                <div style="margin-bottom: 35px;">
+                    <p style="color: #2c3e50; line-height: 1.9; font-size: 17px; margin: 0;">
+                        Software engineer with 5+ years of experience building scalable web applications. 
+                        Specialized in full-stack development with focus on clean, maintainable code.
+                    </p>
+                </div>
+                
+                <div style="margin-bottom: 35px;">
+                    <h2 style="color: #1a1a1a; font-size: 22px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;">Experience</h2>
+                    <div style="margin-bottom: 28px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <div>
+                                <h3 style="margin: 0; font-size: 20px; font-weight: 600; color: #1a1a1a;">Senior Software Engineer</h3>
+                                <p style="margin: 5px 0 0 0; color: #495057; font-size: 17px;">Tech Corp Inc.</p>
+                            </div>
+                            <span style="color: #666; font-size: 16px; font-weight: 600; white-space: nowrap;">2021 - Present</span>
+                        </div>
+                        <ul style="margin: 12px 0 0 22px; padding: 0; color: #2c3e50; font-size: 17px; line-height: 1.8;">
+                            <li style="margin-bottom: 6px;">Architected microservices handling 1M+ daily active users</li>
+                            <li style="margin-bottom: 6px;">Optimized database queries improving response time by 40%</li>
+                            <li style="margin-bottom: 6px;">Mentored team of 5 junior engineers</li>
+                        </ul>
+                    </div>
+                    <div style="margin-bottom: 28px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <div>
+                                <h3 style="margin: 0; font-size: 20px; font-weight: 600; color: #1a1a1a;">Software Engineer</h3>
+                                <p style="margin: 5px 0 0 0; color: #495057; font-size: 17px;">StartUp Solutions</p>
+                            </div>
+                            <span style="color: #666; font-size: 16px; font-weight: 600; white-space: nowrap;">2019 - 2021</span>
+                        </div>
+                        <ul style="margin: 12px 0 0 22px; padding: 0; color: #2c3e50; font-size: 17px; line-height: 1.8;">
+                            <li style="margin-bottom: 6px;">Developed RESTful APIs using Django and Flask</li>
+                            <li style="margin-bottom: 6px;">Implemented CI/CD reducing deployment time by 60%</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 35px;">
+                    <h2 style="color: #1a1a1a; font-size: 22px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;">Education</h2>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div>
+                            <h3 style="margin: 0; font-size: 20px; font-weight: 600; color: #1a1a1a;">Bachelor of Science in Computer Science</h3>
+                            <p style="margin: 5px 0 0 0; color: #495057; font-size: 17px;">University of Technology</p>
+                        </div>
+                        <span style="color: #666; font-size: 16px; font-weight: 600; white-space: nowrap;">2015 - 2019</span>
+                    </div>
+                </div>
+                
+                <div>
+                    <h2 style="color: #1a1a1a; font-size: 22px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px;">Skills</h2>
+                    <p style="color: #2c3e50; font-size: 17px; line-height: 2; margin: 0; font-weight: 500;">
+                        Python  •  JavaScript  •  TypeScript  •  React  •  Django  •  Node.js  •  
+                        PostgreSQL  •  MongoDB  •  AWS  •  Docker  •  Kubernetes  •  Git
+                    </p>
+                </div>
+            </div>
+        `
+    },
+    executive: {
+        name: 'Executive Premium',
+        category: 'traditional',
+        html: `
+            <div style="width: 210mm; min-height: 297mm; padding: 20mm; background: white; font-family: 'Times New Roman', serif;">
+                <div style="text-align: center; padding: 20px 0 25px; border-bottom: 5px solid #1a1a1a; margin-bottom: 30px;">
+                    <h1 style="margin: 0 0 10px 0; color: #1a1a1a; font-size: 50px; font-weight: bold; letter-spacing: 3px;">JOHN DOE</h1>
+                    <p style="margin: 0 0 12px 0; color: #2c3e50; font-size: 22px; font-style: italic;">Chief Technology Officer</p>
+                    <p style="margin: 0; color: #495057; font-size: 17px;">
+                        john.doe@email.com  |  +1 234-567-8900  |  San Francisco, CA  |  LinkedIn: /in/johndoe
+                    </p>
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <h2 style="color: #1a1a1a; font-size: 24px; font-weight: bold; margin-bottom: 14px; border-bottom: 3px solid #1a1a1a; padding-bottom: 8px;">EXECUTIVE SUMMARY</h2>
+                    <p style="color: #2c3e50; line-height: 2; font-size: 17px; text-align: justify;">
+                        Visionary technology executive with 15+ years of progressive leadership experience. Proven track record 
+                        of driving digital transformation, building high-performing teams, and delivering enterprise-scale solutions. 
+                        Strategic thinker with deep expertise in cloud architecture, artificial intelligence, and organizational 
+                        development. Successfully led $50M+ technology initiatives across Fortune 500 companies.
+                    </p>
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <h2 style="color: #1a1a1a; font-size: 24px; font-weight: bold; margin-bottom: 14px; border-bottom: 3px solid #1a1a1a; padding-bottom: 8px;">EXECUTIVE EXPERIENCE</h2>
+                    <div style="margin-bottom: 22px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <h3 style="margin: 0; font-size: 20px; font-weight: bold; color: #1a1a1a;">Chief Technology Officer</h3>
+                            <span style="color: #495057; font-size: 17px; font-weight: bold;">2020 - Present</span>
+                        </div>
+                        <p style="margin: 5px 0 12px 0; color: #2c3e50; font-size: 18px; font-style: italic;">Global Tech Corporation, San Francisco, CA</p>
+                        <ul style="margin: 0; padding-left: 22px; color: #2c3e50; font-size: 17px; line-height: 2;">
+                            <li>Direct technology strategy and operations for $2B revenue organization with 500+ employees</li>
+                            <li>Led digital transformation initiative resulting in 45% operational efficiency improvement</li>
+                            <li>Established AI/ML center of excellence, driving $30M in cost savings</li>
+                            <li>Built and managed $50M technology budget across multiple business units</li>
+                        </ul>
+                    </div>
+                    <div style="margin-bottom: 22px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <h3 style="margin: 0; font-size: 20px; font-weight: bold; color: #1a1a1a;">Vice President of Engineering</h3>
+                            <span style="color: #495057; font-size: 17px; font-weight: bold;">2017 - 2020</span>
+                        </div>
+                        <p style="margin: 5px 0 12px 0; color: #2c3e50; font-size: 18px; font-style: italic;">Innovation Systems Inc., San Francisco, CA</p>
+                        <ul style="margin: 0; padding-left: 22px; color: #2c3e50; font-size: 17px; line-height: 2;">
+                            <li>Scaled engineering organization from 50 to 200+ engineers across 5 locations</li>
+                            <li>Drove cloud migration strategy, reducing infrastructure costs by 60%</li>
+                            <li>Implemented agile transformation across all engineering teams</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <h2 style="color: #1a1a1a; font-size: 24px; font-weight: bold; margin-bottom: 14px; border-bottom: 3px solid #1a1a1a; padding-bottom: 8px;">EDUCATION & CERTIFICATIONS</h2>
+                    <div style="margin-bottom: 18px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <div>
+                                <h3 style="margin: 0; font-size: 19px; font-weight: bold; color: #1a1a1a;">Master of Business Administration (MBA)</h3>
+                                <p style="margin: 5px 0; color: #2c3e50; font-size: 17px;">Stanford Graduate School of Business</p>
+                            </div>
+                            <span style="color: #495057; font-size: 17px; font-weight: bold;">2015</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <div>
+                                <h3 style="margin: 0; font-size: 19px; font-weight: bold; color: #1a1a1a;">Master of Science in Computer Science</h3>
+                                <p style="margin: 5px 0; color: #2c3e50; font-size: 17px;">Massachusetts Institute of Technology</p>
+                            </div>
+                            <span style="color: #495057; font-size: 17px; font-weight: bold;">2010</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <h2 style="color: #1a1a1a; font-size: 24px; font-weight: bold; margin-bottom: 14px; border-bottom: 3px solid #1a1a1a; padding-bottom: 8px;">BOARD & ADVISORY ROLES</h2>
+                    <p style="color: #2c3e50; font-size: 17px; line-height: 2; margin: 0;">
+                        • Board Member, TechStartup Accelerator (2021 - Present)<br>
+                        • Technical Advisor, Venture Capital Fund (2019 - Present)<br>
+                        • Advisory Board, University CS Department (2018 - Present)
+                    </p>
+                </div>
+                
+                <div>
+                    <h2 style="color: #1a1a1a; font-size: 24px; font-weight: bold; margin-bottom: 14px; border-bottom: 3px solid #1a1a1a; padding-bottom: 8px;">CORE COMPETENCIES</h2>
+                    <p style="color: #2c3e50; font-size: 17px; line-height: 2; margin: 0; font-weight: 500;">
+                        Strategic Planning  •  Digital Transformation  •  Cloud Architecture  •  Team Building  •  
+                        Budget Management  •  Vendor Relations  •  Agile Methodologies  •  AI/ML Strategy  •  
+                        Cybersecurity  •  M&A Integration  •  Board Relations  •  Stakeholder Management
+                    </p>
+                </div>
+            </div>
+        `
+    },
+    technical: {
+        name: 'Technical Expert',
+        category: 'modern',
+        html: `
+            <div style="width: 210mm; min-height: 297mm; padding: 20mm; background: white; font-family: 'Courier New', monospace;">
+                <div style="background: #1a1a1a !important; color: #ffffff !important; padding: 25px; margin: -20mm -20mm 30px -20mm; border-bottom: 5px solid #00d4ff;">
+                    <h1 style="margin: 0 0 12px 0; font-size: 48px !important; font-weight: 900 !important; color: #ffffff !important; letter-spacing: 2px; -webkit-text-fill-color: #ffffff !important; fill: #ffffff !important;"><span style="color: #ffffff !important;">&lt;John Doe /&gt;</span></h1>
+                    <p style="margin: 0 0 15px 0; font-size: 22px !important; color: #ffffff !important; font-weight: 700 !important; letter-spacing: 1px; -webkit-text-fill-color: #ffffff !important; fill: #ffffff !important;"><span style="color: #ffffff !important;">Senior Software Engineer | Full Stack Developer</span></p>
+                    <p style="margin: 0; font-size: 17px !important; color: #ffffff !important; font-weight: 600 !important; letter-spacing: 0.5px; -webkit-text-fill-color: #ffffff !important; fill: #ffffff !important;">
+                        <span style="color: #ffffff !important;">📧 john.doe@email.com  |  📱 +1-234-567-8900  |  🔗 github.com/johndoe  |  📍 San Francisco, CA</span>
+                    </p>
+                </div>
+                
+                <div style="margin-bottom: 28px;">
+                    <h2 style="color: #00d4ff; font-size: 24px; margin-bottom: 12px; font-family: Arial, sans-serif; font-weight: bold;">// TECHNICAL PROFILE</h2>
+                    <p style="color: #1a1a1a; line-height: 1.8; font-size: 17px; font-family: Arial, sans-serif; font-weight: 500;">
+                        Full-stack software engineer specializing in scalable web applications and cloud infrastructure. 
+                        5+ years of experience in modern JavaScript frameworks, Python backends, and DevOps practices.
+                    </p>
+                </div>
+                
+                <div style="margin-bottom: 28px;">
+                    <h2 style="color: #00d4ff; font-size: 24px; margin-bottom: 14px; font-family: Arial, sans-serif; font-weight: bold;">// SKILLS MATRIX</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; font-family: Arial, sans-serif;">
+                        <div>
+                            <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #e06c75; font-weight: bold;">Languages & Frameworks</h3>
+                            <p style="margin: 0; font-size: 16px; color: #1a1a1a; line-height: 2; font-weight: 500;">
+                                ▪ Python (Django, Flask, FastAPI)<br>
+                                ▪ JavaScript/TypeScript (React, Node.js)<br>
+                                ▪ Java (Spring Boot)<br>
+                                ▪ Go (Gin, Echo)
+                            </p>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #e06c75; font-weight: bold;">Cloud & DevOps</h3>
+                            <p style="margin: 0; font-size: 16px; color: #1a1a1a; line-height: 2; font-weight: 500;">
+                                ▪ AWS (EC2, S3, Lambda, RDS)<br>
+                                ▪ Docker, Kubernetes<br>
+                                ▪ Jenkins, GitLab CI/CD<br>
+                                ▪ Terraform, Ansible
+                            </p>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #e06c75; font-weight: bold;">Databases</h3>
+                            <p style="margin: 0; font-size: 16px; color: #1a1a1a; line-height: 2; font-weight: 500;">
+                                ▪ PostgreSQL, MySQL<br>
+                                ▪ MongoDB, Redis<br>
+                                ▪ Elasticsearch<br>
+                                ▪ DynamoDB
+                            </p>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #e06c75; font-weight: bold;">Tools & Practices</h3>
+                            <p style="margin: 0; font-size: 16px; color: #1a1a1a; line-height: 2; font-weight: 500;">
+                                ▪ Git, GitHub, GitLab<br>
+                                ▪ Agile/Scrum<br>
+                                ▪ TDD, Unit Testing<br>
+                                ▪ Microservices Architecture
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 28px;">
+                    <h2 style="color: #00d4ff; font-size: 24px; margin-bottom: 14px; font-family: Arial, sans-serif; font-weight: bold;">// PROFESSIONAL EXPERIENCE</h2>
+                    <div style="margin-bottom: 22px; font-family: Arial, sans-serif;">
+                        <div style="background: #f8f9fa; padding: 15px; border-left: 5px solid #00d4ff;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <h3 style="margin: 0; font-size: 19px; color: #1a1a1a; font-weight: bold;">Senior Software Engineer</h3>
+                                <span style="color: #495057; font-size: 16px; font-weight: 600;">2021 - Present</span>
+                            </div>
+                            <p style="margin: 6px 0 12px 0; color: #495057; font-size: 17px; font-weight: 500;">Tech Corp Inc. | San Francisco, CA</p>
+                            <ul style="margin: 0; padding-left: 22px; color: #1a1a1a; font-size: 16px; line-height: 1.9;">
+                                <li>Designed and implemented microservices architecture serving 1M+ users</li>
+                                <li>Optimized API performance achieving 40% reduction in response time</li>
+                                <li>Led migration from monolith to containerized services using Docker/Kubernetes</li>
+                                <li>Implemented CI/CD pipelines reducing deployment time from hours to minutes</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 22px; font-family: Arial, sans-serif;">
+                        <div style="background: #f8f9fa; padding: 15px; border-left: 5px solid #00d4ff;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <h3 style="margin: 0; font-size: 19px; color: #1a1a1a; font-weight: bold;">Software Engineer</h3>
+                                <span style="color: #495057; font-size: 16px; font-weight: 600;">2019 - 2021</span>
+                            </div>
+                            <p style="margin: 6px 0 12px 0; color: #495057; font-size: 17px; font-weight: 500;">StartUp Solutions | San Francisco, CA</p>
+                            <ul style="margin: 0; padding-left: 22px; color: #1a1a1a; font-size: 16px; line-height: 1.9;">
+                                <li>Developed RESTful APIs using Django and Flask frameworks</li>
+                                <li>Built real-time data processing pipelines with Apache Kafka</li>
+                                <li>Implemented automated testing achieving 85% code coverage</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 28px;">
+                    <h2 style="color: #00d4ff; font-size: 24px; margin-bottom: 14px; font-family: Arial, sans-serif; font-weight: bold;">// KEY PROJECTS</h2>
+                    <div style="font-family: Arial, sans-serif;">
+                        <div style="margin-bottom: 16px;">
+                            <h3 style="margin: 0 0 8px 0; font-size: 18px; color: #1a1a1a; font-weight: bold;">E-Commerce Platform Rebuild</h3>
+                            <p style="margin: 0; font-size: 16px; color: #2c3e50; line-height: 1.8; font-weight: 500;">
+                                Architected and led development of scalable e-commerce platform handling 100K+ daily transactions. 
+                                Tech: React, Node.js, PostgreSQL, AWS, Docker
+                            </p>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 8px 0; font-size: 18px; color: #1a1a1a; font-weight: bold;">Real-time Analytics Dashboard</h3>
+                            <p style="margin: 0; font-size: 16px; color: #2c3e50; line-height: 1.8; font-weight: 500;">
+                                Built real-time analytics system processing 10M+ events per day using Kafka and Elasticsearch.
+                                Tech: Python, Kafka, Elasticsearch, Redis, Grafana
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 28px;">
+                    <h2 style="color: #00d4ff; font-size: 24px; margin-bottom: 14px; font-family: Arial, sans-serif; font-weight: bold;">// EDUCATION</h2>
+                    <div style="font-family: Arial, sans-serif;">
+                        <h3 style="margin: 0; font-size: 19px; color: #1a1a1a; font-weight: bold;">B.S. Computer Science</h3>
+                        <p style="margin: 6px 0; color: #495057; font-size: 16px; font-weight: 500;">University of Technology | GPA: 3.8/4.0 | 2015-2019</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h2 style="color: #00d4ff; font-size: 24px; margin-bottom: 14px; font-family: Arial, sans-serif; font-weight: bold;">// CERTIFICATIONS</h2>
+                    <p style="margin: 0; font-size: 16px; color: #1a1a1a; line-height: 2.1; font-family: Arial, sans-serif; font-weight: 500;">
+                        ✓ AWS Certified Solutions Architect - Professional<br>
+                        ✓ Certified Kubernetes Administrator (CKA)<br>
+                        ✓ Google Cloud Professional Developer
+                    </p>
+                </div>
+            </div>
+        `
+    }
+};
+
+// Initialize templates on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Render all template previews
+    Object.keys(templateData).forEach(key => {
+        const element = document.getElementById(`template-${key}`);
+        if (element) {
+            element.innerHTML = templateData[key].html;
+        }
+    });
+});
+
+// Filter templates
+function filterTemplates(category) {
+    const items = document.querySelectorAll('.template-item');
+    const buttons = document.querySelectorAll('[data-filter]');
+    
+    // Update active button
+    buttons.forEach(btn => {
+        if (btn.getAttribute('data-filter') === category) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    
+    // Filter items
+    items.forEach(item => {
+        if (category === 'all' || item.getAttribute('data-category') === category) {
+            item.classList.remove('hidden');
+        } else {
+            item.classList.add('hidden');
+        }
+    });
+}
+
+// Show preview in modal
+function showPreview(templateId, templateName) {
+    const template = templateData[templateId];
+    if (!template) return;
+    
+    // Update modal content
+    document.getElementById('modalPreviewContent').innerHTML = template.html;
+    document.getElementById('previewModalLabel').innerHTML = `<i class="bi bi-eye"></i> ${template.name}`;
+    
+    // Update use template button
+    const useBtn = document.getElementById('useTemplateBtn');
+    useBtn.href = `{% url 'generate_resume' %}?template=${templateId}`;
+    
+    // Update template info
+    const templateInfo = templates.find(t => t.id === templateId);
+    if (templateInfo) {
+        const infoHTML = `
+            <h4>${templateInfo.name}</h4>
+            <p class="text-muted">${templateInfo.description}</p>
+            
+            <h6 class="mt-4 text-uppercase text-muted">Features</h6>
+            <ul class="list-unstyled">
+                ${templateInfo.features.map(f => `<li class="mb-2"><i class="bi bi-check-circle text-success"></i> ${f}</li>`).join('')}
+            </ul>
+            
+            <h6 class="mt-4 text-uppercase text-muted">Best For</h6>
+            <div class="d-flex flex-wrap gap-2">
+                ${templateInfo.best_for.map(p => `<span class="badge bg-primary">${p}</span>`).join('')}
+            </div>
+        `;
+        document.getElementById('modalTemplateInfo').innerHTML = infoHTML;
+    }
+}
+
+// Download preview as PDF (placeholder)
+function downloadPreview() {
+    alert('PDF download feature will be available when you use this template to generate your resume.');
+}
+
+// Store templates data from Django
+const templates = {{ templates_json|safe }};
+</script>
+{% endblock %}

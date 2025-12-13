@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify Email - AI Resume Builder{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header text-center bg-gradient text-white py-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <h3 class="mb-0"><i class="bi bi-envelope-check-fill"></i> Verify Your Email</h3>
+                    <p class="mb-0 mt-2 small">Enter the verification code sent to your email</p>
+                </div>
+                <div class="card-body p-5">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                <strong>
+                                    {% if message.tags == 'success' %}
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    {% elif message.tags == 'error' %}
+                                        <i class="bi bi-exclamation-triangle-fill"></i>
+                                    {% else %}
+                                        <i class="bi bi-info-circle-fill"></i>
+                                    {% endif %}
+                                </strong>
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <div class="text-center mb-4">
+                        <div class="verification-icon mb-3">
+                            <i class="bi bi-envelope-check" style="font-size: 4rem; color: #667eea;"></i>
+                        </div>
+                        <p class="text-muted">
+                            We've sent a 6-digit verification code to<br>
+                            <strong class="text-dark">{{ email }}</strong>
+                        </p>
+                        <p class="small text-muted">
+                            Please check your inbox and spam folder. The code expires in 10 minutes.
+                        </p>
+                    </div>
+                    
+                    <form method="post" action="{% url 'signup_verify_otp' %}" id="otpForm">
+                        {% csrf_token %}
+                        {{ form.email }}
+                        
+                        <div class="mb-4">
+                            <label for="id_otp" class="form-label text-center d-block">
+                                <i class="bi bi-shield-lock"></i> Enter Verification Code
+                            </label>
+                            <input type="text" name="otp" class="form-control form-control-lg text-center" 
+                                   id="id_otp" placeholder="000000" maxlength="6" required autofocus
+                                   style="letter-spacing: 10px; font-size: 24px; font-weight: bold;">
+                            <div class="invalid-feedback text-center">
+                                Please enter the 6-digit code.
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" class="btn btn-lg text-white" 
+                                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="bi bi-check-circle-fill"></i> Verify Email
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <p class="text-muted mb-2">Didn't receive the code?</p>
+                        <form method="post" action="{% url 'resend_signup_otp' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link text-decoration-none" style="color: #667eea;">
+                                <i class="bi bi-arrow-clockwise"></i> Resend Code
+                            </button>
+                        </form>
+                        <span class="text-muted mx-2">|</span>
+                        <a href="{% url 'account_signup' %}" class="text-decoration-none" style="color: #667eea;">
+                            <i class="bi bi-arrow-left"></i> Start Over
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Help Section -->
+            <div class="card mt-4 border-0 bg-light">
+                <div class="card-body">
+                    <h6 class="mb-3"><i class="bi bi-question-circle"></i> Having trouble?</h6>
+                    <ul class="small text-muted mb-0">
+                        <li>Check your spam or junk folder</li>
+                        <li>Make sure you entered the correct email address</li>
+                        <li>Wait a few minutes for the email to arrive</li>
+                        <li>Click "Resend Code" if you didn't receive it</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- How it works & Security Tip -->
+            <div class="card mt-3 border-0 bg-white">
+                <div class="card-body small">
+                    <h6 class="mb-2"><i class="bi bi-list-check"></i> How it works</h6>
+                    <ol class="mb-3">
+                        <li>We send a one-time 6-digit code to your email.</li>
+                        <li>Enter the code on this page to verify your email and activate your account.</li>
+                        <li>If the code expires, request a new one using "Resend Code".</li>
+                    </ol>
+                    <h6 class="mb-2"><i class="bi bi-shield-lock"></i> Security tip</h6>
+                    <p class="mb-0 text-muted">Never share your OTP. We will never ask for your password via email.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-header {
+    border-bottom: none;
+}
+
+.form-control {
+    color: #212529 !important;
+    background-color: #ffffff !important;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+}
+
+.form-label {
+    color: #212529 !important;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.verification-icon {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Dark theme adjustments */
+[data-bs-theme="dark"] .card {
+    background-color: #ffffff !important;
+}
+
+/* Force muted/grey text to white on this page for better contrast in dark mode */
+.text-muted,
+.muted-text,
+small.text-muted,
+.form-text,
+.feature-desc {
+    color: #ffffff !important;
+}
+
+[data-bs-theme='light'] .text-muted,
+body.light-theme .text-muted,
+body[data-theme='light'] .text-muted,
+[data-bs-theme='light'] .muted-text,
+body.light-theme .muted-text,
+body[data-theme='light'] .muted-text,
+[data-bs-theme='light'] small.text-muted,
+body.light-theme small.text-muted,
+body[data-theme='light'] small.text-muted,
+[data-bs-theme='light'] .form-text,
+body.light-theme .form-text,
+body[data-theme='light'] .form-text,
+[data-bs-theme='light'] .feature-desc,
+body.light-theme .feature-desc,
+body[data-theme='light'] .feature-desc {
+    color: #111 !important;
+}
+
+[data-bs-theme="dark"] .card-body {
+    background-color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .form-control {
+    color: #212529 !important;
+    background-color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .form-label {
+    color: #212529 !important;
+}
+
+[data-bs-theme="dark"] .text-dark {
+    color: #212529 !important;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const otpInput = document.getElementById('id_otp');
+    const form = document.getElementById('otpForm');
+    
+    // Only allow numbers
+    otpInput.addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        
+        // Auto-submit when 6 digits entered
+        if (this.value.length === 6) {
+            // Add a small delay for better UX
+            setTimeout(() => {
+                form.submit();
+            }, 300);
+        }
+    });
+    
+    // Paste support
+    otpInput.addEventListener('paste', function(e) {
+        e.preventDefault();
+        const pastedData = e.clipboardData.getData('text');
+        const numbers = pastedData.replace(/[^0-9]/g, '').substring(0, 6);
+        this.value = numbers;
+        
+        if (numbers.length === 6) {
+            setTimeout(() => {
+                form.submit();
+            }, 300);
+        }
+    });
+    
+    // Form validation
+    form.addEventListener('submit', function(e) {
+        if (otpInput.value.length !== 6) {
+            e.preventDefault();
+            otpInput.classList.add('is-invalid');
+            otpInput.focus();
+        }
+    });
+    
+    // Remove invalid class on input
+    otpInput.addEventListener('input', function() {
+        this.classList.remove('is-invalid');
+    });
+});
+</script>
+{% endblock %}

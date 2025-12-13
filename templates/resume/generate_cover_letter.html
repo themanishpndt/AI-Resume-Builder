@@ -1,0 +1,319 @@
+{% extends 'base.html' %}
+
+{% block title %}Generate Cover Letter - AI Resume Builder{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-warning text-white">
+                    <h3 class="mb-0"><i class="bi bi-envelope-paper"></i> Generate AI-Powered Cover Letter</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>How it works:</strong> Our AI will analyze your profile, education, experience, and projects to create a personalized cover letter tailored to the specific job and company you're applying to.
+                    </div>
+
+                    <div class="mb-4">
+                        <h5>Your Profile Status</h5>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-person-check icon-xl text-success mb-2"></i>
+                                        <h6>Profile</h6>
+                                        {% if profile.summary %}
+                                            <span class="badge bg-success">Complete</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Incomplete</span>
+                                            <br><a href="{% url 'profile_edit' %}" class="btn btn-sm btn-outline-primary mt-2">Complete Now</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-briefcase icon-xl text-primary mb-2"></i>
+                                        <h6>Experience</h6>
+                                        {% if experience_count > 0 %}
+                                            <span class="badge bg-success">{{ experience_count }} Added</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">None</span>
+                                            <br><a href="{% url 'experience_add' %}" class="btn btn-sm btn-outline-primary mt-2">Add Now</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-mortarboard icon-xl text-info mb-2"></i>
+                                        <h6>Education</h6>
+                                        {% if education_count > 0 %}
+                                            <span class="badge bg-success">{{ education_count }} Added</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">None</span>
+                                            <br><a href="{% url 'education_add' %}" class="btn btn-sm btn-outline-primary mt-2">Add Now</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="post" id="generateCoverLetterForm">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            {{ form.company_name.label_tag }}
+                            {{ form.company_name }}
+                            {% if form.company_name.help_text %}
+                                <small class="form-text text-muted">{{ form.company_name.help_text }}</small>
+                            {% endif %}
+                            {% if form.company_name.errors %}
+                                <div class="invalid-feedback d-block">{{ form.company_name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.position.label_tag }}
+                            {{ form.position }}
+                            {% if form.position.help_text %}
+                                <small class="form-text text-muted">{{ form.position.help_text }}</small>
+                            {% endif %}
+                            {% if form.position.errors %}
+                                <div class="invalid-feedback d-block">{{ form.position.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.job_description.label_tag }}
+                            {{ form.job_description }}
+                            {% if form.job_description.help_text %}
+                                <small class="form-text text-muted">{{ form.job_description.help_text }}</small>
+                            {% endif %}
+                            {% if form.job_description.errors %}
+                                <div class="invalid-feedback d-block">{{ form.job_description.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Template Selection -->
+                        <div class="mb-4">
+                            <label class="form-label"><i class="bi bi-palette"></i> Select Template Design</label>
+                            <div class="row g-3" id="templateSelector">
+                                <div class="col-md-4">
+                                    <div class="template-card" data-template="modern">
+                                        <div class="template-preview modern-preview">
+                                            <div class="preview-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                                            <div class="preview-lines">
+                                                <div class="line" style="background: #667eea; width: 60%;"></div>
+                                                <div class="line" style="background: #ddd; width: 100%;"></div>
+                                                <div class="line" style="background: #ddd; width: 80%;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="template-name">Modern</div>
+                                        <small class="text-muted">Bold & Contemporary</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="template-card selected" data-template="classic">
+                                        <div class="template-preview classic-preview">
+                                            <div class="preview-header" style="background: #2c3e50;"></div>
+                                            <div class="preview-lines">
+                                                <div class="line" style="background: #2c3e50; width: 60%;"></div>
+                                                <div class="line" style="background: #ddd; width: 100%;"></div>
+                                                <div class="line" style="background: #ddd; width: 80%;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="template-name">Classic</div>
+                                        <small class="text-muted">Professional & Timeless</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="template-card" data-template="creative">
+                                        <div class="template-preview creative-preview">
+                                            <div class="preview-sidebar" style="background: linear-gradient(180deg, #FF6B6B 0%, #FFE66D 100%);"></div>
+                                            <div class="preview-lines" style="margin-left: 30%;">
+                                                <div class="line" style="background: #FF6B6B; width: 70%;"></div>
+                                                <div class="line" style="background: #ddd; width: 100%;"></div>
+                                                <div class="line" style="background: #ddd; width: 80%;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="template-name">Creative</div>
+                                        <small class="text-muted">Vibrant & Unique</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="template-card" data-template="minimal">
+                                        <div class="template-preview minimal-preview">
+                                            <div class="preview-header" style="background: #000;"></div>
+                                            <div class="preview-lines">
+                                                <div class="line" style="background: #000; width: 50%;"></div>
+                                                <div class="line" style="background: #ddd; width: 100%;"></div>
+                                                <div class="line" style="background: #ddd; width: 70%;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="template-name">Minimal</div>
+                                        <small class="text-muted">Clean & Simple</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="template-card" data-template="executive">
+                                        <div class="template-preview executive-preview">
+                                            <div class="preview-header" style="background: #1a1a2e; border-bottom: 3px solid #0f4c81;"></div>
+                                            <div class="preview-lines">
+                                                <div class="line" style="background: #0f4c81; width: 65%;"></div>
+                                                <div class="line" style="background: #ddd; width: 100%;"></div>
+                                                <div class="line" style="background: #ddd; width: 75%;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="template-name">Executive</div>
+                                        <small class="text-muted">Formal & Corporate</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="template-card" data-template="technical">
+                                        <div class="template-preview technical-preview">
+                                            <div class="preview-header" style="background: #333;"></div>
+                                            <div class="preview-lines">
+                                                <div class="line" style="background: #00d4aa; width: 55%; border-left: 3px solid #00d4aa;"></div>
+                                                <div class="line" style="background: #ddd; width: 100%;"></div>
+                                                <div class="line" style="background: #ddd; width: 85%;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="template-name">Technical</div>
+                                        <small class="text-muted">Tech-Focused & Sharp</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" name="template" id="selectedTemplate" value="classic">
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            <strong>Note:</strong> Cover letter generation may take 10-30 seconds. Please be patient.
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning btn-lg" id="generateBtn">
+                                <i class="bi bi-envelope-paper"></i> Generate Cover Letter
+                            </button>
+                            <a href="{% url 'cover_letter_list' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-list"></i> View My Cover Letters
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-lightbulb"></i> Tips for Better Results</h5>
+                    <ul class="mb-0">
+                        <li>Complete your profile with a strong summary and career objective</li>
+                        <li>Add relevant work experience and projects</li>
+                        <li>Include the job description for a more tailored cover letter</li>
+                        <li>Be specific about the company name and position</li>
+                        <li>The more information you provide, the better your cover letter will be</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .template-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        padding: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        background: white;
+        text-align: center;
+    }
+    
+    .template-card:hover {
+        border-color: #FFC107;
+        box-shadow: 0 4px 12px rgba(255, 193, 7, 0.15);
+        transform: translateY(-2px);
+    }
+    
+    .template-card.selected {
+        border-color: #FFC107;
+        background: #fff9e6;
+        box-shadow: 0 4px 12px rgba(255, 193, 7, 0.25);
+    }
+    
+    .template-preview {
+        height: 100px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+        background: white;
+        margin-bottom: 10px;
+        position: relative;
+    }
+    
+    .preview-header {
+        height: 25px;
+        width: 100%;
+    }
+    
+    .preview-sidebar {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 30%;
+        height: 100%;
+    }
+    
+    .preview-lines {
+        padding: 8px;
+    }
+    
+    .line {
+        height: 6px;
+        border-radius: 2px;
+        margin-bottom: 6px;
+    }
+    
+    .template-name {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #333;
+    }
+</style>
+
+<script>
+let selectedTemplate = 'classic'; // Default template for cover letters
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click handlers to all template cards
+    document.querySelectorAll('.template-card').forEach(card => {
+        card.addEventListener('click', function() {
+            // Remove selected class from all cards
+            document.querySelectorAll('.template-card').forEach(c => {
+                c.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked card
+            this.classList.add('selected');
+            
+            // Update selected template
+            selectedTemplate = this.getAttribute('data-template');
+            document.getElementById('selectedTemplate').value = selectedTemplate;
+        });
+    });
+});
+
+document.getElementById('generateCoverLetterForm').addEventListener('submit', function() {
+    var btn = document.getElementById('generateBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Generating...';
+});
+</script>
+{% endblock %}

@@ -1,0 +1,2375 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Sign Up - AI Resume Builder{% endblock %}
+
+{% block messages %}
+    {# Override base.html messages block to prevent duplicate display #}
+{% endblock %}
+
+{% block content %}
+<!-- Animated Particle Background -->
+<canvas id="particles-canvas-signup"></canvas>
+
+<!-- Three.js 3D container (home-like background) -->
+<div id="three-container"></div>
+<!-- Floating decorative moving elements (subtle, non-interactive) -->
+<div id="floating-elements" aria-hidden="true">
+    <div class="float-elem e1"></div>
+    <div class="float-elem e2"></div>
+    <div class="float-elem e3"></div>
+    <div class="float-elem e4"></div>
+</div>
+
+<div class="futuristic-signup-container">
+<div class="container position-relative">
+    <div class="row align-items-center justify-content-center py-5" style="min-height: calc(100vh - 120px); margin-top: 80px;">
+        <!-- Left Side - Features with Animation -->
+        <div class="col-lg-5 mb-4 mb-lg-0">
+            <div class="signup-features animate-fade-in">
+                <!-- Animated Character SVG -->
+                <div class="animated-character-container mb-4 text-center">
+                    <svg class="animated-character" width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Robot Head -->
+                        <g class="robot-head">
+                            <rect x="60" y="50" width="80" height="70" rx="10" fill="url(#robotGradient)" stroke="#667eea" stroke-width="3"/>
+                            <!-- Eyes -->
+                            <circle class="eye-left" cx="80" cy="75" r="8" fill="#fff"/>
+                            <circle class="pupil-left" cx="80" cy="75" r="4" fill="#667eea"/>
+                            <circle class="eye-right" cx="120" cy="75" r="8" fill="#fff"/>
+                            <circle class="pupil-right" cx="120" cy="75" r="4" fill="#667eea"/>
+                            <!-- Smile -->
+                            <path class="smile" d="M 75 95 Q 100 105 125 95" stroke="#667eea" stroke-width="3" fill="none" stroke-linecap="round"/>
+                            <!-- Antenna -->
+                            <line x1="100" y1="50" x2="100" y2="30" stroke="#764ba2" stroke-width="3"/>
+                            <circle cx="100" cy="25" r="5" fill="#f093fb" class="antenna-light"/>
+                        </g>
+                        <!-- Body -->
+                        <rect x="70" y="120" width="60" height="50" rx="5" fill="url(#robotGradient)" stroke="#667eea" stroke-width="2"/>
+                        <!-- Arms -->
+                        <rect class="arm-left" x="45" y="130" width="25" height="8" rx="4" fill="#764ba2"/>
+                        <rect class="arm-right" x="130" y="130" width="25" height="8" rx="4" fill="#764ba2"/>
+                        <!-- Document Icon -->
+                        <rect class="document" x="85" y="135" width="30" height="25" rx="2" fill="#fff" opacity="0.8"/>
+                        <line x1="90" y1="142" x2="110" y2="142" stroke="#667eea" stroke-width="2"/>
+                        <line x1="90" y1="148" x2="110" y2="148" stroke="#667eea" stroke-width="2"/>
+                        <line x1="90" y1="154" x2="105" y2="154" stroke="#667eea" stroke-width="2"/>
+                        
+                        <!-- Gradient Definitions -->
+                        <defs>
+                            <linearGradient id="robotGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.3" />
+                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:0.3" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    
+                    <!-- Floating particles -->
+                    <div class="floating-particles">
+                        <div class="particle particle-1"></div>
+                        <div class="particle particle-2"></div>
+                        <div class="particle particle-3"></div>
+                        <div class="particle particle-4"></div>
+                    </div>
+                </div>
+                
+                <div class="feature-header mb-4">
+                    <h1 class="hero-title-signup mb-3">
+                        <i class="bi bi-stars"></i> Welcome to AI Resume Builder
+                    </h1>
+                    <p class="hero-subtitle-signup mb-4">
+                        Create professional resumes in minutes with cutting-edge AI technology
+                    </p>
+                </div>
+                
+                <div class="feature-list" role="list" aria-label="Signup features">
+                    <div class="feature-item glass-card d-flex align-items-start mb-3 p-3" role="listitem" tabindex="0">
+                        <div class="feature-icon me-3" aria-hidden="true">
+                            <div class="icon-wrapper">
+                                <i class="bi bi-robot fs-3" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="feature-accent" aria-hidden="true"></div>
+                            <h5 id="feature-title-1" class="mb-1 fw-bold">AI-Powered Resume Generation</h5>
+                            <p class="text-muted mb-0 small feature-desc">Create tailored resumes with intelligent suggestions</p>
+                            <p class="feature-more small">Use AI to auto-format, summarize experience, and suggest role-specific keywords.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item glass-card d-flex align-items-start mb-3 p-3" role="listitem" tabindex="0">
+                        <div class="feature-icon me-3" aria-hidden="true">
+                            <div class="icon-wrapper">
+                                <i class="bi bi-file-earmark-text fs-3" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="feature-accent" aria-hidden="true"></div>
+                            <h5 id="feature-title-2" class="mb-1 fw-bold">Professional Templates</h5>
+                            <p class="text-muted mb-0 small feature-desc">Choose from multiple ATS-friendly templates</p>
+                            <p class="feature-more small">Templates are optimized for applicant tracking systems and recruiter scanning.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item glass-card d-flex align-items-start mb-3 p-3" role="listitem" tabindex="0">
+                        <div class="feature-icon me-3" aria-hidden="true">
+                            <div class="icon-wrapper">
+                                <i class="bi bi-envelope-paper fs-3" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="feature-accent" aria-hidden="true"></div>
+                            <h5 id="feature-title-3" class="mb-1 fw-bold">Cover Letter Generator</h5>
+                            <p class="text-muted mb-0 small feature-desc">Generate compelling cover letters instantly</p>
+                            <p class="feature-more small">Personalize tone, skills, and company details with a few prompts.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item glass-card d-flex align-items-start mb-3 p-3" role="listitem" tabindex="0">
+                        <div class="feature-icon me-3" aria-hidden="true">
+                            <div class="icon-wrapper">
+                                <i class="bi bi-file-pdf fs-3" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="feature-accent" aria-hidden="true"></div>
+                            <h5 id="feature-title-4" class="mb-1 fw-bold">Export to PDF</h5>
+                            <p class="text-muted mb-0 small feature-desc">Download your resume in high-quality PDF format</p>
+                            <p class="feature-more small">High-resolution export with print-ready layout options and font embedding.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Side - Signup Form -->
+        <div class="col-lg-6">
+            <div class="glass-card-signup animate-slide-in">
+                <div class="card-header-signup text-center py-4">
+                    <h3 class="card-title-signup mb-2" style="color: #ffffff !important;"><i class="bi bi-person-plus-fill me-2"></i>Create Your Account</h3>
+                    <p class="card-subtitle-signup mb-0" style="color: #ffffff !important;">Start building your professional future today</p>
+                </div>
+                <div class="card-body-signup p-4 p-md-5">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                <strong>
+                                    {% if message.tags == 'success' %}
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    {% elif message.tags == 'error' %}
+                                        <i class="bi bi-exclamation-triangle-fill"></i>
+                                    {% else %}
+                                        <i class="bi bi-info-circle-fill"></i>
+                                    {% endif %}
+                                </strong>
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <!-- Only show server-side errors after form submission -->
+                    {% if form.errors and form.is_bound %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong><i class="bi bi-exclamation-triangle-fill"></i> Please correct the following errors:</strong>
+                            <ul class="mb-0 mt-2">
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <li>
+                                            {% if field == '__all__' %}
+                                                {{ error }}
+                                            {% else %}
+                                                <strong>{{ field|title }}:</strong> {{ error }}
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endif %}
+                    
+                    <form method="post" action="{% url 'account_signup' %}" id="signupForm" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- First Name -->
+                        <div class="mb-3">
+                            <label for="id_first_name" class="form-label">
+                                <i class="bi bi-person"></i> First Name <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text" aria-hidden="true"><i class="bi bi-person-fill"></i></span>
+                                <input type="text" name="first_name" class="form-control form-control-lg {% if form.is_bound and form.first_name.errors %}is-invalid{% endif %}" 
+                                       id="id_first_name" placeholder="Enter your first name" 
+                                       value="{{ form.first_name.value|default:'' }}" required aria-required="true">
+                            </div>
+                            <div class="invalid-feedback">
+                                {% if form.is_bound and form.first_name.errors %}
+                                    {{ form.first_name.errors.0 }}
+                                {% else %}
+                                    Please enter your first name.
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Last Name -->
+                        <div class="mb-3">
+                            <label for="id_last_name" class="form-label">
+                                <i class="bi bi-person"></i> Last Name <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text" aria-hidden="true"><i class="bi bi-person-badge-fill"></i></span>
+                                <input type="text" name="last_name" class="form-control form-control-lg {% if form.is_bound and form.last_name.errors %}is-invalid{% endif %}" 
+                                       id="id_last_name" placeholder="Enter your last name" 
+                                       value="{{ form.last_name.value|default:'' }}" required aria-required="true">
+                            </div>
+                            <div class="invalid-feedback">
+                                {% if form.is_bound and form.last_name.errors %}
+                                    {{ form.last_name.errors.0 }}
+                                {% else %}
+                                    Please enter your last name.
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="id_email" class="form-label">
+                                <i class="bi bi-envelope"></i> Email Address <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text" aria-hidden="true"><i class="bi bi-envelope-fill"></i></span>
+                                <input type="email" name="email" class="form-control form-control-lg {% if form.is_bound and form.email.errors %}is-invalid{% endif %}" 
+                                       id="id_email" placeholder="your.email@example.com" 
+                                       value="{{ form.email.value|default:'' }}" required aria-required="true" aria-describedby="email-help">
+                            </div>
+                            <div class="invalid-feedback">
+                                {% if form.is_bound and form.email.errors %}
+                                    {{ form.email.errors.0 }}
+                                {% else %}
+                                    Please enter a valid email address.
+                                {% endif %}
+                            </div>
+                            <small id="email-help" class="form-text text-muted email-help" role="status" aria-live="polite">
+                                <i class="bi bi-info-circle help-icon info" aria-hidden="true"></i>
+                                <i class="bi bi-check-circle-fill help-icon check" aria-hidden="true" style="display:none"></i>
+                                <span class="help-text">We'll send a verification code to this email.</span>
+                            </small>
+                        </div>
+                        
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label for="id_password1" class="form-label">
+                                <i class="bi bi-lock"></i> Password <span class="text-danger">*</span>
+                            </label>
+                            <div class="password-wrapper position-relative">
+                                <input type="password" name="password1" class="form-control form-control-lg {% if form.is_bound and form.password1.errors %}is-invalid{% endif %}" 
+                                       id="id_password1" placeholder="Create a strong password" required aria-describedby="password-strength-region">
+                                <button type="button" class="password-toggle-btn position-absolute" tabindex="0" aria-pressed="false" aria-label="Show password">
+                                    <i class="bi bi-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">
+                                {% if form.is_bound and form.password1.errors %}
+                                    {{ form.password1.errors.0 }}
+                                {% else %}
+                                    Password must be at least 8 characters long.
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Password Strength Indicator -->
+                            <div id="password-strength-region" class="password-strength mt-2" style="display: none;" aria-live="polite">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <small class="text-muted">Password Strength:</small>
+                                    <small class="strength-text fw-bold" aria-live="polite" aria-atomic="true"></small>
+                                </div>
+                                <div class="progress" style="height: 5px;">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                </div>
+                                <ul class="password-requirements mt-2 small text-muted mb-0">
+                                    <li id="req-length"><i class="bi bi-x-circle text-danger"></i> At least 8 characters</li>
+                                    <li id="req-uppercase"><i class="bi bi-x-circle text-danger"></i> One uppercase letter</li>
+                                    <li id="req-lowercase"><i class="bi bi-x-circle text-danger"></i> One lowercase letter</li>
+                                    <li id="req-number"><i class="bi bi-x-circle text-danger"></i> One number</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Confirm Password -->
+                        <div class="mb-3">
+                            <label for="id_password2" class="form-label">
+                                <i class="bi bi-lock-fill"></i> Confirm Password <span class="text-danger">*</span>
+                            </label>
+                            <div class="password-wrapper position-relative">
+                                <input type="password" name="password2" class="form-control form-control-lg" 
+                                       id="id_password2" placeholder="Re-enter your password" required>
+                                <button type="button" class="password-toggle-btn position-absolute" tabindex="0" aria-pressed="false" aria-label="Show password">
+                                    <i class="bi bi-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback" id="password-match-feedback">
+                                Passwords do not match.
+                            </div>
+                        </div>
+                        
+                        <!-- Terms & Conditions -->
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    I agree to the <a href="{% url 'terms_of_service' %}" target="_blank" class="text-decoration-none">Terms of Service</a> 
+                                    and <a href="{% url 'privacy_policy' %}" target="_blank" class="text-decoration-none">Privacy Policy</a> <span class="text-danger">*</span>
+                                </label>
+                                <div class="invalid-feedback">You must agree before submitting.</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-lg text-white" 
+                                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="bi bi-envelope-check-fill"></i> Send Verification Code
+                            </button>
+                        </div>
+                        <p class="text-center text-white small mt-2 mb-0 send-verification-note" style="color: #ffffff !important;">
+                            <i class="bi bi-info-circle"></i> We'll send a verification code to your email
+                        </p>
+                    </form>
+                    
+                    <hr class="my-4">
+
+                    <p class="text-center mb-0 have-account-row">
+                        <span class="text-white" style="color: #ffffff !important;">Already have an account?</span>
+                        <a href="{% url 'account_login' %}" class="have-account-cta" role="button" aria-label="Login to your account">
+                            <i class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></i>
+                            Login here
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Back to Home Button -->
+<a href="{% url 'home' %}" class="btn-back-home">
+    <i class="bi bi-house-door-fill me-2"></i>Back to Home
+</a>
+
+<style>
+/* ============================================
+   FUTURISTIC SIGNUP PAGE STYLES
+   ============================================ */
+:root {
+    --primary-color: #00d4ff;
+    --secondary-color: #7b2cbf;
+    --accent-color: #ff006e;
+    --dark-bg: #0a0e27;
+    --darker-bg: #050816;
+    --text-light: #e2e8f0;
+    --text-muted: #ffffff;
+}
+
+/* Animated Particle Background */
+#particles-canvas-signup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 50%, var(--darker-bg) 100%);
+}
+
+#three-container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Floating moving decorative elements */
+#floating-elements{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* sits above three-container but below content */
+    pointer-events: none;
+    overflow: visible;
+}
+.float-elem{
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(18px);
+    opacity: 0.7;
+    transform: translate3d(0,0,0);
+    will-change: transform, opacity;
+}
+.float-elem.e1{ width: 240px; height: 240px; left: 8%; top: 10%; background: radial-gradient(circle at 30% 30%, rgba(102,126,234,0.9), rgba(118,75,162,0.5)); animation: float1 12s ease-in-out infinite; }
+.float-elem.e2{ width: 160px; height: 160px; right: 10%; top: 18%; background: radial-gradient(circle at 70% 30%, rgba(0,212,255,0.85), rgba(102,126,234,0.35)); animation: float2 10s ease-in-out infinite; }
+.float-elem.e3{ width: 200px; height: 200px; left: 18%; bottom: 12%; background: radial-gradient(circle at 20% 80%, rgba(255,0,146,0.85), rgba(123,44,191,0.28)); animation: float3 14s ease-in-out infinite; }
+.float-elem.e4{ width: 120px; height: 120px; right: 22%; bottom: 20%; background: radial-gradient(circle at 60% 60%, rgba(0,212,255,0.6), rgba(102,126,234,0.22)); animation: float4 9s ease-in-out infinite; }
+
+@keyframes float1{
+    0%{ transform: translateY(0) translateX(0) scale(1); opacity:0.78 }
+    50%{ transform: translateY(-30px) translateX(12px) scale(1.03); opacity:0.95 }
+    100%{ transform: translateY(0) translateX(0) scale(1); opacity:0.78 }
+}
+@keyframes float2{
+    0%{ transform: translateY(0) translateX(0) scale(1); opacity:0.6 }
+    50%{ transform: translateY(-22px) translateX(-8px) scale(1.04); opacity:0.85 }
+    100%{ transform: translateY(0) translateX(0) scale(1); opacity:0.6 }
+}
+@keyframes float3{
+    0%{ transform: translateY(0) translateX(0) scale(1); opacity:0.72 }
+    50%{ transform: translateY(-40px) translateX(18px) scale(1.02); opacity:0.9 }
+    100%{ transform: translateY(0) translateX(0) scale(1); opacity:0.72 }
+}
+@keyframes float4{
+    0%{ transform: translateY(0) translateX(0) scale(1); opacity:0.65 }
+    50%{ transform: translateY(-18px) translateX(6px) scale(1.06); opacity:0.9 }
+    100%{ transform: translateY(0) translateX(0) scale(1); opacity:0.65 }
+}
+
+.futuristic-signup-container {
+    position: relative;
+    z-index: 1;
+    min-height: calc(100vh - 120px);
+}
+
+/* Ensure navbar is visible */
+.navbar { position: sticky; top: 0; z-index: 9999; }
+
+body {
+    background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 50%, var(--darker-bg) 100%);
+}
+
+.navbar {
+    background: linear-gradient(135deg, rgba(102,126,234,0.12), rgba(118,75,162,0.12));
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.navbar .nav-link,
+.navbar .navbar-brand {
+    color: #ffffff !important;
+}
+
+.navbar .dropdown-menu {
+    background: rgba(10, 14, 39, 0.98) !important;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.navbar .dropdown-item {
+    color: #e2e8f0 !important;
+}
+
+.navbar .dropdown-item:hover {
+    background: rgba(0, 212, 255, 0.2) !important;
+    color: #00d4ff !important;
+}
+
+/* Ensure decorative icons/logos are visible across themes */
+[data-bs-theme='dark'] .icon-wrapper i,
+[data-bs-theme='dark'] .feature-icon i,
+[data-bs-theme='dark'] .bi,
+body.dark-theme .icon-wrapper i,
+body.dark-theme .feature-icon i {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+
+[data-bs-theme='light'] .icon-wrapper i,
+[data-bs-theme='light'] .feature-icon i,
+body.light-theme .icon-wrapper i,
+body.light-theme .feature-icon i {
+    color: #111 !important;
+    fill: #111 !important;
+}
+
+/* Hero Title & Subtitle */
+.hero-title-signup {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(2.25rem, 6vw, 3rem);
+    font-weight: 900;
+    color: #ffffff;
+    /* Gradient text for a more modern look */
+    background: linear-gradient(90deg, #67d2ff 0%, #8b5cf6 40%, #ff6b9d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    line-height: 1.02;
+    text-transform: none;
+    animation: titleGlow 3.5s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.3); }
+}
+
+.hero-subtitle-signup {
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    color: rgba(255,255,255,0.92);
+    font-weight: 500;
+    opacity: 0.95;
+    line-height: 1.5;
+    margin-top: 0.35rem;
+    max-width: 42ch;
+    position: relative;
+}
+
+/* Animated underline to draw subtle attention */
+.hero-subtitle-signup::after {
+    content: '';
+    display: block;
+    width: 56px;
+    height: 4px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, rgba(102,126,234,0.9), rgba(123,44,191,0.7));
+    margin-top: 12px;
+    transform-origin: left center;
+    animation: underlineGrow 2.4s ease-in-out infinite;
+}
+
+@keyframes underlineGrow {
+    0% { transform: scaleX(0.6); opacity: 0.6; }
+    50% { transform: scaleX(1); opacity: 1; }
+    100% { transform: scaleX(0.6); opacity: 0.6; }
+}
+}
+
+/* Glass Card */
+.glass-card-signup {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 60px rgba(0, 212, 255, 0.1);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-signup:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), 0 0 80px rgba(0, 212, 255, 0.2);
+    transform: translateY(-5px);
+}
+
+.glass-card {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+    background: rgba(15, 23, 42, 0.75);
+    transform: translateY(-3px);
+    border-color: var(--primary-color);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+}
+
+/* Card Header */
+.card-header-signup {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-header-signup::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: shimmer 4s infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-30px, -30px); }
+}
+
+.card-title-signup {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    position: relative;
+    z-index: 1;
+}
+
+.card-subtitle-signup {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-size: 0.95rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Ensure subtitle color adapts to theme explicitly (dark=white, light=dark) */
+[data-bs-theme='dark'] .card-subtitle-signup,
+body.dark-theme .card-subtitle-signup,
+body[data-theme='dark'] .card-subtitle-signup {
+    color: rgba(255,255,255,0.95) !important;
+}
+
+[data-bs-theme='light'] .card-subtitle-signup,
+body.light-theme .card-subtitle-signup,
+body[data-theme='light'] .card-subtitle-signup {
+    color: #111 !important;
+}
+
+.card-body-signup {
+    background: rgba(15, 23, 42, 0.6);
+}
+
+
+/* Form Styling */
+.form-control, .form-select {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 2px solid rgba(0, 212, 255, 0.2);
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: #ffffff !important;
+    font-size: 0.95rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Larger input-group text/icon */
+.input-group-text {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    color: var(--primary-color);
+    min-width: 46px;
+    justify-content: center;
+}
+
+.input-group.input-group-lg .form-control {
+    padding-left: 12px;
+}
+
+.form-control-lg {
+    min-height: 56px;
+}
+
+.form-label {
+    color: var(--text-light) !important;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.2px;
+}
+
+.form-control::placeholder { color: rgba(255,255,255,0.55) !important; }
+
+.form-text#email-help { color: #ffffff !important; }
+.email-help { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; }
+.email-help .help-icon { font-size: 1rem; transition: transform 220ms ease, opacity 220ms ease; }
+.email-help .help-icon.check { color: #28a745; }
+.email-help.valid { color: #28a745 !important; }
+.email-help.valid .help-icon.check { display: inline-block; transform: scale(1); opacity: 1; }
+.email-help.valid .help-icon.info { display: none; }
+.email-help .help-text { display: inline-block; }
+.email-help .muted { color: #ffffff !important; }
+
+/* Ensure the small verification note is clearly visible (white in dark, dark in light) */
+.send-verification-note { color: #ffffff !important; }
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Theme-aware overrides: ensure clear contrast in dark and light modes */
+[data-bs-theme="dark"] .card-body-signup,
+[data-bs-theme="dark"] .card-header-signup,
+[data-bs-theme="dark"] .glass-card-signup,
+[data-bs-theme="dark"] .signup-features,
+[data-bs-theme="dark"] .feature-item {
+    color: rgba(255,255,255,0.95) !important;
+}
+
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select,
+[data-bs-theme="dark"] .form-label,
+[data-bs-theme="dark"] .form-text,
+[data-bs-theme="dark"] .password-requirements li {
+    color: rgba(255,255,255,0.95) !important;
+}
+
+[data-bs-theme="dark"] .form-control::placeholder {
+    color: rgba(255,255,255,0.9) !important;
+}
+
+/* Light theme: ensure verification note is dark for contrast */
+[data-bs-theme="light"] .send-verification-note,
+body.light-theme .send-verification-note,
+body[data-theme="light"] .send-verification-note {
+    color: #111111 !important;
+}
+
+/* Light theme overrides */
+[data-bs-theme="light"] .form-control,
+[data-bs-theme="light"] .form-label,
+[data-bs-theme="light"] .form-text,
+[data-bs-theme="light"] .password-requirements li,
+[data-bs-theme="light"] .card-body-signup {
+    color: #111 !important;
+}
+
+[data-bs-theme="light"] .form-control::placeholder {
+    color: rgba(17,17,17,0.45) !important;
+}
+
+/* Small page fade-in for professional effect (use requested animation) */
+body { animation: fadeIn 0.6s ease-in-out; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Placeholder inherit rule and vendors */
+::placeholder { color: inherit; opacity: 0.8; }
+::-webkit-input-placeholder { color: inherit; opacity: 0.8; }
+:-ms-input-placeholder { color: inherit; opacity: 0.8; }
+
+/* Theme class selectors to support body.dark-theme / body.light-theme and data-theme attributes */
+body.dark-theme, body[data-theme='dark'], [data-bs-theme='dark'] {
+    color: #fff;
+}
+body.dark-theme input, body.dark-theme label, body.dark-theme p, body.dark-theme h1, body.dark-theme h2,
+body[data-theme='dark'] input, body[data-theme='dark'] label, body[data-theme='dark'] p, body[data-theme='dark'] h1, body[data-theme='dark'] h2,
+[data-bs-theme='dark'] input, [data-bs-theme='dark'] label, [data-bs-theme='dark'] p, [data-bs-theme='dark'] h1, [data-bs-theme='dark'] h2 {
+    color: #fff !important;
+}
+
+body.light-theme, body[data-theme='light'], [data-bs-theme='light'] {
+    color: #111;
+}
+body.light-theme input, body.light-theme label, body.light-theme p, body.light-theme h1, body.light-theme h2,
+body[data-theme='light'] input, body[data-theme='light'] label, body[data-theme='light'] p, body[data-theme='light'] h1, body[data-theme='light'] h2,
+[data-bs-theme='light'] input, [data-bs-theme='light'] label, [data-bs-theme='light'] p, [data-bs-theme='light'] h1, [data-bs-theme='light'] h2 {
+    color: #111 !important;
+}
+
+/* Force visibility for key signup texts (hero and feature list) */
+.hero-title-signup,
+.hero-subtitle-signup,
+.feature-item h5,
+.feature-item p {
+    color: rgba(255,255,255,0.95) !important;
+}
+
+/* Light theme override for the same elements */
+body.light-theme .hero-title-signup,
+body.light-theme .hero-subtitle-signup,
+body.light-theme .feature-item h5,
+body.light-theme .feature-item p,
+body[data-theme='light'] .hero-title-signup,
+body[data-theme='light'] .hero-subtitle-signup,
+body[data-theme='light'] .feature-item h5,
+body[data-theme='light'] .feature-item p,
+[data-bs-theme='light'] .hero-title-signup,
+[data-bs-theme='light'] .hero-subtitle-signup,
+[data-bs-theme='light'] .feature-item h5,
+[data-bs-theme='light'] .feature-item p {
+    color: #111 !important;
+}
+
+/* FORCE: Make signup page left-panel text white (override any light-theme rules) */
+.futuristic-signup-container,
+.futuristic-signup-container .hero-title-signup,
+.futuristic-signup-container .hero-subtitle-signup,
+.futuristic-signup-container .feature-item h5,
+.futuristic-signup-container .feature-item p,
+.futuristic-signup-container .feature-desc,
+.futuristic-signup-container .feature-more {
+    color: #ffffff !important;
+}
+
+.futuristic-signup-container .feature-icon .icon-wrapper i {
+    color: #ffffff !important;
+}
+
+.futuristic-signup-container .feature-item .text-muted {
+    color: #ffffff !important;
+}
+
+/* Icon/logo enhancements for signup page: colored icon wrappers and subtle glows */
+.icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(102,126,234,0.18), rgba(118,75,162,0.18));
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+}
+
+.icon-wrapper i,
+.feature-icon i {
+    color: #ffffff !important;
+    font-size: 1.35rem;
+    filter: drop-shadow(0 8px 20px rgba(118,75,162,0.18));
+}
+
+.feature-item:hover .icon-wrapper {
+    transform: translateY(-6px) scale(1.04);
+    box-shadow: 0 18px 48px rgba(102,126,234,0.12), 0 6px 20px rgba(118,75,162,0.08);
+    background: linear-gradient(135deg,#67d2ff,#8b5cf6);
+}
+
+/* Per-feature icon colors */
+.feature-item:nth-child(1) .icon-wrapper { background: linear-gradient(135deg,#00d4ff,#7b2cbf); }
+.feature-item:nth-child(2) .icon-wrapper { background: linear-gradient(135deg,#ff9ab3,#8b5cf6); }
+.feature-item:nth-child(3) .icon-wrapper { background: linear-gradient(135deg,#ffd166,#ff6b6b); }
+.feature-item:nth-child(4) .icon-wrapper { background: linear-gradient(135deg,#6ee7b7,#34d399); }
+
+/* Signup page additional overrides: TOS label, verification note, already-have-account prompt, placeholders, and links */
+.futuristic-signup-container .form-check-label,
+.futuristic-signup-container .tos-label,
+.futuristic-signup-container .terms-label {
+    color: #ffffff !important;
+}
+.futuristic-signup-container .form-check-label a,
+.futuristic-signup-container .tos-label a,
+.futuristic-signup-container .terms-label a {
+    color: #ffffff !important;
+    text-decoration: underline;
+}
+.futuristic-signup-container .form-text,
+.futuristic-signup-container .verification-note,
+.futuristic-signup-container .verification-help {
+    color: #ffffff !important;
+}
+.futuristic-signup-container .already-account,
+.futuristic-signup-container .have-account,
+.futuristic-signup-container .account-prompt,
+.futuristic-signup-container .text-muted.account-prompt {
+    color: #ffffff !important;
+}
+.futuristic-signup-container input::placeholder,
+.futuristic-signup-container textarea::placeholder {
+    color: rgba(255,255,255,0.72) !important;
+}
+.futuristic-signup-container a {
+    color: #ffffff !important;
+}
+
+/* Force entry icons/logos in the signup panel to be white for consistent contrast */
+.futuristic-signup-container .input-group-text,
+.futuristic-signup-container .input-group-text i,
+.futuristic-signup-container .form-label i,
+.futuristic-signup-container .feature-icon i,
+.futuristic-signup-container .bi,
+.futuristic-signup-container .have-account-cta i,
+.futuristic-signup-container .password-toggle-btn i {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+
+/* Narrow scope: don't force all .bi globally, only within signup container */
+.futuristic-signup-container .input-group-text { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.04); }
+
+/* Autofill styling */
+.form-control:-webkit-autofill,
+.form-control:-webkit-autofill:hover,
+.form-control:-webkit-autofill:focus {
+    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.05) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.form-control:focus, .form-select:focus {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.15), 0 0 20px rgba(0, 212, 255, 0.2);
+    transform: translateY(-2px);
+    color: #ffffff !important;
+}
+
+.form-control:hover {
+    border-color: rgba(0, 212, 255, 0.4);
+}
+
+.form-label {
+    color: var(--text-light) !important;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.form-text {
+    color: var(--text-muted) !important;
+    font-size: 0.85rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Force common muted/grey text to appear white on this page for dark-mode contrast */
+.text-muted,
+.muted-text,
+small.text-muted,
+.lead,
+.form-text,
+.feature-desc {
+    color: #ffffff !important;
+}
+
+/* Light theme overrides: make these darker for contrast when using a light theme */
+[data-bs-theme='light'] .text-muted,
+body.light-theme .text-muted,
+body[data-theme='light'] .text-muted,
+[data-bs-theme='light'] .muted-text,
+body.light-theme .muted-text,
+body[data-theme='light'] .muted-text,
+[data-bs-theme='light'] small.text-muted,
+body.light-theme small.text-muted,
+body[data-theme='light'] small.text-muted,
+[data-bs-theme='light'] .form-text,
+body.light-theme .form-text,
+body[data-theme='light'] .form-text,
+[data-bs-theme='light'] .feature-desc,
+body.light-theme .feature-desc,
+body[data-theme='light'] .feature-desc {
+    color: #111 !important;
+}
+
+.form-check-label {
+    color: var(--text-light) !important;
+    font-size: 0.9rem;
+}
+
+.form-check-input {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(0, 212, 255, 0.3);
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-control.is-valid {
+    border-color: #28a745;
+    background-image: none;
+}
+
+.form-control.is-invalid {
+    border-color: #ff006e;
+    background-image: none;
+}
+
+/* Password Toggle */
+.password-wrapper {
+    position: relative;
+}
+
+.password-toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 6px;
+    color: var(--primary-color);
+    z-index: 10;
+    transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.password-toggle-btn:hover {
+    background: rgba(255,255,255,0.07);
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+.password-toggle-btn:focus,
+.password-toggle-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(102,126,234,0.18);
+    transform: translateY(-50%) scale(1.02);
+}
+[data-bs-theme='dark'] .password-toggle-btn {
+    background: rgba(255,255,255,0.06) !important;
+    border-color: rgba(255,255,255,0.12) !important;
+    color: #ffffff !important;
+}
+[data-bs-theme='dark'] .password-toggle-btn i {
+    color: #ffffff !important;
+}
+
+[data-bs-theme='light'] .password-toggle-btn {
+    background: rgba(0,0,0,0.04) !important;
+    border-color: rgba(0,0,0,0.06) !important;
+    color: #0d6efd !important;
+}
+[data-bs-theme='light'] .password-toggle-btn i {
+    color: #0d6efd !important;
+}
+
+/* Ensure the eye icon is visible and slightly larger */
+.password-toggle-btn i {
+    font-size: 1.05rem;
+    line-height: 1;
+    display: inline-block;
+    color: var(--primary-color) !important;
+}
+
+.password-toggle-btn {
+    z-index: 20; /* above inputs and other overlays */
+}
+
+[data-bs-theme='light'] .password-toggle-btn {
+    background: rgba(0,0,0,0.04);
+    border-color: rgba(0,0,0,0.06);
+    color: #0d6efd;
+}
+[data-bs-theme='light'] .password-toggle-btn:hover {
+    background: rgba(0,0,0,0.06);
+}
+
+.password-wrapper input {
+    padding-right: 50px;
+}
+
+/* Password Strength Indicator */
+.password-strength {
+    margin-top: 10px;
+    padding: 12px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 10px;
+}
+
+/* Make the "Password Strength:" heading red and bold (scoped to signup page) */
+.futuristic-signup-container .password-strength small.text-muted {
+    color: #ff4d4f !important; /* red */
+    font-weight: 700 !important;
+}
+
+.strength-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.password-requirements {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.password-requirements li {
+    padding: 4px 0;
+    transition: all 0.3s;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.password-requirements li i {
+    margin-right: 8px;
+    font-size: 0.9rem;
+}
+
+/* Pulse animation for requirement met */
+.password-requirements li.pulse {
+    transform: scale(1.03);
+    transition: transform 220ms ease;
+}
+
+/* Stronger visual for strength badge */
+.strength-text {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    letter-spacing: 0.2px;
+    transition: background-color 260ms ease, color 260ms ease, transform 200ms ease;
+}
+.strength-text.very-weak { background: rgba(220,53,69,0.12); color: #dc3545; }
+.futuristic-signup-container .strength-text.very-weak {
+    background: linear-gradient(90deg,#a50f15,#dc3545) !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    box-shadow: 0 8px 30px rgba(165,15,21,0.18) !important;
+    animation: pulse-very-weak 900ms ease-in-out infinite;
+}
+
+.futuristic-signup-container .strength-text.weak {
+    background: linear-gradient(90deg,#e05547,#ff6b6b) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    box-shadow: 0 8px 26px rgba(224,85,71,0.12) !important;
+    animation: pulse-weak 1200ms ease-in-out infinite;
+}
+
+.futuristic-signup-container .strength-text.fair {
+    background: linear-gradient(90deg,#f6c844,#f59e0b) !important; /* amber */
+    color: #08121a !important; /* dark text for contrast against amber */
+    font-weight: 700 !important;
+    box-shadow: 0 8px 20px rgba(245,158,11,0.12) !important;
+}
+
+.futuristic-signup-container .strength-text.good {
+    background: linear-gradient(90deg,#34d399,#10b981) !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    box-shadow: 0 8px 30px rgba(34,197,94,0.16) !important;
+}
+
+.futuristic-signup-container .strength-text.strong {
+    background: linear-gradient(90deg,#10b981,#059669) !important;
+    color: #ffffff !important;
+    font-weight: 900 !important;
+    box-shadow: 0 10px 40px rgba(16,185,129,0.22) !important;
+    transform: translateY(-2px) scale(1.02);
+}
+
+/* Progress bar styles for each status (scoped) */
+.futuristic-signup-container .password-strength .progress-bar.progress-very-weak {
+    background: linear-gradient(90deg,#8b0a0f,#dc3545) !important;
+}
+.futuristic-signup-container .password-strength .progress-bar.progress-weak {
+    background: linear-gradient(90deg,#e05547,#ff6b6b) !important;
+}
+.futuristic-signup-container .password-strength .progress-bar.progress-fair {
+    background: linear-gradient(90deg,#f6c844,#f59e0b) !important;
+}
+.futuristic-signup-container .password-strength .progress-bar.progress-good {
+    background: linear-gradient(90deg,#34d399,#10b981) !important;
+}
+.futuristic-signup-container .password-strength .progress-bar.progress-strong {
+    background: linear-gradient(90deg,#22c55e,#16a34a) !important;
+}
+
+/* Small pulse/glow animations */
+@keyframes pulse-very-weak {
+    0% { transform: translateY(0) scale(1); filter: brightness(1); }
+    50% { transform: translateY(-1px) scale(1.01); filter: brightness(1.06); }
+    100% { transform: translateY(0) scale(1); filter: brightness(1); }
+}
+@keyframes pulse-weak {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-2px) scale(1.02); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+/* When all requirements are met, add a celebratory pulse to each requirement briefly */
+.password-requirements.all-met li {
+    transform: translateY(-2px) scale(1.02);
+}
+
+/* Met/unmet requirement styles: satisfied requirements stay white with green icon; unmet requirements are red */
+.password-requirements li { color: #ffffff !important; }
+.password-requirements li i { color: rgba(255,255,255,0.85) !important; }
+.password-requirements li.met { color: #ffffff !important; }
+.password-requirements li.met i { color: #28a745 !important; }
+.password-requirements li:not(.met) { color: #ff4d4f !important; }
+.password-requirements li:not(.met) i { color: #ff4d4f !important; }
+
+/* Password match feedback (confirm password) should be red when passwords don't match */
+#password-match-feedback {
+    color: #ff4d4f !important;
+}
+
+.password-strength .progress { background: rgba(255,255,255,0.06); }
+.password-strength .progress-bar { transition: width 360ms ease, background-color 260ms ease; }
+
+/* Icon Wrapper */
+.icon-wrapper {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+}
+
+/* ============================================
+   FEATURE LIST STYLING
+   ============================================ */
+.signup-features {
+    padding: 2rem 1rem;
+}
+
+.feature-item {
+    animation: fadeInUp 0.6s ease-out backwards;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+/* Stronger feature visuals: larger icon, gradient title and hover lift */
+.feature-item .icon-wrapper {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 30px rgba(99,102,241,0.12);
+}
+
+.feature-item h5 {
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+    background: linear-gradient(90deg, #67d2ff 0%, #8b5cf6 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.feature-item p {
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 0;
+    font-size: 0.92rem;
+}
+
+.feature-item:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 18px 50px rgba(0,0,0,0.35);
+}
+
+/* Subtle floating pulse for the icon to add life */
+.feature-item .icon-wrapper { animation: iconPulse 6s ease-in-out infinite; }
+@keyframes iconPulse { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+/* Decorative accent for feature items */
+.feature-accent {
+    width: 48px;
+    height: 6px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    background: linear-gradient(90deg, rgba(102,126,234,0.95), rgba(118,75,162,0.9));
+}
+
+/* Extra descriptive line: hidden until hover/focus */
+.feature-more {
+    display: none;
+    margin-top: 6px;
+    color: rgba(226,232,240,0.85);
+}
+.feature-item:focus-within .feature-more,
+.feature-item:hover .feature-more,
+.feature-item:focus .feature-more {
+    display: block;
+}
+
+/* Icon micro-rotate on hover */
+.feature-item:hover .icon-wrapper i {
+    transform: rotate(-6deg) scale(1.02);
+    transition: transform 260ms ease;
+}
+
+/* Ensure keyboard users see the hover content */
+.feature-item:focus { outline: 2px solid rgba(102,126,234,0.12); }
+
+/* Make feature descriptions slightly more prominent */
+.feature-desc { color: rgba(255,255,255,0.95) !important; }
+
+/* Ensure feature descriptions adapt to theme explicitly */
+[data-bs-theme='light'] .feature-desc,
+body.light-theme .feature-desc,
+body[data-theme='light'] .feature-desc {
+    color: #111 !important;
+}
+
+.feature-item:nth-child(1) { animation-delay: 0.1s; }
+.feature-item:nth-child(2) { animation-delay: 0.2s; }
+.feature-item:nth-child(3) { animation-delay: 0.3s; }
+.feature-item:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.animate-slide-in {
+    animation: slideIn 0.8s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.feature-icon {
+    flex-shrink: 0;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 12px 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Alerts */
+.alert {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 12px;
+    color: #ffffff;
+    padding: 16px 20px;
+    animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert-success {
+    background: rgba(40, 167, 69, 0.2);
+    border-color: #28a745;
+    color: #d4edda;
+}
+
+.alert-danger {
+    background: rgba(220, 53, 69, 0.2);
+    border-color: #dc3545;
+    color: #f8d7da;
+}
+
+.invalid-feedback {
+    color: #ff6b9d;
+    font-size: 0.875rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    display: none !important;
+}
+
+.invalid-feedback.d-block {
+    display: block !important;
+}
+
+/* Only show validation after form submission */
+.was-validated .form-control:invalid ~ .invalid-feedback,
+.form-control.is-invalid ~ .invalid-feedback {
+    display: block !important;
+}
+
+/* ============================================
+   ANIMATED CHARACTER & PARTICLES
+   ============================================ */
+.animated-character-container {
+    position: relative;
+    display: inline-block;
+}
+
+.animated-character {
+    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 10px 20px rgba(102, 126, 234, 0.2));
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+}
+
+/* Robot Head Animation */
+.robot-head {
+    animation: headBob 2s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@keyframes headBob {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-3deg); }
+    75% { transform: rotate(3deg); }
+}
+
+/* Eye Blink Animation */
+.eye-left, .eye-right {
+    animation: blink 4s infinite;
+}
+
+@keyframes blink {
+    0%, 48%, 52%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Pupil Movement */
+.pupil-left, .pupil-right {
+    animation: lookAround 5s ease-in-out infinite;
+}
+
+@keyframes lookAround {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(2px, -1px); }
+    50% { transform: translate(-2px, 1px); }
+    75% { transform: translate(1px, -2px); }
+}
+
+/* Antenna Light Pulse */
+.antenna-light {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+/* Arms Wave */
+.arm-left {
+    animation: waveLeft 3s ease-in-out infinite;
+    transform-origin: right center;
+}
+
+.arm-right {
+    animation: waveRight 3s ease-in-out infinite;
+    transform-origin: left center;
+}
+
+@keyframes waveLeft {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-15deg); }
+}
+
+@keyframes waveRight {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(15deg); }
+}
+
+/* Document Bounce */
+.document {
+    animation: documentBounce 2s ease-in-out infinite;
+}
+
+@keyframes documentBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+/* Smile Animation */
+.smile {
+    animation: smile 4s ease-in-out infinite;
+}
+
+@keyframes smile {
+    0%, 100% { d: path("M 75 95 Q 100 105 125 95"); }
+    50% { d: path("M 75 95 Q 100 110 125 95"); }
+}
+
+/* Floating Particles */
+.floating-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    opacity: 0.6;
+}
+
+.particle-1 {
+    top: 20%;
+    left: 10%;
+    animation: floatParticle1 4s ease-in-out infinite;
+}
+
+.particle-2 {
+    top: 60%;
+    left: 80%;
+    animation: floatParticle2 5s ease-in-out infinite;
+}
+
+.particle-3 {
+    top: 40%;
+    left: 90%;
+    animation: floatParticle3 6s ease-in-out infinite;
+}
+
+.particle-4 {
+    top: 80%;
+    left: 20%;
+    animation: floatParticle4 4.5s ease-in-out infinite;
+}
+
+@keyframes floatParticle1 {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+    50% { transform: translate(20px, -30px) scale(1.5); opacity: 0.3; }
+}
+
+@keyframes floatParticle2 {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+    50% { transform: translate(-25px, -40px) scale(1.3); opacity: 0.4; }
+}
+
+@keyframes floatParticle3 {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+    50% { transform: translate(-15px, 35px) scale(1.4); opacity: 0.3; }
+}
+
+@keyframes floatParticle4 {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+    50% { transform: translate(30px, -25px) scale(1.2); opacity: 0.5; }
+}
+
+/* Back to Home Button */
+.btn-back-home {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: #fff !important;
+    padding: 12px 24px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+    transition: all 0.3s;
+    z-index: 999;
+    font-size: 0.9rem;
+}
+
+.btn-back-home:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.5);
+    color: #fff;
+}
+
+/* Links */
+.card-body-signup a,
+.signup-features a {
+    color: var(--primary-color);
+    transition: all 0.3s;
+}
+
+.card-body-signup a:hover,
+.signup-features a:hover {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+}
+
+/* "Already have an account?" CTA */
+.have-account-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 1rem;
+}
+
+.have-account-row .muted-text {
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+}
+
+.have-account-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(102,126,234,0.95), rgba(118,75,162,0.95));
+    color: #fff !important;
+    font-weight: 700;
+    text-decoration: none !important;
+    box-shadow: 0 8px 28px rgba(99,102,241,0.16);
+    transform: translateZ(0);
+    transition: transform 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
+}
+
+.have-account-cta:hover,
+.have-account-cta:focus {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 50px rgba(99,102,241,0.26);
+    opacity: 0.98;
+}
+
+[data-bs-theme='light'] .have-account-cta {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    color: #fff !important;
+}
+
+[data-bs-theme='light'] .have-account-row .muted-text,
+body.light-theme .have-account-row .muted-text {
+    color: #333 !important;
+}
+
+/* Footer styling */
+.footer {
+    background: var(--darker-bg) !important;
+    border-top: 1px solid rgba(0, 212, 255, 0.1);
+    color: var(--text-light) !important;
+}
+
+.footer p {
+    color: var(--text-light) !important;
+}
+
+.footer .text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .hero-title-signup {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle-signup {
+        font-size: 1rem;
+    }
+    
+    .signup-features {
+        padding: 1rem 0;
+    }
+    
+    .feature-item {
+        margin-bottom: 0.75rem !important;
+    }
+    
+    .btn-back-home {
+        bottom: 1rem;
+        left: 1rem;
+        font-size: 0.85rem;
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .card-body-signup {
+        padding: 2rem 1.5rem !important;
+    }
+    
+    .icon-wrapper {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .icon-wrapper i {
+        font-size: 1.2rem;
+    }
+    
+    .feature-item h5 {
+        font-size: 1rem;
+    }
+}
+
+/* FORCE: Make signup form labels and placeholders white */
+#signupForm label.form-label {
+    color: #ffffff !important;
+}
+#signupForm .form-control {
+    color: #ffffff !important;
+}
+#signupForm .form-control::placeholder {
+    color: rgba(255,255,255,0.55) !important;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Fade-in effect: add page-visible class to body so CSS can transition opacity
+    document.body.classList.add('page-visible');
+    const form = document.getElementById('signupForm');
+    // Client-side blur-based validation: show warnings only on blur or submit
+    if (form) {
+        const inputs = form.querySelectorAll("input[required]");
+        inputs.forEach(input => {
+            input.addEventListener('blur', () => {
+                if (!input.value.trim()) {
+                    input.classList.add('is-invalid');
+                    const fb = input.nextElementSibling;
+                    if (fb && fb.classList.contains('invalid-feedback')) {
+                        fb.classList.add('d-block', 'text-danger');
+                        fb.classList.remove('d-none');
+                    }
+                } else {
+                    input.classList.remove('is-invalid');
+                    const fb = input.nextElementSibling;
+                    if (fb && fb.classList.contains('invalid-feedback')) {
+                        fb.classList.remove('d-block');
+                        fb.classList.add('d-none');
+                    }
+                }
+            });
+        });
+
+        form.addEventListener('submit', (e) => {
+            let isValid = true;
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    input.classList.add('is-invalid');
+                    isValid = false;
+                }
+            });
+            if (!isValid) e.preventDefault();
+        });
+    }
+    const password1 = document.getElementById('id_password1');
+    const password2 = document.getElementById('id_password2');
+    const strengthIndicator = document.querySelector('.password-strength');
+    const progressBar = document.querySelector('.password-strength .progress-bar');
+    const strengthText = document.querySelector('.strength-text');
+    let formSubmitted = false;
+    
+    // Disable browser's default validation messages initially and show client warnings
+    // only after blur on a field or after form submit. Server-side errors (Django)
+    // are preserved and will still render from the template.
+    form.setAttribute('novalidate', 'true');
+
+    // Utility: validate a single field and toggle invalid-feedback using classes
+    function validateField(field) {
+        const wrapper = field.closest('.mb-3');
+        const feedback = wrapper ? wrapper.querySelector('.invalid-feedback') : null;
+        let invalid = false;
+
+        if (field.hasAttribute('required') && !field.value.trim()) invalid = true;
+        if (!invalid && field.type === 'email') {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!re.test(field.value)) invalid = true;
+        }
+        if (!invalid && field.id === 'id_password1') {
+            if (field.value.length < 8) invalid = true;
+        }
+
+        if (invalid) {
+            field.classList.add('is-invalid');
+            if (feedback) feedback.classList.add('d-block');
+            return false;
+        } else {
+            field.classList.remove('is-invalid');
+            field.classList.add('is-valid');
+            if (feedback) feedback.classList.remove('d-block');
+            return true;
+        }
+    }
+
+    // Attach blur listeners to show validation only after the user leaves the field
+    form.querySelectorAll('input').forEach(input => {
+        input.addEventListener('blur', function() {
+            // Only validate on blur for client-side feedback
+            validateField(input);
+            // Special: check password match on blur of confirm
+            if (input.id === 'id_password2' || input.id === 'id_password1') {
+                if (formSubmitted) checkPasswordMatch();
+            }
+        });
+
+        // Remove invalid state while typing after it's been shown
+        input.addEventListener('input', function() {
+            if (this.classList.contains('is-invalid') && this.value.trim()) {
+                this.classList.remove('is-invalid');
+                const wrapper = this.closest('.mb-3');
+                const feedback = wrapper ? wrapper.querySelector('.invalid-feedback') : null;
+                if (feedback) feedback.classList.remove('d-block');
+            }
+        });
+    });
+    
+    // ============================================
+    // ANIMATED CHARACTER INTERACTIONS
+    // ============================================
+    
+    // Eyes follow cursor
+    const pupilLeft = document.querySelector('.pupil-left');
+    const pupilRight = document.querySelector('.pupil-right');
+    const animatedCharacter = document.querySelector('.animated-character');
+    
+    if (animatedCharacter && pupilLeft && pupilRight) {
+        document.addEventListener('mousemove', function(e) {
+            const characterRect = animatedCharacter.getBoundingClientRect();
+            const characterCenterX = characterRect.left + characterRect.width / 2;
+            const characterCenterY = characterRect.top + characterRect.height / 2;
+            
+            const angle = Math.atan2(e.clientY - characterCenterY, e.clientX - characterCenterX);
+            const distance = Math.min(3, Math.hypot(e.clientX - characterCenterX, e.clientY - characterCenterY) / 100);
+            
+            const pupilX = Math.cos(angle) * distance;
+            const pupilY = Math.sin(angle) * distance;
+            
+            pupilLeft.setAttribute('cx', 80 + pupilX);
+            pupilLeft.setAttribute('cy', 75 + pupilY);
+            pupilRight.setAttribute('cx', 120 + pupilX);
+            pupilRight.setAttribute('cy', 75 + pupilY);
+        });
+    }
+    
+    // Character reacts to form interactions
+    const formInputs = form.querySelectorAll('input');
+    const robotHead = document.querySelector('.robot-head');
+    const smile = document.querySelector('.smile');
+    
+    formInputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            if (robotHead) {
+                robotHead.style.animation = 'headNod 0.5s ease-in-out';
+                setTimeout(() => {
+                    robotHead.style.animation = 'headBob 2s ease-in-out infinite';
+                }, 500);
+            }
+        });
+        
+        input.addEventListener('input', function() {
+            if (this.value.length > 0 && smile) {
+                smile.setAttribute('d', 'M 75 95 Q 100 110 125 95'); // Bigger smile
+            }
+        });
+    });
+    
+    // Add head nod animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes headNod {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(5deg) translateY(-3px); }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Password strength checker
+    function checkPasswordStrength(password) {
+        let strength = 0;
+        const requirements = {
+            length: password.length >= 8,
+            uppercase: /[A-Z]/.test(password),
+            lowercase: /[a-z]/.test(password),
+            number: /[0-9]/.test(password),
+            special: /[^A-Za-z0-9]/.test(password)
+        };
+        
+        // Update requirement indicators
+        updateRequirement('req-length', requirements.length);
+        updateRequirement('req-uppercase', requirements.uppercase);
+        updateRequirement('req-lowercase', requirements.lowercase);
+        updateRequirement('req-number', requirements.number);
+        
+        // Calculate strength
+        Object.values(requirements).forEach(met => {
+            if (met) strength++;
+        });
+        
+        // Update progress bar
+        let color, text, percentage;
+        
+        if (strength === 0) {
+            color = '#dc3545';
+            text = 'Very Weak';
+            percentage = 0;
+        } else if (strength <= 2) {
+            color = '#dc3545';
+            text = 'Weak';
+            percentage = 25;
+        } else if (strength === 3) {
+            color = '#ffc107';
+            text = 'Fair';
+            percentage = 50;
+        } else if (strength === 4) {
+            color = '#28a745';
+            text = 'Good';
+            percentage = 75;
+        } else {
+            color = '#16a34a';
+            text = 'Strong';
+            percentage = 100;
+        }
+        
+        // Update progress bar
+        progressBar.style.width = percentage + '%';
+        progressBar.style.backgroundColor = color;
+        // Toggle strong progress styling when fully strong
+        if (percentage === 100) {
+            progressBar.classList.add('progress-strong');
+        } else {
+            progressBar.classList.remove('progress-strong');
+        }
+
+        // Update strength text (badge) with semantic classes for styling
+        // For Strong state, show a check icon and stronger visual treatment
+        strengthText.classList.remove('very-weak','weak','fair','good','strong');
+        if (text === 'Very Weak') {
+            strengthText.textContent = text;
+            strengthText.classList.add('very-weak');
+        } else if (text === 'Weak') {
+            strengthText.textContent = text;
+            strengthText.classList.add('weak');
+        } else if (text === 'Fair') {
+            strengthText.textContent = text;
+            strengthText.classList.add('fair');
+        } else if (text === 'Good') {
+            strengthText.textContent = text;
+            strengthText.classList.add('good');
+        } else if (text === 'Strong') {
+            strengthText.innerHTML = '<i class="bi bi-check-circle-fill me-1" aria-hidden="true"></i>' + text;
+            strengthText.classList.add('strong');
+            // Subtle celebratory animation
+            strengthText.animate([
+                { transform: 'scale(0.98) translateY(0px)', opacity: 0.95 },
+                { transform: 'scale(1.06) translateY(-4px)', opacity: 1 },
+                { transform: 'scale(1) translateY(0px)', opacity: 1 }
+            ], { duration: 420, easing: 'cubic-bezier(0.2,0.9,0.2,1)' });
+        }
+
+        // Accessibility: announce the current strength and set aria-label
+        strengthText.setAttribute('aria-live', 'polite');
+        strengthText.setAttribute('aria-atomic', 'true');
+        strengthText.setAttribute('aria-label', text + ' password strength');
+
+        // If all requirements met, add celebratory pulse to requirements list
+        const reqItems = document.querySelectorAll('.password-requirements li');
+        const allMet = Array.from(reqItems).every(li => li.classList.contains('met'));
+        const reqList = document.querySelector('.password-requirements');
+        if (allMet) {
+            reqList.classList.add('all-met');
+            reqItems.forEach(li => {
+                li.classList.add('pulse');
+                setTimeout(() => li.classList.remove('pulse'), 600);
+            });
+        } else {
+            reqList.classList.remove('all-met');
+        }
+    }
+    
+    function updateRequirement(id, met) {
+        const element = document.getElementById(id);
+        const icon = element.querySelector('i');
+        
+        if (met) {
+            icon.className = 'bi bi-check-circle-fill text-success';
+                element.style.color = '#28a745';
+                element.classList.add('met');
+        } else {
+            icon.className = 'bi bi-x-circle text-danger';
+                element.style.color = '#6c757d';
+                element.classList.remove('met');
+        }
+    }
+    
+    // Show strength indicator when user starts typing (without showing errors)
+    password1.addEventListener('input', function() {
+        if (this.value.length > 0) {
+            strengthIndicator.style.display = 'block';
+            checkPasswordStrength(this.value);
+        } else {
+            strengthIndicator.style.display = 'none';
+        }
+        
+        // Only show validation errors if form was already submitted
+        if (formSubmitted) {
+            if (this.value.length >= 8) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            }
+            checkPasswordMatch();
+        }
+    });
+
+    // Live email validation and helper update
+    const emailInput = document.getElementById('id_email');
+    const emailHelpEl = document.getElementById('email-help');
+    const emailHelpText = emailHelpEl ? emailHelpEl.querySelector('.help-text') : null;
+    const emailInfoIcon = emailHelpEl ? emailHelpEl.querySelector('.help-icon.info') : null;
+    const emailCheckIcon = emailHelpEl ? emailHelpEl.querySelector('.help-icon.check') : null;
+
+    if (emailInput && emailHelpEl && emailHelpText) {
+        const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        emailInput.addEventListener('input', function() {
+            const val = this.value.trim();
+            if (!val) {
+                emailHelpEl.classList.remove('valid');
+                emailHelpText.textContent = "We'll send a verification code to this email.";
+                if (emailInfoIcon) emailInfoIcon.style.display = 'inline-block';
+                if (emailCheckIcon) emailCheckIcon.style.display = 'none';
+                return;
+            }
+
+            if (emailRe.test(val)) {
+                // show check and confirm email in helper (obfuscate local part lightly)
+                const parts = val.split('@');
+                const local = parts[0];
+                const obfLocal = local.length > 2 ? local[0] + '***' + local.slice(-1) : local;
+                const display = obfLocal + '@' + parts[1];
+                emailHelpText.textContent = `We'll send a verification code to ${display}`;
+                emailHelpEl.classList.add('valid');
+                if (emailInfoIcon) emailInfoIcon.style.display = 'none';
+                if (emailCheckIcon) emailCheckIcon.style.display = 'inline-block';
+            } else {
+                emailHelpEl.classList.remove('valid');
+                emailHelpText.textContent = "Enter a valid email address to receive the verification code.";
+                if (emailInfoIcon) emailInfoIcon.style.display = 'inline-block';
+                if (emailCheckIcon) emailCheckIcon.style.display = 'none';
+            }
+        });
+    }
+
+    // Announce requirement met change with a small visual pulse
+    function pulseRequirement(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.add('pulse');
+        setTimeout(() => el.classList.remove('pulse'), 420);
+    }
+
+    // Modify updateRequirement to pulse when becoming met
+    const originalUpdateRequirement = updateRequirement;
+    updateRequirement = function(id, met) {
+        originalUpdateRequirement(id, met);
+        if (met) pulseRequirement(id);
+    }
+    
+    // Ensure client-side invalid-feedback is hidden unless the input is marked invalid by server
+    document.querySelectorAll('.invalid-feedback').forEach(function(el) {
+        const parent = el.closest('.mb-3');
+        const input = parent ? parent.querySelector('input, textarea, select') : null;
+        if (input && !input.classList.contains('is-invalid')) {
+            el.classList.remove('d-block');
+        }
+    });
+    
+    // Check password match (only after form submission)
+    function checkPasswordMatch() {
+        if (!formSubmitted) return false;
+        
+        const feedback = document.getElementById('password-match-feedback');
+        if (password2.value && password1.value !== password2.value) {
+            password2.classList.add('is-invalid');
+            feedback.style.display = 'block';
+            return false;
+        } else if (password2.value) {
+            password2.classList.remove('is-invalid');
+            password2.classList.add('is-valid');
+            feedback.style.display = 'none';
+            return true;
+        }
+        return true;
+    }
+    
+    // Validate password match function
+    function validatePasswordMatch() {
+        if (password1.value && password2.value && password1.value !== password2.value) {
+            password2.classList.add('is-invalid');
+            document.getElementById('password-match-feedback').style.display = 'block';
+            return false;
+        }
+        return true;
+    }
+    
+    // Password2 input listener
+    password2.addEventListener('input', function() {
+        if (formSubmitted) {
+            checkPasswordMatch();
+        }
+    });
+    
+    // Toggle password visibility (accessible)
+    document.querySelectorAll('.password-toggle-btn').forEach(btn => {
+        function togglePassword() {
+            const wrapper = btn.closest('.password-wrapper');
+            const input = wrapper ? wrapper.querySelector('input') : null;
+            const icon = btn.querySelector('i');
+            if (!input || !icon) return;
+
+            const isHidden = input.type === 'password';
+            if (isHidden) {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+                btn.setAttribute('aria-pressed', 'true');
+                btn.setAttribute('aria-label', 'Hide password');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+                btn.setAttribute('aria-pressed', 'false');
+                btn.setAttribute('aria-label', 'Show password');
+            }
+            // keep focus on button for keyboard users
+            btn.focus();
+        }
+
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            togglePassword();
+        });
+
+        // Support Enter/Space for accessibility (some browsers already do this)
+        btn.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                togglePassword();
+            }
+        });
+    });
+    
+    // Form validation on submit
+    form.addEventListener('submit', function(e) {
+        formSubmitted = true;
+        let isValid = true;
+        
+        // Validate required fields
+        form.querySelectorAll('[required]').forEach(field => {
+            if (field.type === 'checkbox') {
+                // Skip checkbox validation here, handled separately
+                return;
+            }
+            
+            if (!field.value.trim()) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else if (field.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) {
+                field.classList.add('is-invalid');
+                const feedbackEl = field.nextElementSibling;
+                if (feedbackEl && feedbackEl.classList.contains('invalid-feedback')) {
+                    feedbackEl.textContent = 'Please enter a valid email address.';
+                }
+                isValid = false;
+            } else if (field.id === 'id_password1' && field.value.length < 8) {
+                field.classList.add('is-invalid');
+                const feedbackEl = field.closest('.password-wrapper').nextElementSibling;
+                if (feedbackEl && feedbackEl.classList.contains('invalid-feedback')) {
+                    feedbackEl.textContent = 'Password must be at least 8 characters long.';
+                }
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+                field.classList.add('is-valid');
+            }
+        });
+        
+        // Check if passwords match
+        if (!validatePasswordMatch()) {
+            isValid = false;
+        }
+        
+        // Check if terms are accepted
+        const termsCheckbox = document.getElementById('terms');
+        if (!termsCheckbox.checked) {
+            termsCheckbox.classList.add('is-invalid');
+            const feedbackEl = termsCheckbox.parentElement.querySelector('.invalid-feedback');
+            if (feedbackEl) {
+                feedbackEl.style.display = 'block';
+            }
+            isValid = false;
+        }
+        
+        // Prevent submission if validation fails
+        if (!isValid) {
+            e.preventDefault();
+            
+            // Scroll to first error
+            const firstError = form.querySelector('.is-invalid');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => {
+                    if (firstError.focus) firstError.focus();
+                }, 300);
+            }
+            
+            return false;
+        }
+        
+        // Show loading state on submit button
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Sending...';
+        }
+    });
+    
+    // Remove validation styling when user fixes the field (only after submission)
+    form.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', function() {
+            if (formSubmitted && this.classList.contains('is-invalid') && this.value.trim()) {
+                this.classList.remove('is-invalid');
+            }
+        });
+    });
+    
+    // Handle checkbox validation
+    const termsCheckbox = document.getElementById('terms');
+    if (termsCheckbox) {
+        termsCheckbox.addEventListener('change', function() {
+            if (formSubmitted) {
+                if (this.checked) {
+                    this.classList.remove('is-invalid');
+                } else {
+                    this.classList.add('is-invalid');
+                }
+            }
+        });
+    }
+    
+    // ============================================
+    // PARTICLE ANIMATION BACKGROUND
+    // ============================================
+    const canvas = document.getElementById('particles-canvas-signup');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const particles = [];
+        const particleCount = 80;
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            
+            draw() {
+                ctx.fillStyle = `rgba(0, 212, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        function init() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 120) {
+                        ctx.strokeStyle = `rgba(0, 212, 255, ${0.15 * (1 - distance / 120)})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        
+        init();
+        animate();
+        
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    }
+});
+</script>
+        <!-- Three.js and GSAP for home-like background animation -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+        <script src="{% static 'js/home-animations.js' %}"></script>
+        {% endblock %}

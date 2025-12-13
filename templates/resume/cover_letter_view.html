@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ cover_letter.title }} - AI Resume Builder{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="bi bi-envelope-paper"></i> Cover Letter</h2>
+                <a href="{% url 'cover_letter_list' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-white">
+                    <h4 class="mb-0">{{ cover_letter.title }}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong><i class="bi bi-building"></i> Company:</strong></p>
+                            <p class="text-muted">{{ cover_letter.company_name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong><i class="bi bi-briefcase"></i> Position:</strong></p>
+                            <p class="text-muted">{{ cover_letter.position }}</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <p class="mb-1"><strong><i class="bi bi-calendar"></i> Generated:</strong></p>
+                            <p class="text-muted">
+                                {{ cover_letter.created_at|date:"F d, Y \a\t g:i A" }}
+                                {% if cover_letter.template %}
+                                    <span class="badge bg-primary ms-2">
+                                        <i class="bi bi-palette"></i> {{ cover_letter.template|title }} Template
+                                    </span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    {% if cover_letter.job_description %}
+                        <div class="alert alert-light">
+                            <strong><i class="bi bi-file-text"></i> Job Description Used:</strong>
+                            <p class="mb-0 mt-2 small">{{ cover_letter.job_description|truncatewords:50 }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="cover-letter-content">
+                        {{ cover_letter.content|linebreaks }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 flex-wrap justify-content-center mb-5">
+                <a href="{% url 'cover_letter_download_pdf' cover_letter.pk %}" class="btn btn-success btn-lg">
+                    <i class="bi bi-download"></i> Download as PDF
+                </a>
+                <button class="btn btn-outline-primary btn-lg" onclick="copyToClipboard()">
+                    <i class="bi bi-clipboard"></i> Copy to Clipboard
+                </button>
+                <a href="{% url 'generate_cover_letter' %}" class="btn btn-outline-warning btn-lg">
+                    <i class="bi bi-plus-circle"></i> Generate New
+                </a>
+                <a href="{% url 'cover_letter_delete' cover_letter.pk %}" class="btn btn-outline-danger btn-lg">
+                    <i class="bi bi-trash"></i> Delete
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.cover-letter-content {
+    font-family: 'Georgia', serif;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #333;
+    white-space: pre-wrap;
+    padding: 2rem;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+@media print {
+    .btn, .card-header, nav {
+        display: none !important;
+    }
+    .cover-letter-content {
+        border: none;
+        padding: 0;
+    }
+}
+</style>
+
+<script>
+function copyToClipboard() {
+    const content = `{{ cover_letter.content|escapejs }}`;
+    navigator.clipboard.writeText(content).then(function() {
+        alert('Cover letter copied to clipboard!');
+    }, function(err) {
+        alert('Failed to copy: ' + err);
+    });
+}
+</script>
+{% endblock %}

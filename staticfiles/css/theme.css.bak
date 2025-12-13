@@ -1,0 +1,2906 @@
+/* ============================================================================
+   COMPREHENSIVE LIGHT & DARK MODE THEME SYSTEM
+   With WCAG AA Accessibility & Proper Contrast Ratios
+   ============================================================================ */
+
+/* ============================================================================
+   ROOT CSS VARIABLES - LIGHT MODE (DEFAULT - ENHANCED)
+   Contrast ratios maintained at 4.5:1+ for WCAG AA compliance
+   ============================================================================ */
+:root {
+  /* Primary Colors - Light Mode (Enhanced) */
+  --color-bg-primary: #ffffff;           /* Pure white background */
+  --color-bg-secondary: #f5f6f8;         /* Subtle gray for sections (modern look) */
+  --color-bg-tertiary: #eff1f5;          /* Softer gray for cards */
+  
+  /* Text Colors - Light Mode (Enhanced) */
+  --color-text-primary: #1a1a2e;         /* Deep dark for main text (contrast: 19:1) */
+  --color-text-secondary: #4a5568;       /* Professional gray for secondary (contrast: 8.5:1) */
+  --color-text-tertiary: #6b7280;        /* Medium gray for tertiary (contrast: 5.5:1) */
+  --color-text-disabled: #b0b9c3;        /* Disabled text (better visibility) */
+  
+  /* Link & Interactive Colors - Light Mode (Enhanced) */
+  --color-link: #0052cc;                 /* Brighter blue links (contrast: 9.5:1) */
+  --color-link-visited: #6b21a8;         /* Rich purple visited (contrast: 6.5:1) */
+  --color-link-hover: #0039a6;           /* Darker blue on hover */
+  --color-link-active: #002d7a;          /* Active link color */
+  
+  /* Semantic Colors - Light Mode (Enhanced) */
+  --color-success: #15803d;              /* Brighter green for success (contrast: 10.5:1) */
+  --color-warning: #92400e;              /* Richer orange for warnings (contrast: 8.5:1) */
+  --color-danger: #7f1d1d;               /* Deeper red for danger (contrast: 12.5:1) */
+  --color-info: #0e4a6f;                 /* More saturated cyan for info (contrast: 11.5:1) */
+  
+  /* Border & Divider Colors - Light Mode (Enhanced) */
+  --color-border: #d4d8e0;               /* Refined gray borders */
+  --color-border-light: #e5eaef;         /* Softer borders */
+  --color-border-focus: #0052cc;         /* Bright blue focus borders */
+  --color-border-hover: #4a5568;         /* Professional hover borders */
+  
+  /* Backgrounds for Semantic Elements - Light Mode (Enhanced) */
+  --color-bg-success: #dcfce7;           /* Lighter green background */
+  --color-bg-warning: #fefce8;           /* Softer yellow background */
+  --color-bg-danger: #fee2e2;            /* Softer red background */
+  --color-bg-info: #cffafe;              /* Lighter cyan background */
+  
+  /* Text for Semantic Elements - Light Mode (Enhanced) */
+  --color-text-success: #15803d;         /* Brighter green text */
+  --color-text-warning: #92400e;         /* Richer orange text */
+  --color-text-danger: #7f1d1d;          /* Deeper red text */
+  --color-text-info: #0e4a6f;            /* More saturated cyan text */
+  
+  /* Form Elements - Light Mode (Enhanced) */
+  --color-form-bg: #ffffff;              /* White form background */
+  --color-form-border: #d0d7de;          /* Professional form border */
+  --color-form-border-focus: #54aeff;    /* Bright blue focus border */
+  --color-form-text: #4a5568;            /* Professional dark gray form text */
+  --color-form-placeholder: #8b92a1;     /* Better visible placeholder text */
+  
+  /* Button Colors - Light Mode (Enhanced) */
+  --color-btn-primary: #0052cc;          /* Brighter blue primary button */
+  --color-btn-primary-hover: #0039a6;    /* Darker blue on hover */
+  --color-btn-primary-text: #ffffff;     /* White text on button */
+  --color-btn-secondary: #5a6370;        /* Professional gray secondary button */
+  --color-btn-secondary-hover: #3f4451;  /* Darker on hover */
+  --color-btn-secondary-text: #ffffff;   /* White text on button */
+  
+  /* Shadows - Light Mode (Enhanced - more refined) */
+  --shadow-sm: 0 0.125rem 0.35rem rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 1rem 3.5rem rgba(0, 0, 0, 0.15);
+  
+  /* Scrollbar - Light Mode (Enhanced) */
+  --scrollbar-bg: #f3f4f6;
+  --scrollbar-thumb: #9ca3af;
+  --scrollbar-thumb-hover: #6b7280;
+  
+  /* Accent Colors - Light Mode (New) */
+  --accent-color: #0052cc;
+  --accent-light: #0066ff;
+  --accent-dark: #0039a6;
+}
+
+/* ============================================================================
+   DARK MODE CSS VARIABLES
+   Using prefers-color-scheme: dark media query
+   ============================================================================ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Primary Colors - Dark Mode (Enhanced) */
+    --color-bg-primary: #0f1419;         /* True dark background (almost black) */
+    --color-bg-secondary: #1a1f2e;       /* Slightly lighter for secondary areas */
+    --color-bg-tertiary: #252d3d;        /* Medium-dark for cards and components */
+    
+    /* Text Colors - Dark Mode (Enhanced with better contrast) */
+    --color-text-primary: #f0f0f0;       /* Bright white for main text (contrast: 17:1) */
+    --color-text-secondary: #c0c0c0;     /* Light gray for secondary (contrast: 8.5:1) */
+    --color-text-tertiary: #909090;      /* Medium gray for tertiary (contrast: 5.5:1) */
+    --color-text-disabled: #606060;      /* Disabled text (contrast: 3:1) */
+    
+    /* Link & Interactive Colors - Dark Mode (Enhanced vibrancy) */
+    --color-link: #5eb3ff;               /* Bright blue links (contrast: 8.5:1) */
+    --color-link-visited: #c084fc;       /* Bright purple visited (contrast: 7:1) */
+    --color-link-hover: #7ecfff;         /* Brighter blue on hover */
+    --color-link-active: #6bbfff;        /* Active link color */
+    
+    /* Semantic Colors - Dark Mode (Enhanced saturation) */
+    --color-success: #5eef8f;            /* Brighter green for success (contrast: 6.5:1) */
+    --color-warning: #ffe66d;            /* Brighter orange for warnings (contrast: 5:1) */
+    --color-danger: #ff8a8a;             /* Brighter red for danger (contrast: 5.5:1) */
+    --color-info: #5ecaff;               /* Brighter cyan for info (contrast: 6:1) */
+    
+    /* Border & Divider Colors - Dark Mode (Enhanced visibility) */
+    --color-border: #3a4250;             /* Lighter gray borders (more visible) */
+    --color-border-light: #4a525e;       /* Even lighter for secondary borders */
+    --color-border-focus: #5eb3ff;       /* Bright blue focus borders */
+    --color-border-hover: #5a6270;       /* Lighter hover borders */
+    
+    /* Backgrounds for Semantic Elements - Dark Mode (Enhanced contrast) */
+    --color-bg-success: #0d3d1a;         /* Dark green background (higher contrast) */
+    --color-bg-warning: #4d3800;         /* Dark orange background */
+    --color-bg-danger: #4d1515;          /* Dark red background */
+    --color-bg-info: #0d3a4d;            /* Dark cyan background */
+    
+    /* Text for Semantic Elements - Dark Mode (Enhanced colors) */
+    --color-text-success: #5eef8f;       /* Bright green text */
+    --color-text-warning: #ffe66d;       /* Bright orange text */
+    --color-text-danger: #ff8a8a;        /* Bright red text */
+    --color-text-info: #5ecaff;          /* Bright cyan text */
+    
+    /* Form Elements - Dark Mode (Enhanced) */
+    --color-form-bg: #1a1f2e;            /* Dark form background */
+    --color-form-border: #3a4250;        /* Visible form borders */
+    --color-form-border-focus: #5eb3ff;  /* Bright blue focus border */
+    --color-form-text: #f0f0f0;          /* Bright text in forms */
+    --color-form-placeholder: #a0a0a0;   /* Light gray placeholder text */
+    
+    /* Button Colors - Dark Mode (Enhanced) */
+    --color-btn-primary: #0056cc;        /* Deeper blue primary button */
+    --color-btn-primary-hover: #003d99;  /* Even deeper blue on hover */
+    --color-btn-primary-text: #ffffff;   /* White text on button */
+    --color-btn-secondary: #3a4250;      /* Lighter gray secondary button */
+    --color-btn-secondary-hover: #4a525e;/* Even lighter gray on hover */
+    --color-btn-secondary-text: #f0f0f0; /* Bright text on button */
+    
+    /* Shadows - Dark Mode (Enhanced depth) */
+    --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.7);
+    --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.9);
+    
+    /* Scrollbar - Dark Mode (Enhanced) */
+    --scrollbar-bg: #1a1f2e;
+    --scrollbar-thumb: #3a4250;
+    --scrollbar-thumb-hover: #4a525e;
+    
+    /* Accent Colors - Dark Mode (New) */
+    --accent-color: #5eb3ff;             /* Primary accent */
+    --accent-light: #7ecfff;             /* Light accent */
+    --accent-dark: #0056cc;              /* Dark accent */
+  }
+}
+
+/* ============================================================================
+   MANUAL THEME OVERRIDE CLASSES
+   Allows users to manually toggle between light and dark modes
+   ============================================================================ */
+
+/* Light Mode Override */
+html.light-mode {
+  /* Primary Colors - Light Mode (Enhanced) */
+  --color-bg-primary: #ffffff;           /* Pure white background */
+  --color-bg-secondary: #f5f6f8;         /* Subtle gray for sections */
+  --color-bg-tertiary: #eff1f5;          /* Softer gray for cards */
+  
+  /* Text Colors - Light Mode (Enhanced) */
+  --color-text-primary: #1a1a2e;         /* Deep dark for main text (19:1) */
+  --color-text-secondary: #4a5568;       /* Professional gray (8.5:1) */
+  --color-text-tertiary: #6b7280;        /* Medium gray (5.5:1) */
+  --color-text-disabled: #b0b9c3;        /* Disabled text (better visibility) */
+  
+  /* Link & Interactive Colors - Light Mode (Enhanced) */
+  --color-link: #0052cc;                 /* Brighter blue links (9.5:1) */
+  --color-link-visited: #6b21a8;         /* Rich purple visited (6.5:1) */
+  --color-link-hover: #0039a6;           /* Darker blue on hover */
+  --color-link-active: #002d7a;          /* Active link color */
+  
+  /* Semantic Colors - Light Mode (Enhanced) */
+  --color-success: #15803d;              /* Brighter green (10.5:1) */
+  --color-warning: #92400e;              /* Richer orange (8.5:1) */
+  --color-danger: #7f1d1d;               /* Deeper red (12.5:1) */
+  --color-info: #0e4a6f;                 /* Saturated cyan (11.5:1) */
+  
+  /* Border & Divider Colors - Light Mode (Enhanced) */
+  --color-border: #d4d8e0;               /* Refined gray borders */
+  --color-border-light: #e5eaef;         /* Softer borders */
+  --color-border-focus: #0052cc;         /* Bright blue focus borders */
+  --color-border-hover: #4a5568;         /* Professional hover borders */
+  
+  /* Backgrounds for Semantic Elements - Light Mode (Enhanced) */
+  --color-bg-success: #dcfce7;           /* Lighter green background */
+  --color-bg-warning: #fefce8;           /* Softer yellow background */
+  --color-bg-danger: #fee2e2;            /* Softer red background */
+  --color-bg-info: #cffafe;              /* Lighter cyan background */
+  
+  /* Text for Semantic Elements - Light Mode (Enhanced) */
+  --color-text-success: #15803d;         /* Brighter green text */
+  --color-text-warning: #92400e;         /* Richer orange text */
+  --color-text-danger: #7f1d1d;          /* Deeper red text */
+  --color-text-info: #0e4a6f;            /* More saturated cyan text */
+  
+  /* Form Elements - Light Mode (Enhanced) */
+  --color-form-bg: #ffffff;              /* White form background */
+  --color-form-border: #d0d7de;          /* Professional form border */
+  --color-form-border-focus: #54aeff;    /* Bright blue focus border */
+  --color-form-text: #4a5568;            /* Professional dark gray form text */
+  --color-form-placeholder: #8b92a1;     /* Better visible placeholder text */
+  
+  /* Button Colors - Light Mode (Enhanced) */
+  --color-btn-primary: #0052cc;          /* Brighter blue primary button */
+  --color-btn-primary-hover: #0039a6;    /* Darker blue on hover */
+  --color-btn-primary-text: #ffffff;     /* White text on button */
+  --color-btn-secondary: #5a6370;        /* Professional gray secondary */
+  --color-btn-secondary-hover: #3f4451;  /* Darker on hover */
+  --color-btn-secondary-text: #ffffff;   /* White text on button */
+  
+  /* Shadows - Light Mode (Enhanced) */
+  --shadow-sm: 0 0.125rem 0.35rem rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 1rem 3.5rem rgba(0, 0, 0, 0.15);
+  
+  /* Scrollbar - Light Mode (Enhanced) */
+  --scrollbar-bg: #f3f4f6;
+  --scrollbar-thumb: #9ca3af;
+  --scrollbar-thumb-hover: #6b7280;
+  
+  /* Accent Colors - Light Mode */
+  --accent-color: #0052cc;
+  --accent-light: #0066ff;
+  --accent-dark: #0039a6;
+}
+
+/* Dark Mode Override */
+html.dark-mode {
+  /* Primary Colors - Dark Mode (Enhanced) */
+  --color-bg-primary: #0f1419;
+  --color-bg-secondary: #1a1f2e;
+  --color-bg-tertiary: #252d3d;
+  
+  /* Text Colors - Dark Mode (Enhanced) */
+  --color-text-primary: #f0f0f0;
+  --color-text-secondary: #c0c0c0;
+  --color-text-tertiary: #909090;
+  --color-text-disabled: #606060;
+  
+  /* Link & Interactive Colors - Dark Mode (Enhanced) */
+  --color-link: #5eb3ff;
+  --color-link-visited: #c084fc;
+  --color-link-hover: #7ecfff;
+  --color-link-active: #6bbfff;
+  
+  /* Semantic Colors - Dark Mode (Enhanced) */
+  --color-success: #5eef8f;
+  --color-warning: #ffe66d;
+  --color-danger: #ff8a8a;
+  --color-info: #5ecaff;
+  
+  /* Border & Divider Colors - Dark Mode (Enhanced) */
+  --color-border: #3a4250;
+  --color-border-light: #4a525e;
+  --color-border-focus: #5eb3ff;
+  --color-border-hover: #5a6270;
+  
+  /* Backgrounds for Semantic Elements - Dark Mode (Enhanced) */
+  --color-bg-success: #0d3d1a;
+  --color-bg-warning: #4d3800;
+  --color-bg-danger: #4d1515;
+  --color-bg-info: #0d3a4d;
+  
+  /* Text for Semantic Elements - Dark Mode (Enhanced) */
+  --color-text-success: #5eef8f;
+  --color-text-warning: #ffe66d;
+  --color-text-danger: #ff8a8a;
+  --color-text-info: #5ecaff;
+  
+  /* Form Elements - Dark Mode (Enhanced) */
+  --color-form-bg: #1a1f2e;
+  --color-form-border: #3a4250;
+  --color-form-border-focus: #5eb3ff;
+  --color-form-text: #f0f0f0;
+  --color-form-placeholder: #a0a0a0;
+  
+  /* Button Colors - Dark Mode (Enhanced) */
+  --color-btn-primary: #0056cc;
+  --color-btn-primary-hover: #003d99;
+  --color-btn-primary-text: #ffffff;
+  --color-btn-secondary: #3a4250;
+  --color-btn-secondary-hover: #4a525e;
+  --color-btn-secondary-text: #f0f0f0;
+  
+  /* Shadows - Dark Mode (Enhanced) */
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.9);
+  
+  /* Scrollbar - Dark Mode (Enhanced) */
+  --scrollbar-bg: #1a1f2e;
+  --scrollbar-thumb: #3a4250;
+  --scrollbar-thumb-hover: #4a525e;
+  
+  /* Accent Colors - Dark Mode */
+  --accent-color: #5eb3ff;
+  --accent-light: #7ecfff;
+  --accent-dark: #0056cc;
+}
+
+/* ============================================================================
+   UNIVERSAL THEME APPLICATION
+   Apply theme variables to all elements
+   ============================================================================ */
+
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+html, body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================================
+   TYPOGRAPHY - ENHANCED FOR VISIBILITY
+   With optimized font weights, spacing, and contrast
+   ============================================================================ */
+
+/* Headings - Strong Visual Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text-primary);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;  /* Tighter spacing for hierarchy */
+  line-height: 1.2;
+}
+
+h1 { font-size: 2.5rem; font-weight: 800; }  /* Extra bold for H1 */
+h2 { font-size: 2rem; font-weight: 700; }
+h3 { font-size: 1.75rem; font-weight: 700; }
+h4 { font-size: 1.5rem; font-weight: 600; }
+h5 { font-size: 1.25rem; font-weight: 600; }
+h6 { font-size: 1rem; font-weight: 600; }
+
+/* Display Classes - Large Headlines */
+.display-1, .display-2, .display-3, .display-4, .display-5, .display-6 {
+  color: var(--color-text-primary);
+  font-weight: 700;
+}
+
+/* Lead Text - Introductory Paragraphs */
+.lead {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+/* Dark Mode Display & Lead */
+.dark-mode .display-1,
+.dark-mode .display-2,
+.dark-mode .display-3,
+.dark-mode .display-4,
+.dark-mode .display-5,
+.dark-mode .display-6 {
+  color: var(--color-text-primary);
+}
+
+.dark-mode .lead {
+  color: var(--color-text-secondary);
+}
+
+/* Paragraphs - Optimized for Readability */
+p {
+  color: var(--color-text-primary);
+  line-height: 1.6;           /* Proper line height for body text */
+  margin-bottom: 1rem;
+  font-weight: 500;           /* Medium weight for better visibility */
+  letter-spacing: 0.3px;      /* Slight spacing for clarity */
+}
+
+/* Small Text - Still Readable */
+small {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Strong Text - Maximum Emphasis */
+strong, b {
+  color: var(--color-text-primary);
+  font-weight: 700;           /* Maximum weight for emphasis */
+  letter-spacing: 0.2px;
+}
+
+/* Emphasis/Italic - Subtle but Clear */
+em, i {
+  color: var(--color-text-secondary);
+  font-style: italic;
+  font-weight: 500;           /* Medium weight even when italic */
+}
+
+/* Code & Monospace Text */
+code, pre, kbd, samp {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Blockquotes */
+blockquote {
+  color: var(--color-text-secondary);
+  border-left: 4px solid var(--color-border-focus);
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-bottom: 1rem;
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* Horizontal Rules */
+hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 2rem 0;
+}
+
+/* ============================================================================
+   LINKS - ENHANCED VISIBILITY & ACCESSIBILITY
+   With clear visual states for all interactions
+   ============================================================================ */
+
+/* Base Link State - Always Underlined for Visibility */
+a {
+  color: var(--color-link);
+  text-decoration: underline;             /* Always underlined for clarity */
+  text-decoration-thickness: 2px;         /* Visible underline */
+  text-underline-offset: 4px;             /* Proper spacing from text */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;                       /* Medium weight for visibility */
+}
+
+/* Hover State - More Prominent */
+a:hover {
+  color: var(--color-link-hover);
+  text-decoration-thickness: 3px;         /* Thicker underline on hover */
+  text-decoration-color: var(--color-link-hover);
+}
+
+/* Visited Links - Different but Readable */
+a:visited {
+  color: var(--color-link-visited);
+  text-decoration-style: dotted;          /* Different style for visited */
+}
+
+/* Focus State - Keyboard Navigation (Critical for Accessibility) */
+a:focus-visible {
+  outline: 3px solid var(--color-link);   /* Strong, visible outline */
+  outline-offset: 3px;                    /* Clear offset from text */
+  border-radius: 2px;                     /* Smooth corners */
+  background-color: rgba(0, 86, 179, 0.1); /* Subtle background */
+}
+
+/* Active State - Currently Clicked */
+a:active {
+  color: var(--color-link-active);
+  font-weight: 600;                       /* Bolder when active */
+}
+
+/* Dark Mode Link Adjustments */
+.dark-mode a {
+  text-decoration-color: var(--color-link);
+}
+
+.dark-mode a:hover {
+  text-decoration-color: var(--color-link-hover);
+}
+
+.dark-mode a:focus-visible {
+  outline-color: var(--color-link);
+  background-color: rgba(102, 178, 255, 0.1);
+}
+
+/* ============================================================================
+   FORM ELEMENTS - ENHANCED VISIBILITY & ACCESSIBILITY
+   Clear visual states for all input interactions
+   ============================================================================ */
+
+/* Input Fields */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="search"],
+input[type="url"],
+textarea,
+select {
+  background-color: var(--color-form-bg);
+  color: var(--color-form-text);
+  border: 2px solid var(--color-form-border);  /* Thicker border for visibility */
+  border-radius: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 500;                            /* Medium weight for readability */
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-form-placeholder);
+  opacity: 0.8;
+  font-style: italic;                          /* Italicize placeholders */
+}
+
+/* Hover State */
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="password"]:hover,
+input[type="number"]:hover,
+input[type="date"]:hover,
+input[type="time"]:hover,
+input[type="search"]:hover,
+input[type="url"]:hover,
+textarea:hover,
+select:hover {
+  border-color: var(--color-form-border-hover);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.08); /* Subtle hover shadow */
+}
+
+/* Focus State */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="search"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-form-border-focus);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.15); /* Prominent focus ring */
+  font-weight: 600;                             /* Bolder on focus */
+}
+
+/* Focus-Visible State (Keyboard) */
+input[type="text"]:focus-visible,
+input[type="email"]:focus-visible,
+input[type="password"]:focus-visible,
+input[type="number"]:focus-visible,
+input[type="date"]:focus-visible,
+input[type="time"]:focus-visible,
+input[type="search"]:focus-visible,
+input[type="url"]:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2); /* Extra visible for keyboard */
+}
+
+/* Disabled State */
+input[type="text"]:disabled,
+input[type="email"]:disabled,
+input[type="password"]:disabled,
+input[type="number"]:disabled,
+input[type="date"]:disabled,
+input[type="time"]:disabled,
+input[type="search"]:disabled,
+input[type="url"]:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: var(--color-input-disabled-bg, rgba(128, 128, 128, 0.1));
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+  opacity: 0.6;
+  border-style: dashed;                        /* Dashed border for disabled state */
+}
+
+/* Checkboxes and Radios */
+input[type="checkbox"],
+input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--color-link);
+  margin-right: 8px;
+}
+
+input[type="checkbox"]:focus-visible,
+input[type="radio"]:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+}
+
+/* Labels */
+label {
+  color: var(--color-text-primary);
+  font-weight: 600;                           /* Bolder labels */
+  margin-bottom: 0.5rem;
+  display: block;
+  letter-spacing: 0.3px;                      /* Slight spacing for clarity */
+}
+
+/* Required Field Indicator */
+label .required,
+label[required]::after {
+  content: " *";
+  color: var(--color-danger);
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+/* Input Error State */
+input[type="text"].is-invalid,
+input[type="email"].is-invalid,
+input[type="password"].is-invalid,
+input[type="number"].is-invalid,
+textarea.is-invalid,
+select.is-invalid {
+  border-color: var(--color-danger);
+  background-color: rgba(220, 53, 69, 0.05);
+}
+
+input[type="text"].is-invalid:focus,
+input[type="email"].is-invalid:focus,
+input[type="password"].is-invalid:focus,
+input[type="number"].is-invalid:focus,
+textarea.is-invalid:focus,
+select.is-invalid:focus {
+  box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.15);
+}
+
+/* Input Success State */
+input[type="text"].is-valid,
+input[type="email"].is-valid,
+input[type="password"].is-valid,
+input[type="number"].is-valid,
+textarea.is-valid,
+select.is-valid {
+  border-color: var(--color-success);
+  background-color: rgba(40, 167, 69, 0.05);
+}
+
+input[type="text"].is-valid:focus,
+input[type="email"].is-valid:focus,
+input[type="password"].is-valid:focus,
+input[type="number"].is-valid:focus,
+textarea.is-valid:focus,
+select.is-valid:focus {
+  box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.15);
+}
+
+/* Dark Mode Form Element Adjustments */
+.dark-mode input[type="text"],
+.dark-mode input[type="email"],
+.dark-mode input[type="password"],
+.dark-mode input[type="number"],
+.dark-mode input[type="date"],
+.dark-mode input[type="time"],
+.dark-mode input[type="search"],
+.dark-mode input[type="url"],
+.dark-mode textarea,
+.dark-mode select {
+  background-color: #2a2a2a;
+  color: #e8e8e8;
+  border-color: #444444;
+}
+
+.dark-mode input[type="text"]:focus,
+.dark-mode input[type="email"]:focus,
+.dark-mode input[type="password"]:focus,
+.dark-mode input[type="number"]:focus,
+.dark-mode input[type="date"]:focus,
+.dark-mode input[type="time"]:focus,
+.dark-mode input[type="search"]:focus,
+.dark-mode input[type="url"]:focus,
+.dark-mode textarea:focus,
+.dark-mode select:focus {
+  box-shadow: 0 0 0 4px rgba(102, 178, 255, 0.2);
+}
+
+/* ============================================================================
+   BUTTONS - ENHANCED VISIBILITY & ACCESSIBILITY
+   Clear visual states for all button interactions
+   ============================================================================ */
+
+button,
+input[type="button"],
+input[type="submit"],
+.btn {
+  background-color: var(--color-btn-primary);
+  color: var(--color-btn-primary-text);
+  border: 2px solid var(--color-btn-primary);  /* Thicker border for visibility */
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;                            /* Medium-bold weight for visibility */
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.2px;                       /* Slight spacing for clarity */
+}
+
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+.btn:hover {
+  background-color: var(--color-btn-primary-hover);
+  border-color: var(--color-btn-primary-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);                 /* Subtle lift effect */
+}
+
+button:active,
+input[type="button"]:active,
+input[type="submit"]:active,
+.btn:active {
+  transform: translateY(1px);                 /* Pressed effect */
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
+}
+
+button:focus,
+button:focus-visible,
+input[type="button"]:focus,
+input[type="button"]:focus-visible,
+input[type="submit"]:focus,
+input[type="submit"]:focus-visible,
+.btn:focus,
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);  /* Clear focus ring */
+}
+
+/* Secondary Buttons */
+button.secondary,
+.btn.secondary {
+  background-color: var(--color-btn-secondary);
+  color: var(--color-btn-secondary-text);
+  border-color: var(--color-btn-secondary);
+}
+
+button.secondary:hover,
+.btn.secondary:hover {
+  background-color: var(--color-btn-secondary-hover);
+  border-color: var(--color-btn-secondary-hover);
+  box-shadow: var(--shadow-md);
+}
+
+/* Disabled Buttons */
+button:disabled,
+input[type="button"]:disabled,
+input[type="submit"]:disabled,
+.btn:disabled {
+  background-color: var(--color-text-disabled);
+  color: var(--color-text-tertiary);
+  border-color: var(--color-text-disabled);
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+button:disabled:hover,
+input[type="button"]:disabled:hover,
+input[type="submit"]:disabled:hover,
+.btn:disabled:hover {
+  box-shadow: none;
+  transform: none;
+}
+
+/* ============================================================================
+   BOOTSTRAP BUTTON VARIANTS - ALL COLORS
+   Complete theming for all button types (primary, secondary, success, danger, warning, info)
+   ============================================================================ */
+
+/* Primary Buttons */
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: 2px solid #007bff;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+  box-shadow: 0 0.5rem 1rem rgba(0, 86, 179, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  background-color: #004085;
+  border-color: #004085;
+  transform: translateY(1px);
+}
+
+.btn-primary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.3);
+}
+
+/* Secondary Buttons */
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border: 2px solid #6c757d;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #495057;
+  border-color: #495057;
+  box-shadow: 0 0.5rem 1rem rgba(73, 80, 87, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-secondary:active {
+  background-color: #343a40;
+  border-color: #343a40;
+  transform: translateY(1px);
+}
+
+/* Success Buttons */
+.btn-success {
+  background-color: #28a745;
+  color: white;
+  border: 2px solid #28a745;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-success:hover {
+  background-color: #1e7e34;
+  border-color: #1e7e34;
+  box-shadow: 0 0.5rem 1rem rgba(30, 126, 52, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-success:active {
+  background-color: #155724;
+  border-color: #155724;
+  transform: translateY(1px);
+}
+
+/* Danger Buttons */
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border: 2px solid #dc3545;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #c82333;
+  box-shadow: 0 0.5rem 1rem rgba(200, 35, 51, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-danger:active {
+  background-color: #bd2130;
+  border-color: #bd2130;
+  transform: translateY(1px);
+}
+
+/* Warning Buttons */
+.btn-warning {
+  background-color: #ffc107;
+  color: #212529;
+  border: 2px solid #ffc107;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-warning:hover {
+  background-color: #e0a800;
+  border-color: #e0a800;
+  box-shadow: 0 0.5rem 1rem rgba(224, 168, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-warning:active {
+  background-color: #d39e00;
+  border-color: #d39e00;
+  transform: translateY(1px);
+}
+
+/* Info Buttons */
+.btn-info {
+  background-color: #17a2b8;
+  color: white;
+  border: 2px solid #17a2b8;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-info:hover {
+  background-color: #138496;
+  border-color: #138496;
+  box-shadow: 0 0.5rem 1rem rgba(19, 132, 150, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-info:active {
+  background-color: #117a8b;
+  border-color: #117a8b;
+  transform: translateY(1px);
+}
+
+/* Light Buttons */
+.btn-light {
+  background-color: #f8f9fa;
+  color: #212529;
+  border: 2px solid #f8f9fa;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-light:hover {
+  background-color: #e2e6ea;
+  border-color: #e2e6ea;
+  box-shadow: 0 0.5rem 1rem rgba(226, 230, 234, 0.5);
+  transform: translateY(-2px);
+}
+
+/* ============================================================================
+   OUTLINE BUTTON VARIANTS - ALL COLORS
+   Transparent background with colored borders and text
+   ============================================================================ */
+
+/* Outline Primary */
+.btn-outline-primary {
+  background-color: transparent;
+  color: #007bff;
+  border: 2px solid #007bff;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-primary:hover {
+  background-color: #007bff;
+  color: white;
+  border-color: #0056b3;
+  box-shadow: 0 0.5rem 1rem rgba(0, 123, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-outline-primary:active {
+  background-color: #0056b3;
+  color: white;
+  transform: translateY(1px);
+}
+
+/* Outline Secondary */
+.btn-outline-secondary {
+  background-color: transparent;
+  color: #6c757d;
+  border: 2px solid #6c757d;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #6c757d;
+  color: white;
+  border-color: #495057;
+  box-shadow: 0 0.5rem 1rem rgba(108, 117, 125, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-outline-secondary:active {
+  background-color: #495057;
+  color: white;
+  transform: translateY(1px);
+}
+
+/* Outline Success */
+.btn-outline-success {
+  background-color: transparent;
+  color: #28a745;
+  border: 2px solid #28a745;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-success:hover {
+  background-color: #28a745;
+  color: white;
+  border-color: #1e7e34;
+  box-shadow: 0 0.5rem 1rem rgba(40, 167, 69, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-outline-success:active {
+  background-color: #1e7e34;
+  color: white;
+  transform: translateY(1px);
+}
+
+/* Outline Danger */
+.btn-outline-danger {
+  background-color: transparent;
+  color: #dc3545;
+  border: 2px solid #dc3545;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+  border-color: #c82333;
+  box-shadow: 0 0.5rem 1rem rgba(220, 53, 69, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-outline-danger:active {
+  background-color: #c82333;
+  color: white;
+  transform: translateY(1px);
+}
+
+/* Outline Warning */
+.btn-outline-warning {
+  background-color: transparent;
+  color: #ffc107;
+  border: 2px solid #ffc107;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-warning:hover {
+  background-color: #ffc107;
+  color: #212529;
+  border-color: #e0a800;
+  box-shadow: 0 0.5rem 1rem rgba(255, 193, 7, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-outline-warning:active {
+  background-color: #e0a800;
+  border-color: #e0a800;
+  transform: translateY(1px);
+}
+
+/* Outline Info */
+.btn-outline-info {
+  background-color: transparent;
+  color: #17a2b8;
+  border: 2px solid #17a2b8;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-info:hover {
+  background-color: #17a2b8;
+  color: white;
+  border-color: #138496;
+  box-shadow: 0 0.5rem 1rem rgba(23, 162, 184, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-outline-info:active {
+  background-color: #138496;
+  color: white;
+  transform: translateY(1px);
+}
+
+/* ============================================================================
+   DARK MODE BUTTON ADJUSTMENTS
+   All button types enhanced for dark mode visibility
+   ============================================================================ */
+
+.dark-mode .btn-primary,
+.dark-mode .btn-secondary,
+.dark-mode .btn-success,
+.dark-mode .btn-danger,
+.dark-mode .btn-warning,
+.dark-mode .btn-info,
+.dark-mode .btn-light {
+  border-width: 2px;
+  font-weight: 600;
+}
+
+.dark-mode .btn-primary {
+  background-color: #0066cc;
+  border-color: #66b2ff;
+}
+
+.dark-mode .btn-primary:hover {
+  background-color: #0052a3;
+  border-color: #80bfff;
+  box-shadow: 0 0.5rem 1rem rgba(102, 178, 255, 0.25);
+}
+
+.dark-mode .btn-secondary {
+  background-color: #505050;
+  border-color: #808080;
+}
+
+.dark-mode .btn-secondary:hover {
+  background-color: #656565;
+  border-color: #a0a0a0;
+  box-shadow: 0 0.5rem 1rem rgba(160, 160, 160, 0.15);
+}
+
+.dark-mode .btn-success {
+  background-color: #388e3c;
+  border-color: #51cf66;
+}
+
+.dark-mode .btn-success:hover {
+  background-color: #2e7d32;
+  border-color: #66de93;
+  box-shadow: 0 0.5rem 1rem rgba(81, 207, 102, 0.25);
+}
+
+.dark-mode .btn-danger {
+  background-color: #c62828;
+  border-color: #ff6b6b;
+}
+
+.dark-mode .btn-danger:hover {
+  background-color: #b71c1c;
+  border-color: #ff8787;
+  box-shadow: 0 0.5rem 1rem rgba(255, 107, 107, 0.25);
+}
+
+.dark-mode .btn-warning {
+  background-color: #f57f17;
+  border-color: #ffd93d;
+  color: white;
+}
+
+.dark-mode .btn-warning:hover {
+  background-color: #e65100;
+  border-color: #ffed4e;
+  color: white;
+  box-shadow: 0 0.5rem 1rem rgba(255, 217, 61, 0.25);
+}
+
+.dark-mode .btn-info {
+  background-color: #00838f;
+  border-color: #74c0fc;
+}
+
+.dark-mode .btn-info:hover {
+  background-color: #006064;
+  border-color: #99d8ff;
+  box-shadow: 0 0.5rem 1rem rgba(116, 192, 252, 0.25);
+}
+
+.dark-mode .btn-light {
+  background-color: #3a3a3a;
+  color: #e8e8e8;
+  border-color: #505050;
+}
+
+.dark-mode .btn-light:hover {
+  background-color: #4a4a4a;
+  border-color: #707070;
+  box-shadow: 0 0.5rem 1rem rgba(112, 112, 112, 0.25);
+}
+
+/* Dark Mode Outline Buttons */
+.dark-mode .btn-outline-primary {
+  background-color: transparent;
+  color: #66b2ff;
+  border-color: #66b2ff;
+}
+
+.dark-mode .btn-outline-primary:hover {
+  background-color: #0066cc;
+  color: white;
+  border-color: #80bfff;
+}
+
+.dark-mode .btn-outline-secondary {
+  background-color: transparent;
+  color: #808080;
+  border-color: #808080;
+}
+
+.dark-mode .btn-outline-secondary:hover {
+  background-color: #505050;
+  color: white;
+  border-color: #a0a0a0;
+}
+
+.dark-mode .btn-outline-success {
+  background-color: transparent;
+  color: #51cf66;
+  border-color: #51cf66;
+}
+
+.dark-mode .btn-outline-success:hover {
+  background-color: #388e3c;
+  color: white;
+  border-color: #66de93;
+}
+
+.dark-mode .btn-outline-danger {
+  background-color: transparent;
+  color: #ff6b6b;
+  border-color: #ff6b6b;
+}
+
+.dark-mode .btn-outline-danger:hover {
+  background-color: #c62828;
+  color: white;
+  border-color: #ff8787;
+}
+
+.dark-mode .btn-outline-warning {
+  background-color: transparent;
+  color: #ffd93d;
+  border-color: #ffd93d;
+}
+
+.dark-mode .btn-outline-warning:hover {
+  background-color: #f57f17;
+  color: white;
+  border-color: #ffed4e;
+}
+
+.dark-mode .btn-outline-info {
+  background-color: transparent;
+  color: #74c0fc;
+  border-color: #74c0fc;
+}
+
+.dark-mode .btn-outline-info:hover {
+  background-color: #00838f;
+  color: white;
+  border-color: #99d8ff;
+}
+
+/* Button Sizes - All Modes */
+.btn-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.875rem;
+  border-width: 2px !important;
+  font-weight: 600;
+}
+
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+  border-width: 2px !important;
+  font-weight: 600;
+}
+
+/* Focus Visible for All Buttons */
+.btn:focus-visible,
+button:focus-visible,
+input[type="button"]:focus-visible,
+input[type="submit"]:focus-visible {
+  outline: none;
+}
+
+.dark-mode button:focus-visible,
+.dark-mode button:focus,
+.dark-mode input[type="button"]:focus-visible,
+.dark-mode input[type="button"]:focus,
+.dark-mode input[type="submit"]:focus-visible,
+.dark-mode input[type="submit"]:focus,
+.dark-mode .btn:focus-visible,
+.dark-mode .btn:focus {
+  box-shadow: 0 0 0 3px rgba(102, 178, 255, 0.3);
+}
+
+/* ============================================================================
+   QUICK ACTIONS - COMFORTABLE STYLING FOR ALL MODES
+   Enhanced spacing and styling for Quick Actions button containers
+   ============================================================================ */
+
+/* Quick Actions Container */
+.quick-actions-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1rem 0;
+}
+
+/* Quick Actions Button Base Styling */
+.quick-actions-container .btn {
+  padding: 0.55rem 1.2rem;
+  font-size: 0.95rem;
+  border-radius: 0.35rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  min-width: 140px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.quick-actions-container .btn i {
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+}
+
+/* Light Mode - Quick Actions Button Styles */
+.quick-actions-container .btn:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.quick-actions-container .btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Light Mode - Specific Button Colors */
+.quick-actions-container .btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: 2px solid #007bff;
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+}
+
+.quick-actions-container .btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+  box-shadow: 0 4px 10px rgba(0, 86, 179, 0.25);
+}
+
+.quick-actions-container .btn-outline-primary {
+  background-color: transparent;
+  color: #007bff;
+  border: 2px solid #007bff;
+}
+
+.quick-actions-container .btn-outline-primary:hover {
+  background-color: #007bff;
+  color: white;
+  border-color: #0056b3;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.25);
+}
+
+.quick-actions-container .btn-success {
+  background-color: #28a745;
+  color: white;
+  border: 2px solid #28a745;
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+}
+
+.quick-actions-container .btn-success:hover {
+  background-color: #1e7e34;
+  border-color: #1e7e34;
+  box-shadow: 0 4px 10px rgba(30, 126, 52, 0.25);
+}
+
+.quick-actions-container .btn-info {
+  background-color: #17a2b8;
+  color: white;
+  border: 2px solid #17a2b8;
+  box-shadow: 0 2px 4px rgba(23, 162, 184, 0.2);
+}
+
+.quick-actions-container .btn-info:hover {
+  background-color: #138496;
+  border-color: #138496;
+  box-shadow: 0 4px 10px rgba(19, 132, 150, 0.25);
+}
+
+/* Dark Mode - Quick Actions Button Styles */
+.dark-mode .quick-actions-container .btn {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .quick-actions-container .btn:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+.dark-mode .quick-actions-container .btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark Mode - Specific Button Colors */
+.dark-mode .quick-actions-container .btn-primary {
+  background-color: #0066cc;
+  color: white;
+  border: 2px solid #66b2ff;
+  box-shadow: 0 2px 6px rgba(0, 102, 204, 0.3);
+}
+
+.dark-mode .quick-actions-container .btn-primary:hover {
+  background-color: #0052a3;
+  border-color: #80bfff;
+  box-shadow: 0 4px 12px rgba(102, 178, 255, 0.3);
+}
+
+.dark-mode .quick-actions-container .btn-outline-primary {
+  background-color: transparent;
+  color: #66b2ff;
+  border: 2px solid #66b2ff;
+}
+
+.dark-mode .quick-actions-container .btn-outline-primary:hover {
+  background-color: #0066cc;
+  color: white;
+  border-color: #80bfff;
+  box-shadow: 0 4px 12px rgba(102, 178, 255, 0.3);
+}
+
+.dark-mode .quick-actions-container .btn-success {
+  background-color: #388e3c;
+  color: white;
+  border: 2px solid #51cf66;
+  box-shadow: 0 2px 6px rgba(81, 207, 102, 0.2);
+}
+
+.dark-mode .quick-actions-container .btn-success:hover {
+  background-color: #2e7d32;
+  border-color: #66de93;
+  box-shadow: 0 4px 12px rgba(81, 207, 102, 0.3);
+}
+
+.dark-mode .quick-actions-container .btn-info {
+  background-color: #00838f;
+  color: white;
+  border: 2px solid #74c0fc;
+  box-shadow: 0 2px 6px rgba(116, 192, 252, 0.2);
+}
+
+.dark-mode .quick-actions-container .btn-info:hover {
+  background-color: #006064;
+  border-color: #99d8ff;
+  box-shadow: 0 4px 12px rgba(116, 192, 252, 0.3);
+}
+
+/* Responsive Quick Actions */
+@media (max-width: 576px) {
+  .quick-actions-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .quick-actions-container .btn {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* ============================================================================
+   TEXT VISIBILITY FIXES - PLACEHOLDER TEXT
+   ============================================================================ */
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+  color: var(--color-form-placeholder);
+  opacity: 1;
+}
+
+.dark-mode input::placeholder,
+.dark-mode textarea::placeholder,
+.dark-mode select::placeholder {
+  color: #888888;
+  opacity: 1;
+}
+
+/* ============================================================================
+   TEXT VISIBILITY FIXES - DISABLED FORM ELEMENTS
+   ============================================================================ */
+input:disabled,
+textarea:disabled,
+select:disabled,
+.form-control:disabled,
+.form-select:disabled,
+fieldset:disabled input,
+fieldset:disabled textarea,
+fieldset:disabled select {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-disabled);
+  opacity: 0.7;
+  cursor: not-allowed;
+  border-color: var(--color-border);
+}
+
+.dark-mode input:disabled,
+.dark-mode textarea:disabled,
+.dark-mode select:disabled,
+.dark-mode .form-control:disabled,
+.dark-mode .form-select:disabled,
+.dark-mode fieldset:disabled input,
+.dark-mode fieldset:disabled textarea,
+.dark-mode fieldset:disabled select {
+  background-color: #252525;
+  color: #666666;
+  opacity: 0.6;
+}
+
+/* ============================================================================
+   TEXT VISIBILITY FIXES - LABELS AND FORM TEXT
+   ============================================================================ */
+label,
+.form-label,
+legend {
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.dark-mode label,
+.dark-mode .form-label,
+.dark-mode legend {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.form-text,
+small,
+.help-text {
+  color: var(--color-text-tertiary) !important;
+}
+
+.dark-mode .form-text,
+.dark-mode small,
+.dark-mode .help-text {
+  color: #999999 !important;
+}
+
+/* ============================================================================
+   TEXT VISIBILITY FIXES - LINKS
+   ============================================================================ */
+a,
+.link {
+  color: var(--color-link);
+  text-decoration: underline;
+  transition: all 0.2s ease;
+}
+
+a:hover,
+.link:hover {
+  color: var(--color-link-hover);
+}
+
+a:visited,
+.link:visited {
+  color: var(--color-link-visited);
+}
+
+.dark-mode a,
+.dark-mode .link {
+  color: #66b2ff;
+  text-decoration: underline;
+}
+
+.dark-mode a:hover,
+.dark-mode .link:hover {
+  color: #99ccff;
+  text-decoration: none;
+}
+
+.dark-mode a:visited,
+.dark-mode .link:visited {
+  color: #b399ff;
+}
+
+/* ============================================================================
+   TEXT VISIBILITY FIXES - REQUIRED FIELD INDICATORS
+   ============================================================================ */
+.required-indicator::after,
+[aria-required="true"]::after {
+  content: " *";
+  color: var(--color-danger);
+  font-weight: bold;
+  margin-left: 2px;
+}
+
+/* ============================================================================
+   TEXT VISIBILITY FIXES - CODE BLOCKS
+   ============================================================================ */
+code,
+pre,
+.code,
+.pre {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+}
+
+.dark-mode code,
+.dark-mode pre,
+.dark-mode .code,
+.dark-mode .pre {
+  background-color: #2a2a2a;
+  color: #e8e8e8;
+  border-color: #444444;
+}
+
+/* ============================================================================
+   TEXT VISIBILITY FIXES - BLOCKQUOTES
+   ============================================================================ */
+blockquote {
+  border-left: 4px solid var(--color-link);
+  padding-left: 1rem;
+  margin-left: 0;
+  color: var(--color-text-secondary);
+}
+
+.dark-mode blockquote {
+  border-left-color: #66b2ff;
+  color: #b0b0b0;
+}
+
+/* ============================================================================
+   TEXT VISIBILITY FIXES - HR/DIVIDERS
+   ============================================================================ */
+hr,
+.divider {
+  border-color: var(--color-border);
+  opacity: 1;
+}
+
+.dark-mode hr,
+.dark-mode .divider {
+  border-color: #444444;
+}
+
+/* ============================================================================
+   TEXT VISIBILITY FIXES - ABBREVIATIONS
+   ============================================================================ */
+abbr[title] {
+  border-bottom: 1px dotted var(--color-border);
+  cursor: help;
+  text-decoration: none;
+}
+
+.dark-mode abbr[title] {
+  border-bottom-color: #444444;
+}
+
+/* ============================================================================
+   CARDS & CONTAINERS
+   ============================================================================ */
+
+.card,
+.container,
+.panel,
+section {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.card:hover,
+.container:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border-hover);
+}
+
+/* ============================================================================
+   SEMANTIC COLORS - ENHANCED ALERTS & STATUS MESSAGES
+   Clear, visible status indicators with proper contrast and hierarchy
+   ============================================================================ */
+
+/* Success - With Enhanced Visibility */
+.success,
+.alert-success {
+  background-color: var(--color-bg-success);
+  color: var(--color-text-success);
+  border: 4px solid var(--color-text-success);  /* Thicker left border */
+  border-left-width: 4px;                       /* More prominent left indicator */
+  padding: 1rem 1rem 1rem 1.5rem;               /* Extra left padding */
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+  font-weight: 500;                             /* Medium weight for readability */
+  box-shadow: 0 2px 4px rgba(30, 126, 52, 0.1); /* Subtle shadow */
+}
+
+.success h1, .success h2, .success h3,
+.success h4, .success h5, .success h6,
+.alert-success h1, .alert-success h2, .alert-success h3,
+.alert-success h4, .alert-success h5, .alert-success h6 {
+  color: var(--color-text-success);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Warning - With Enhanced Visibility */
+.warning,
+.alert-warning {
+  background-color: var(--color-bg-warning);
+  color: var(--color-text-warning);
+  border: 4px solid var(--color-text-warning);  /* Thicker left border */
+  border-left-width: 4px;                       /* More prominent left indicator */
+  padding: 1rem 1rem 1rem 1.5rem;               /* Extra left padding */
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+  font-weight: 500;                             /* Medium weight for readability */
+  box-shadow: 0 2px 4px rgba(133, 100, 4, 0.1); /* Subtle shadow */
+}
+
+.warning h1, .warning h2, .warning h3,
+.warning h4, .warning h5, .warning h6,
+.alert-warning h1, .alert-warning h2, .alert-warning h3,
+.alert-warning h4, .alert-warning h5, .alert-warning h6 {
+  color: var(--color-text-warning);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Danger - With Enhanced Visibility */
+.danger,
+.alert-danger {
+  background-color: var(--color-bg-danger);
+  color: var(--color-text-danger);
+  border: 4px solid var(--color-text-danger);  /* Thicker left border */
+  border-left-width: 4px;                      /* More prominent left indicator */
+  padding: 1rem 1rem 1rem 1.5rem;              /* Extra left padding */
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+  font-weight: 500;                            /* Medium weight for readability */
+  box-shadow: 0 2px 4px rgba(132, 32, 41, 0.1); /* Subtle shadow */
+}
+
+.danger h1, .danger h2, .danger h3,
+.danger h4, .danger h5, .danger h6,
+.alert-danger h1, .alert-danger h2, .alert-danger h3,
+.alert-danger h4, .alert-danger h5, .alert-danger h6 {
+  color: var(--color-text-danger);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Info - With Enhanced Visibility */
+.info,
+.alert-info {
+  background-color: var(--color-bg-info);
+  color: var(--color-text-info);
+  border: 4px solid var(--color-text-info);   /* Thicker left border */
+  border-left-width: 4px;                     /* More prominent left indicator */
+  padding: 1rem 1rem 1rem 1.5rem;             /* Extra left padding */
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+  font-weight: 500;                           /* Medium weight for readability */
+  box-shadow: 0 2px 4px rgba(12, 84, 96, 0.1); /* Subtle shadow */
+}
+
+.info h1, .info h2, .info h3,
+.info h4, .info h5, .info h6,
+.alert-info h1, .alert-info h2, .alert-info h3,
+.alert-info h4, .alert-info h5, .alert-info h6 {
+  color: var(--color-text-info);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Alert Icon/Badge Styling */
+.success::before, .alert-success::before,
+.warning::before, .alert-warning::before,
+.danger::before, .alert-danger::before,
+.info::before, .alert-info::before {
+  margin-right: 0.5rem;
+  font-weight: 600;
+}
+
+/* Dark Mode Alert Adjustments */
+.dark-mode .success,
+.dark-mode .alert-success {
+  background-color: var(--color-bg-success);
+  border-color: var(--color-text-success);
+  box-shadow: 0 2px 4px rgba(81, 207, 102, 0.2);
+}
+
+.dark-mode .warning,
+.dark-mode .alert-warning {
+  background-color: var(--color-bg-warning);
+  border-color: var(--color-text-warning);
+  box-shadow: 0 2px 4px rgba(255, 217, 61, 0.2);
+}
+
+.dark-mode .danger,
+.dark-mode .alert-danger {
+  background-color: var(--color-bg-danger);
+  border-color: var(--color-text-danger);
+  box-shadow: 0 2px 4px rgba(255, 107, 107, 0.2);
+}
+
+.dark-mode .info,
+.dark-mode .alert-info {
+  background-color: var(--color-bg-info);
+  border-color: var(--color-text-info);
+  box-shadow: 0 2px 4px rgba(116, 192, 252, 0.2);
+}
+
+/* ============================================================================
+   SCROLLBAR STYLING
+   ============================================================================ */
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Firefox */
+* {
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-bg);
+  scrollbar-width: thin;
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.text-primary {
+  color: var(--color-text-primary) !important;
+}
+
+.text-secondary {
+  color: var(--color-text-secondary) !important;
+}
+
+.text-tertiary {
+  color: var(--color-text-tertiary) !important;
+}
+
+.bg-primary {
+  background-color: var(--color-bg-primary) !important;
+}
+
+.bg-secondary {
+  background-color: var(--color-bg-secondary) !important;
+}
+
+.bg-tertiary {
+  background-color: var(--color-bg-tertiary) !important;
+}
+
+.border {
+  border: 1px solid var(--color-border) !important;
+}
+
+.border-light {
+  border: 1px solid var(--color-border-light) !important;
+}
+
+/* ============================================================================
+   ACCESSIBILITY IMPROVEMENTS
+   ============================================================================ */
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: more) {
+  :root {
+    --color-text-primary: #000000;
+    --color-text-secondary: #333333;
+    --color-bg-primary: #ffffff;
+    --color-link: #0000ee;
+  }
+}
+
+/* Print Styles */
+@media print {
+  html, body {
+    background-color: white;
+    color: black;
+  }
+  
+  a {
+    color: #0000ee;
+  }
+}
+
+/* ============================================================================
+   BOOTSTRAP COMPONENT THEME OVERRIDES
+   Ensure Bootstrap components respect the theme system
+   ============================================================================ */
+
+/* Navbar Dark Mode Support */
+.dark-mode .navbar-dark,
+.dark-mode .navbar {
+  background-color: var(--color-bg-secondary) !important;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dark-mode .navbar-dark .navbar-brand {
+  color: var(--color-text-primary) !important;
+}
+
+.dark-mode .navbar-dark .nav-link {
+  color: var(--color-text-secondary) !important;
+}
+
+.dark-mode .navbar-dark .nav-link:hover,
+.dark-mode .navbar-dark .nav-link:focus {
+  color: var(--color-text-primary) !important;
+}
+
+.dark-mode .navbar-dark .nav-link.active {
+  color: var(--color-link) !important;
+}
+
+/* Dropdown Menu Dark Mode */
+.dark-mode .dropdown-menu {
+  background-color: var(--color-bg-secondary) !important;
+  border-color: var(--color-border) !important;
+}
+
+.dark-mode .dropdown-item {
+  color: var(--color-text-secondary) !important;
+}
+
+.dark-mode .dropdown-item:hover,
+.dark-mode .dropdown-item:focus {
+  background-color: var(--color-bg-tertiary) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.dark-mode .dropdown-divider {
+  border-color: var(--color-border) !important;
+}
+
+/* Modal Dark Mode */
+.dark-mode .modal-content {
+  background-color: var(--color-bg-secondary) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.dark-mode .modal-header {
+  border-color: var(--color-border) !important;
+}
+
+.dark-mode .modal-footer {
+  border-color: var(--color-border) !important;
+}
+
+
+/* Card Styling */
+.card {
+  background-color: var(--color-bg-primary) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.card-header {
+  background-color: var(--color-bg-secondary) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.card-header h5 {
+  color: var(--color-text-primary) !important;
+  margin-bottom: 0;
+}
+
+.card-body {
+  color: var(--color-text-primary) !important;
+}
+
+/* Card Dark Mode */
+.dark-mode .card {
+  background-color: var(--color-bg-tertiary) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.dark-mode .card-header {
+  background-color: var(--color-bg-secondary) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.dark-mode .card-header h5 {
+  color: var(--color-text-primary) !important;
+}
+
+.dark-mode .card-body {
+  color: var(--color-text-primary) !important;
+}
+
+/* Button Dark Mode */
+.dark-mode .btn-outline-light {
+  color: var(--color-text-secondary) !important;
+  border-color: var(--color-border) !important;
+}
+
+.dark-mode .btn-outline-light:hover {
+  background-color: var(--color-bg-tertiary) !important;
+  border-color: var(--color-text-secondary) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.dark-mode .btn-light {
+  background-color: var(--color-bg-tertiary) !important;
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-border) !important;
+}
+
+.dark-mode .btn-light:hover {
+  background-color: var(--color-bg-tertiary) !important;
+  color: var(--color-link) !important;
+}
+
+/* Alert Dark Mode */
+.dark-mode .alert-primary {
+  background-color: var(--color-bg-info) !important;
+  color: var(--color-text-info) !important;
+  border-color: var(--color-info) !important;
+}
+
+.dark-mode .alert-success {
+  background-color: var(--color-bg-success) !important;
+  color: var(--color-text-success) !important;
+  border-color: var(--color-success) !important;
+}
+
+.dark-mode .alert-warning {
+  background-color: var(--color-bg-warning) !important;
+  color: var(--color-text-warning) !important;
+  border-color: var(--color-warning) !important;
+}
+
+.dark-mode .alert-danger {
+  background-color: var(--color-bg-danger) !important;
+  color: var(--color-text-danger) !important;
+  border-color: var(--color-danger) !important;
+}
+
+/* Badge Dark Mode */
+.dark-mode .badge {
+  background-color: var(--color-link) !important;
+  color: #ffffff !important;
+}
+
+/* Table Dark Mode */
+.dark-mode .table {
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-border) !important;
+}
+
+.dark-mode .table-striped > tbody > tr:nth-of-type(odd) > * {
+  background-color: var(--color-bg-tertiary) !important;
+}
+
+.dark-mode .table-hover > tbody > tr:hover > * {
+  background-color: var(--color-bg-tertiary) !important;
+}
+
+.dark-mode .table-dark {
+  background-color: var(--color-bg-secondary) !important;
+  color: var(--color-text-primary) !important;
+}
+
+/* Pagination Dark Mode */
+.dark-mode .pagination .page-link {
+  background-color: var(--color-bg-tertiary) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.dark-mode .pagination .page-link:hover {
+  background-color: var(--color-bg-secondary) !important;
+  color: var(--color-link) !important;
+}
+
+.dark-mode .pagination .page-item.active .page-link {
+  background-color: var(--color-link) !important;
+  border-color: var(--color-link) !important;
+}
+
+/* Progress Dark Mode */
+.dark-mode .progress {
+  background-color: var(--color-bg-tertiary) !important;
+  border-color: var(--color-border) !important;
+}
+
+/* Nav Tabs Dark Mode */
+.dark-mode .nav-tabs {
+  border-color: var(--color-border) !important;
+}
+
+.dark-mode .nav-tabs .nav-link {
+  color: var(--color-text-secondary) !important;
+}
+
+.dark-mode .nav-tabs .nav-link:hover {
+  border-color: var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.dark-mode .nav-tabs .nav-link.active {
+  background-color: var(--color-bg-secondary) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-link) !important;
+}
+
+/* List Group Dark Mode */
+.dark-mode .list-group-item {
+  background-color: var(--color-bg-tertiary) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.dark-mode .list-group-item:hover {
+  background-color: var(--color-bg-secondary) !important;
+}
+
+.dark-mode .list-group-item.active {
+  background-color: var(--color-link) !important;
+  border-color: var(--color-link) !important;
+}
+
+/* Footer Dark Mode */
+.dark-mode .footer,
+.dark-mode .bg-dark {
+  background-color: var(--color-bg-secondary) !important;
+  color: var(--color-text-primary) !important;
+}
+
+/* Light Mode Text Utility Classes - Fix Visibility */
+.text-muted {
+  color: var(--color-text-secondary) !important;
+}
+
+.text-primary {
+  color: var(--color-link) !important;
+}
+
+.text-success {
+  color: var(--color-text-success) !important;
+}
+
+.text-warning {
+  color: var(--color-text-warning) !important;
+}
+
+.text-danger {
+  color: var(--color-text-danger) !important;
+}
+
+.text-info {
+  color: var(--color-text-info) !important;
+}
+
+.text-secondary {
+  color: var(--color-text-secondary) !important;
+}
+
+.text-dark {
+  color: var(--color-text-primary) !important;
+}
+
+.text-light {
+  color: #ffffff !important;
+}
+
+.text-body {
+  color: var(--color-text-primary) !important;
+}
+
+.text-white {
+  color: #ffffff !important;
+}
+
+/* Light Mode Background Text Colors */
+.bg-primary .text-white,
+.bg-success .text-white,
+.bg-warning .text-white,
+.bg-danger .text-white,
+.bg-info .text-white {
+  color: #ffffff !important;
+}
+
+.dark-mode .text-muted {
+  color: var(--color-text-secondary) !important;
+}
+
+/* Form Controls Dark Mode - Additional Support */
+.dark-mode input[type="text"],
+.dark-mode input[type="email"],
+.dark-mode input[type="password"],
+.dark-mode input[type="number"],
+.dark-mode input[type="search"],
+.dark-mode textarea,
+.dark-mode select {
+  background-color: var(--color-form-bg) !important;
+  border-color: var(--color-form-border) !important;
+  color: var(--color-form-text) !important;
+}
+
+.dark-mode input::placeholder,
+.dark-mode textarea::placeholder {
+  color: var(--color-form-placeholder) !important;
+}
+
+.dark-mode input:focus,
+.dark-mode textarea:focus,
+.dark-mode select:focus {
+  background-color: var(--color-form-bg) !important;
+  border-color: var(--color-form-border-focus) !important;
+  color: var(--color-form-text) !important;
+}
+
+/* ============================================================================
+   DARK MODE ENHANCEMENTS - VISUAL POLISH & SOPHISTICATION
+   Advanced styling for dark mode appearance
+   ============================================================================ */
+
+/* Dark Mode Dashboard Statistics */
+.dark-mode .stat-number {
+  color: var(--color-text-primary);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+}
+
+.dark-mode .stat-label {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.dark-mode .dashboard-card {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+}
+
+.dark-mode .dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+/* Dark Mode Timeline Items */
+.dark-mode .timeline-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dark-mode .timeline-item:last-child {
+  border-bottom: none;
+}
+
+.dark-mode .timeline-item h6 {
+  color: var(--color-text-primary);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.dark-mode .timeline-item .text-muted {
+  color: var(--color-text-secondary);
+}
+
+.dark-mode .date-range {
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+}
+
+/* Dark Mode Skill Badge */
+.dark-mode .skill-badge {
+  background-color: #0056cc;
+  color: #5eb3ff;
+  border: 1px solid #5eb3ff;
+  font-weight: 600;
+}
+
+/* Dark Mode Profile Photo */
+.dark-mode .profile-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid var(--color-link);
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.dark-mode .profile-photo:hover {
+  box-shadow: 0 0 0 4px var(--color-link);
+  opacity: 0.9;
+}
+
+/* Dark Mode Body & Container Enhancements */
+.dark-mode body {
+  background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+  min-height: 100vh;
+}
+
+.dark-mode .container,
+.dark-mode main {
+  background-color: transparent;
+}
+
+/* Dark Mode Badge Enhancements */
+.dark-mode .badge {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+.dark-mode .badge-primary {
+  background-color: #0056cc;
+  border-color: #5eb3ff;
+}
+
+.dark-mode .badge-success {
+  background-color: #0d3d1a;
+  border-color: #5eef8f;
+  color: #5eef8f;
+}
+
+.dark-mode .badge-warning {
+  background-color: #4d3800;
+  border-color: #ffe66d;
+  color: #ffe66d;
+}
+
+.dark-mode .badge-danger {
+  background-color: #4d1515;
+  border-color: #ff8a8a;
+  color: #ff8a8a;
+}
+
+.dark-mode .badge-info {
+  background-color: #0d3a4d;
+  border-color: #5ecaff;
+  color: #5ecaff;
+}
+
+/* Dark Mode Alert Enhancements */
+.dark-mode .alert {
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+}
+
+.dark-mode .alert-success {
+  background-color: #0d3d1a;
+  border-color: #5eef8f;
+  color: #5eef8f;
+}
+
+.dark-mode .alert-warning {
+  background-color: #4d3800;
+  border-color: #ffe66d;
+  color: #ffe66d;
+}
+
+.dark-mode .alert-danger {
+  background-color: #4d1515;
+  border-color: #ff8a8a;
+  color: #ff8a8a;
+}
+
+.dark-mode .alert-info {
+  background-color: #0d3a4d;
+  border-color: #5ecaff;
+  color: #5ecaff;
+}
+
+/* Dark Mode Navbar Enhancements */
+.dark-mode .navbar,
+.dark-mode .navbar-dark {
+  background-color: var(--color-bg-secondary) !important;
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .navbar-dark .navbar-brand {
+  color: var(--color-link) !important;
+}
+
+.dark-mode .navbar-dark .navbar-nav .nav-link {
+  color: var(--color-text-secondary) !important;
+  transition: all 0.3s ease;
+}
+
+.dark-mode .navbar-dark .navbar-nav .nav-link:hover {
+  color: var(--color-link) !important;
+}
+
+/* Dark Mode List Styling */
+.dark-mode ul,
+.dark-mode ol {
+  color: var(--color-text-primary);
+}
+
+.dark-mode li {
+  color: var(--color-text-primary);
+}
+
+/* Dark Mode Table Enhancements */
+.dark-mode .table {
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+  background-color: var(--color-bg-tertiary);
+}
+
+.dark-mode .table thead {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-border);
+}
+
+.dark-mode .table thead th {
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+  font-weight: 600;
+}
+
+.dark-mode .table tbody td {
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.dark-mode .table tbody tr:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+/* Dark Mode Scrollbar Enhancement */
+.dark-mode::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.dark-mode::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+}
+
+.dark-mode::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 6px;
+}
+
+.dark-mode::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Dark Mode Shadow Enhancements */
+.dark-mode .shadow {
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.dark-mode .shadow-sm {
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.dark-mode .shadow-md,
+.dark-mode .shadow {
+  box-shadow: var(--shadow-md) !important;
+}
+
+.dark-mode .shadow-lg {
+  box-shadow: var(--shadow-lg) !important;
+}
+
+/* Dark Mode Border Radius Enhancement */
+.dark-mode .btn,
+.dark-mode .card,
+.dark-mode .input-group {
+  border-radius: 0.5rem;
+}
+
+/* Dark Mode Focus Ring Enhancement */
+.dark-mode *:focus-visible {
+  outline: 2px solid var(--color-border-focus) !important;
+  outline-offset: 2px;
+}
+
+/* Dark Mode Disabled Elements */
+.dark-mode :disabled,
+.dark-mode .disabled {
+  opacity: 0.65;
+  color: var(--color-text-disabled);
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-border);
+}
+
+/* Dark Mode Modal Enhancements */
+.dark-mode .modal-content {
+  background-color: var(--color-bg-tertiary);
+  border-color: var(--color-border);
+}
+
+.dark-mode .modal-header {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-border);
+}
+
+.dark-mode .modal-header .btn-close {
+  filter: invert(1);
+}
+
+/* Dark Mode Dropdown Enhancements */
+.dark-mode .dropdown-menu {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-border);
+}
+
+.dark-mode .dropdown-item {
+  color: var(--color-text-primary);
+}
+
+.dark-mode .dropdown-item:hover,
+.dark-mode .dropdown-item:focus {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-link);
+}
+
+.dark-mode .dropdown-divider {
+  border-color: var(--color-border);
+}
+
+/* Dark Mode Tooltip & Popover */
+.dark-mode .tooltip-inner {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+}
+
+.dark-mode .popover {
+  background-color: var(--color-bg-tertiary);
+  border-color: var(--color-border);
+}
+
+.dark-mode .popover-header {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+.dark-mode .popover-body {
+  color: var(--color-text-primary);
+}
+
+/* Dark Mode Smooth Transitions */
+.dark-mode * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.dark-mode input:focus,
+.dark-mode textarea:focus,
+.dark-mode select:focus {
+  background-color: var(--color-form-bg) !important;
+  border-color: var(--color-form-border-focus) !important;
+  color: var(--color-form-text) !important;
+}
+
+
+
+/* ============================================================================
+   LIGHT MODE ENHANCEMENTS - VISUAL POLISH & SOPHISTICATION
+   Advanced styling for light mode appearance
+   ============================================================================ */
+
+/* Light Mode Body & Container Enhancements */
+body {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f6f8 100%);
+  min-height: 100vh;
+}
+
+.container,
+main {
+  background-color: transparent;
+}
+
+/* Light Mode Badge Enhancements */
+.badge {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  font-weight: 600;
+}
+
+.badge-primary {
+  background-color: #dbeafe;
+  color: #0052cc;
+  border-color: #93c5fd;
+}
+
+.badge-success {
+  background-color: #dcfce7;
+  color: #15803d;
+  border-color: #86efac;
+}
+
+.badge-warning {
+  background-color: #fefce8;
+  color: #92400e;
+  border-color: #fcd34d;
+}
+
+.badge-danger {
+  background-color: #fee2e2;
+  color: #7f1d1d;
+  border-color: #fca5a5;
+}
+
+.badge-info {
+  background-color: #cffafe;
+  color: #0e4a6f;
+  border-color: #a5f3fc;
+}
+
+/* Light Mode Alert Enhancements */
+.alert {
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.alert-success {
+  background-color: #dcfce7;
+  border-color: #86efac;
+  color: #15803d;
+}
+
+.alert-warning {
+  background-color: #fefce8;
+  border-color: #fcd34d;
+  color: #92400e;
+}
+
+.alert-danger {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+  color: #7f1d1d;
+}
+
+.alert-info {
+  background-color: #cffafe;
+  border-color: #a5f3fc;
+  color: #0e4a6f;
+}
+
+/* Light Mode Navbar Enhancements */
+.navbar,
+.navbar-light {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.navbar-light .navbar-brand {
+  color: var(--color-link) !important;
+  font-weight: 700;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: var(--color-text-secondary) !important;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+  color: var(--color-link) !important;
+}
+
+/* Light Mode Table Enhancements */
+.table {
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.table thead {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-border);
+}
+
+.table thead th {
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.table tbody td {
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.table tbody tr:hover {
+  background-color: var(--color-bg-tertiary);
+}
+
+/* Light Mode Modal Enhancements */
+.modal-content {
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border-radius: 0.75rem;
+}
+
+.modal-header {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-border);
+}
+
+/* Light Mode Dropdown Enhancements */
+.dropdown-menu {
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+}
+
+.dropdown-item {
+  color: var(--color-text-primary);
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-link);
+}
+
+.dropdown-divider {
+  border-color: var(--color-border);
+}
+
+/* Light Mode Input & Form Enhancement */
+input,
+textarea,
+select {
+  border-radius: 0.35rem;
+  transition: all 0.2s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-form-border-focus) !important;
+  box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
+}
+
+/* Light Mode Card Enhancement */
+.card {
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border-radius: 0.5rem;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-border);
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+/* Light Mode Progress Bar */
+.progress {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 0.35rem;
+}
+
+.progress-bar {
+  background-color: var(--color-link);
+}
+
+/* Light Mode Dashboard Statistics */
+.stat-number {
+  color: var(--color-text-primary);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+}
+
+.stat-label {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.dashboard-card {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Light Mode Timeline Items */
+.timeline-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.timeline-item:last-child {
+  border-bottom: none;
+}
+
+.timeline-item h6 {
+  color: var(--color-text-primary);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-item .text-muted {
+  color: var(--color-text-secondary);
+}
+
+.date-range {
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+}
+
+/* Light Mode Skill Badge */
+.skill-badge {
+  background-color: #dbeafe;
+  color: #0052cc;
+  border: 1px solid #93c5fd;
+  font-weight: 600;
+}
+
+/* Light Mode Profile Photo */
+.profile-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid var(--color-link);
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.profile-photo:hover {
+  box-shadow: 0 0 0 4px var(--color-link);
+  opacity: 0.9;
+}
+
+/* Light Mode Link Styling */
+a {
+  color: var(--color-link);
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-link-hover);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}

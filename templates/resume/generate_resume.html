@@ -1,0 +1,304 @@
+{% extends 'base.html' %}
+
+{% block title %}Generate Resume - AI Resume Builder{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Header with View My Resumes Button -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2><i class="bi bi-magic"></i> Generate Resume</h2>
+                <a href="{% url 'resume_list' %}" class="btn btn-outline-success">
+                    <i class="bi bi-list-ul"></i> View My Resumes
+                </a>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="bi bi-file-earmark-text"></i> AI-Powered Resume Generator</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>How it works:</strong> Our AI will analyze your profile, education, experience, and projects to create a professional, personalized resume that highlights your strengths.
+                    </div>
+
+                    {% if completeness_percentage < 50 %}
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <strong>Tip:</strong> Your profile is {{ completeness_percentage }}% complete. For best results, add more information about your education, experience, and projects before generating your resume.
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-4">
+                        <h5>Your Profile Completeness</h5>
+                        <div class="progress" style="height: 25px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ completeness_percentage }}%" aria-valuenow="{{ completeness_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                {{ completeness_percentage }}% Complete
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Template Selection Section -->
+                    <div class="mb-4">
+                        <h5 class="mb-3">
+                            <i class="bi bi-palette"></i> Choose Your Resume Template
+                        </h5>
+                        <p class="text-muted small">Select a template that best fits your industry and career level</p>
+                        
+                        <div class="row g-3" id="templateSelection">
+                            {% for template in available_templates %}
+                            <div class="col-md-4">
+                                <div class="template-option {% if template.id == selected_template %}active{% endif %}" 
+                                     data-template="{{ template.id }}"
+                                     onclick="selectTemplate('{{ template.id }}')">
+                                    <div class="card h-100 border-2 cursor-pointer">
+                                        <div class="card-body text-center">
+                                            <i class="bi {{ template.icon }} template-icon"></i>
+                                            <h6 class="mt-2 mb-1">{{ template.name }}</h6>
+                                            <p class="small text-muted mb-2">{{ template.description }}</p>
+                                            <span class="badge bg-secondary">{{ template.category|title }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <a href="{% url 'templates_gallery' %}" class="btn btn-sm btn-outline-info">
+                                <i class="bi bi-eye"></i> Preview All Templates
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-person-check icon-xl text-success mb-2"></i>
+                                    <h6>Profile</h6>
+                                    {% if profile.summary %}
+                                        <span class="badge bg-success">Complete</span>
+                                        <br>
+                                        <div class="mt-2">
+                                            <a href="{% url 'profile_edit' %}" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-pencil"></i> Edit
+                                            </a>
+                                            <a href="{% url 'portfolio_view' %}" class="btn btn-sm btn-outline-info">
+                                                <i class="bi bi-eye"></i> View
+                                            </a>
+                                        </div>
+                                    {% else %}
+                                        <span class="badge bg-warning">Incomplete</span>
+                                        <br>
+                                        <a href="{% url 'profile_edit' %}" class="btn btn-sm btn-outline-primary mt-2">
+                                            <i class="bi bi-plus-circle"></i> Complete Now
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-mortarboard icon-xl text-info mb-2"></i>
+                                    <h6>Education</h6>
+                                    {% if educations %}
+                                        <span class="badge bg-success">{{ educations.count }} Added</span>
+                                        <br>
+                                        <div class="mt-2">
+                                            <a href="{% url 'education_list' %}" class="btn btn-sm btn-outline-info">
+                                                <i class="bi bi-eye"></i> View All
+                                            </a>
+                                            <a href="{% url 'education_add' %}" class="btn btn-sm btn-outline-success">
+                                                <i class="bi bi-plus-circle"></i> Add More
+                                            </a>
+                                        </div>
+                                    {% else %}
+                                        <span class="badge bg-warning">None</span>
+                                        <br>
+                                        <a href="{% url 'education_add' %}" class="btn btn-sm btn-outline-primary mt-2">
+                                            <i class="bi bi-plus-circle"></i> Add Now
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-briefcase icon-xl text-primary mb-2"></i>
+                                    <h6>Experience</h6>
+                                    {% if experiences %}
+                                        <span class="badge bg-success">{{ experiences.count }} Added</span>
+                                        <br>
+                                        <div class="mt-2">
+                                            <a href="{% url 'experience_list' %}" class="btn btn-sm btn-outline-info">
+                                                <i class="bi bi-eye"></i> View All
+                                            </a>
+                                            <a href="{% url 'experience_add' %}" class="btn btn-sm btn-outline-success">
+                                                <i class="bi bi-plus-circle"></i> Add More
+                                            </a>
+                                        </div>
+                                    {% else %}
+                                        <span class="badge bg-warning">None</span>
+                                        <br>
+                                        <a href="{% url 'experience_add' %}" class="btn btn-sm btn-outline-primary mt-2">
+                                            <i class="bi bi-plus-circle"></i> Add Now
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-code-square icon-xl text-warning mb-2"></i>
+                                    <h6>Projects</h6>
+                                    {% if projects %}
+                                        <span class="badge bg-success">{{ projects.count }} Added</span>
+                                        <br>
+                                        <div class="mt-2">
+                                            <a href="{% url 'project_list' %}" class="btn btn-sm btn-outline-info">
+                                                <i class="bi bi-eye"></i> View All
+                                            </a>
+                                            <a href="{% url 'project_add' %}" class="btn btn-sm btn-outline-success">
+                                                <i class="bi bi-plus-circle"></i> Add More
+                                            </a>
+                                        </div>
+                                    {% else %}
+                                        <span class="badge bg-warning">None</span>
+                                        <br>
+                                        <a href="{% url 'project_add' %}" class="btn btn-sm btn-outline-primary mt-2">
+                                            <i class="bi bi-plus-circle"></i> Add Now
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="post" id="generateForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="template" id="selectedTemplate" value="{{ selected_template }}">
+                        
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i>
+                            <strong>Selected Template:</strong> <span id="selectedTemplateName">{{ selected_template|title }}</span>
+                        </div>
+                        
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            <strong>Note:</strong> Resume generation may take 10-30 seconds. Please be patient.
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg" id="generateBtn">
+                                <i class="bi bi-magic"></i> Generate My Resume with AI
+                            </button>
+                            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Back to Dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Reset button state on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('generateBtn');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="bi bi-magic"></i> Generate My Resume with AI';
+});
+
+// Template selection
+function selectTemplate(templateId) {
+    // Remove active class from all templates
+    document.querySelectorAll('.template-option').forEach(option => {
+        option.classList.remove('active');
+    });
+    
+    // Add active class to selected template
+    const selected = document.querySelector(`[data-template="${templateId}"]`);
+    if (selected) {
+        selected.classList.add('active');
+    }
+    
+    // Update hidden input and display name
+    document.getElementById('selectedTemplate').value = templateId;
+    document.getElementById('selectedTemplateName').textContent = templateId.charAt(0).toUpperCase() + templateId.slice(1).replace('-', ' ');
+}
+
+// Form submission
+document.getElementById('generateForm').addEventListener('submit', function(e) {
+    const btn = document.getElementById('generateBtn');
+    
+    // Prevent double submission
+    if (btn.disabled) {
+        e.preventDefault();
+        return false;
+    }
+    
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Generating Resume...';
+    
+    // Reset button after 30 seconds as a fallback (in case of timeout)
+    setTimeout(function() {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-magic"></i> Generate My Resume with AI';
+    }, 30000);
+});
+
+// Reset button if user navigates back
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        const btn = document.getElementById('generateBtn');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-magic"></i> Generate My Resume with AI';
+    }
+});
+</script>
+
+<style>
+.template-option {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.template-option .card {
+    transition: all 0.3s ease;
+    border-color: #dee2e6;
+}
+
+.template-option:hover .card {
+    border-color: #0d6efd;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
+}
+
+.template-option.active .card {
+    border-color: #0d6efd;
+    background-color: #e7f1ff;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.template-icon {
+    font-size: 2.5rem;
+    color: #0d6efd;
+}
+
+.template-option.active .template-icon {
+    color: #0a58ca;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+</style>
+{% endblock %}

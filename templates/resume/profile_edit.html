@@ -1,0 +1,424 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edit Profile - AI Resume Builder{% endblock %}
+
+{% block extra_head %}
+<style>
+/* Phone input styling */
+.input-group .select2-container {
+    flex: 0 0 auto;
+    width: 180px !important;
+}
+
+.input-group .select2-container .select2-selection {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+}
+
+.input-group input.form-control {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.select2-results__option {
+    font-size: 14px;
+    padding: 8px 12px;
+}
+
+.select2-container--bootstrap-5 .select2-selection {
+    border-radius: 0.375rem;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0"><i class="bi bi-pencil"></i> Edit Profile</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" id="profileForm">
+                        {% csrf_token %}
+                        
+                        <!-- Profile Photo Section -->
+                        <div class="profile-photo-section mb-4">
+                            <h5 class="section-header">Profile Photo</h5>
+                            <div class="row align-items-center">
+                                <div class="col-md-4 text-center">
+                                    <div class="profile-photo-preview">
+                                        {% if user.profile_photo %}
+                                            <img src="{{ user.profile_photo.url }}" alt="Profile Photo" id="photoPreview" class="profile-photo-img">
+                                        {% else %}
+                                            <i class="bi bi-person-circle profile-photo-placeholder" id="photoPlaceholder"></i>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <label for="id_profile_photo" class="form-label">
+                                            <i class="bi bi-camera"></i> Change Profile Photo
+                                        </label>
+                                        <input type="file" class="form-control" id="id_profile_photo" name="profile_photo" accept="image/*" onchange="previewPhoto(event)">
+                                        <small class="form-text text-muted">
+                                            Recommended: Square image, at least 200x200px. Max size: 5MB
+                                        </small>
+                                        {% if user.profile_photo %}
+                                            <div class="mt-2">
+                                                <a href="{{ user.profile_photo.url }}" target="_blank" class="btn btn-sm btn-outline-info">
+                                                    <i class="bi bi-eye"></i> View Current Photo
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h5 class="section-header">Personal Information</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_first_name" class="form-label">First Name</label>
+                                {{ user_form.first_name }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_last_name" class="form-label">Last Name</label>
+                                {{ user_form.last_name }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_email" class="form-label">
+                                    <i class="bi bi-envelope"></i> Email
+                                </label>
+                                {{ user_form.email }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_phone" class="form-label">
+                                    <i class="bi bi-telephone"></i> Phone Number
+                                </label>
+                                <div class="input-group">
+                                    {{ user_form.phone_country_code }}
+                                    {{ user_form.phone }}
+                                </div>
+                                <small class="form-text text-muted">Select country code and enter phone number</small>
+                            </div>
+                        </div>
+                        
+                        <h5 class="section-header mt-4">Professional Details</h5>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="id_city" class="form-label">
+                                    <i class="bi bi-geo-alt"></i> City
+                                </label>
+                                {{ profile_form.city }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="id_state" class="form-label">
+                                    <i class="bi bi-signpost"></i> State/Province
+                                </label>
+                                <select class="form-select" id="id_state_select" style="display:none;">
+                                    <option value="">Select State</option>
+                                </select>
+                                {{ profile_form.state }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="id_country" class="form-label">
+                                    <i class="bi bi-globe"></i> Country
+                                </label>
+                                {{ profile_form.country }}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_career_objective" class="form-label">
+                                <i class="bi bi-bullseye"></i> Career Objective
+                            </label>
+                            {{ profile_form.career_objective }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_summary" class="form-label">
+                                <i class="bi bi-file-text"></i> Professional Summary
+                            </label>
+                            {{ profile_form.summary }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_skills" class="form-label">
+                                <i class="bi bi-tools"></i> Skills
+                            </label>
+                            {{ profile_form.skills }}
+                            <small class="form-text text-muted">Enter skills separated by commas (e.g., Python, JavaScript, React)</small>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="id_linkedin_url" class="form-label">
+                                    <i class="bi bi-linkedin"></i> LinkedIn URL
+                                </label>
+                                {{ profile_form.linkedin_url }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="id_github_url" class="form-label">
+                                    <i class="bi bi-github"></i> GitHub URL
+                                </label>
+                                {{ profile_form.github_url }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="id_portfolio_url" class="form-label">
+                                    <i class="bi bi-link-45deg"></i> Portfolio URL
+                                </label>
+                                {{ profile_form.portfolio_url }}
+                            </div>
+                        </div>
+                        
+                        {{ profile_form.location }}
+                        
+                        <div class="d-flex flex-column gap-3 mt-4">
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-check-circle"></i> Save Changes
+                                </button>
+                                <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary btn-lg">
+                                    <i class="bi bi-x-circle"></i> Cancel
+                                </a>
+                            </div>
+                            
+                            <!-- Delete Account Button -->
+                            <div class="mt-4 pt-3 border-top">
+                                <h5 class="text-danger mb-3">Danger Zone</h5>
+                                <p class="text-muted">
+                                    <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                                    Deleting your account will permanently remove all your data. This action cannot be undone.
+                                </p>
+                                <a href="{% url 'delete_account_confirm' %}" class="btn btn-outline-danger">
+                                    <i class="bi bi-trash"></i> Delete My Account
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// States data for major countries
+const statesByCountry = {{ states_json|safe }};
+
+function updateStates() {
+    const countrySelect = document.getElementById('id_country');
+    const stateInput = document.getElementById('id_state');
+    const stateSelect = document.getElementById('id_state_select');
+    const selectedCountry = countrySelect.value;
+    
+    // Store current state value before changing UI
+    const currentStateValue = stateInput.value;
+    
+    if (statesByCountry[selectedCountry]) {
+        // Country has states - show dropdown
+        // Destroy existing Select2 if present
+        if ($(stateSelect).hasClass('select2-hidden-accessible')) {
+            $(stateSelect).select2('destroy');
+        }
+        
+        stateSelect.innerHTML = '<option value="">Select State/Province</option>';
+        statesByCountry[selectedCountry].forEach(state => {
+            const option = document.createElement('option');
+            option.value = state;
+            option.textContent = state;
+            // Pre-select if it matches current value
+            if (state === currentStateValue) {
+                option.selected = true;
+            }
+            stateSelect.appendChild(option);
+        });
+        
+        // Show dropdown, hide text input
+        stateInput.style.display = 'none';
+        stateSelect.style.display = 'block';
+        
+        // Set the select value to match the input
+        stateSelect.value = currentStateValue;
+        
+        // Reinitialize Select2 with search
+        $(stateSelect).select2({
+            theme: 'bootstrap-5',
+            placeholder: 'Select or search state',
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $('#profileForm')
+        });
+        
+        // Set value again after Select2 initialization
+        if (currentStateValue) {
+            $(stateSelect).val(currentStateValue).trigger('change');
+        }
+        
+        // Sync values - update hidden input when dropdown changes
+        $(stateSelect).off('change.stateSync').on('change.stateSync', function() {
+            stateInput.value = this.value;
+        });
+        
+    } else {
+        // No states list - show text input
+        // Destroy Select2 if present
+        if ($(stateSelect).hasClass('select2-hidden-accessible')) {
+            $(stateSelect).select2('destroy');
+        }
+        
+        stateInput.style.display = 'block';
+        stateSelect.style.display = 'none';
+        stateSelect.value = ''; // Clear the select when not in use
+    }
+}
+
+function previewPhoto(event) {
+    const file = event.target.files[0];
+    if (file) {
+        // Validate file size (5MB max)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('File size must be less than 5MB');
+            event.target.value = '';
+            return;
+        }
+        
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please select a valid image file');
+            event.target.value = '';
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('photoPreview');
+            const placeholder = document.getElementById('photoPlaceholder');
+            
+            if (preview) {
+                preview.src = e.target.result;
+            } else if (placeholder) {
+                // Replace placeholder with image
+                const imgElement = document.createElement('img');
+                imgElement.src = e.target.result;
+                imgElement.id = 'photoPreview';
+                imgElement.className = 'profile-photo-img';
+                imgElement.alt = 'Profile Photo Preview';
+                placeholder.replaceWith(imgElement);
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Call updateStates to setup the UI based on initial country
+    updateStates();
+    
+    // If there's an initial state value, ensure it's set in both fields
+    const stateInput = document.getElementById('id_state');
+    const stateSelect = document.getElementById('id_state_select');
+    
+    if (stateInput.value) {
+        if (stateSelect.style.display !== 'none') {
+            // Dropdown is visible, set its value
+            $(stateSelect).val(stateInput.value).trigger('change');
+        }
+    }
+    
+    // Before form submission, ensure state value is synced
+    document.getElementById('profileForm').addEventListener('submit', function(e) {
+        const stateInput = document.getElementById('id_state');
+        const stateSelect = document.getElementById('id_state_select');
+        
+        // If dropdown is visible, use its value
+        if (stateSelect.style.display !== 'none') {
+            stateInput.value = stateSelect.value;
+        }
+    });
+});
+</script>
+
+<script>
+$(document).ready(function() {
+    // Initialize Select2 on country dropdown with search
+    $('#id_country').select2({
+        theme: 'bootstrap-5',
+        placeholder: 'Select or search country',
+        allowClear: true,
+        width: '100%',
+        matcher: function(params, data) {
+            // If there are no search terms, return all data
+            if ($.trim(params.term) === '') {
+                return data;
+            }
+            
+            // Do not display the item if there is no 'text' property
+            if (typeof data.text === 'undefined') {
+                return null;
+            }
+            
+            // `params.term` is the user's search term
+            var term = params.term.toLowerCase();
+            var text = data.text.toLowerCase();
+            
+            // Check if the text contains the term
+            if (text.indexOf(term) > -1) {
+                return data;
+            }
+            
+            // Return `null` if the term should not be displayed
+            return null;
+        }
+    }).on('change', function() {
+        updateStates();
+    });
+    
+    // Initialize Select2 on phone country code dropdown with search
+    $('#id_phone_country_code').select2({
+        theme: 'bootstrap-5',
+        placeholder: 'Search country code',
+        allowClear: true,
+        width: '100%',
+        dropdownAutoWidth: true,
+        escapeMarkup: function (markup) {
+            return markup;
+        },
+        templateResult: function (data) {
+            if (data.loading) return data.text;
+            return data.text;
+        },
+        templateSelection: function (data) {
+            if (data.id === '') return data.text;
+            return data.text;
+        },
+        matcher: function(params, data) {
+            if ($.trim(params.term) === '') {
+                return data;
+            }
+            
+            if (typeof data.text === 'undefined') {
+                return null;
+            }
+            
+            var term = params.term.toLowerCase();
+            var text = data.text.toLowerCase();
+            
+            if (text.indexOf(term) > -1) {
+                return data;
+            }
+            
+            return null;
+        }
+    });
+});
+</script>
+{% endblock %}
