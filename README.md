@@ -1,198 +1,407 @@
-# AI Resume Builder
+# 📄 AI Resume Builder
 
-A Django-based web application to create, manage and download professional resumes and cover letters. The project supports user accounts, profile editing, resume templates, portfolio generation, Cloudinary media storage, email delivery via SMTP, and PDF export (WeasyPrint preferred; ReportLab fallback for Windows).
-
-**Key Links**
-- Manage script: [manage.py](manage.py)
-- Requirements: [requirements.txt](requirements.txt)
-- Settings: [core/settings.py](core/settings.py)
-- Resume utilities (PDF generation): [resume/utils.py](resume/utils.py)
-- Countries & phone codes: [resume/countries_data.py](resume/countries_data.py)
-- Profile edit template: [templates/resume/profile_edit.html](templates/resume/profile_edit.html)
-
-**Project Structure (high level)**
-- `manage.py` — Django management entry
-- `core/` — Django project settings, urls, WSGI/ASGI
-- `resume/` — Main app: models, views, forms, utilities (PDF, countries, templates)
-- `users/` — Custom user, auth, forms and views
-- `templates/` — HTML templates
-- `static/`, `staticfiles/` — CSS/JS and collected static bundles
-- `media/` — local media folder (project uses Cloudinary in production)
-- `requirements.txt` — pinned Python dependencies
+[![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
+[![Django](https://img.shields.io/badge/Django-4.2+-green.svg)](https://www.djangoproject.com/)
+[![Cloudinary](https://img.shields.io/badge/Cloudinary-Integration-blueviolet)](https://cloudinary.com/)
+[![WeasyPrint](https://img.shields.io/badge/PDF-WeasyPrint%20%7C%20ReportLab-orange)](https://doc.courtbouillon.org/weasyprint/stable/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
-**Features**
-- User signup/login/logout, profile management
-- Resume creation from templates (modern, classic, creative, minimal, executive, technical)
-- Cover letter generation and management
-- Portfolio generation
-- PDF download for resumes, portfolios, cover letters
-  - Uses WeasyPrint when GTK dependencies are present (Linux/macOS); falls back to ReportLab on Windows
-- Cloudinary integration for media storage (images, thumbnails)
-- Email sending via SMTP (account verification, notifications)
-- Admin panel customizations and management commands
+## 📌 Quick Summary
+
+**AI Resume Builder** is a full‑featured, production‑ready Django web application for creating, managing, and downloading professional resumes and cover letters. It offers user authentication, multiple customizable templates, portfolio generation, and robust PDF export (with a seamless fallback from WeasyPrint to ReportLab for Windows users). The project integrates Cloudinary for scalable media storage and SMTP for email notifications, making it suitable for both individual use and as a foundation for larger career‑platform projects.
 
 ---
 
-Getting Started (Windows-focused)
+## 📖 Project Overview
 
-1. Prerequisites
-   - Python 3.12 (project tested with 3.12)
-   - Git (optional)
-   - For full WeasyPrint support (optional): GTK and its dependencies (hard to install on Windows) — see Troubleshooting below. ReportLab fallback is available.
+AI Resume Builder empowers users to build and manage their professional profiles, create polished resumes from a variety of templates, and generate matching cover letters. It handles everything from user registration and profile management to the final PDF download, with a focus on flexibility and ease of use.
 
-2. Clone repository (if applicable)
+### 🎯 Target Users
+- **Job Seekers** looking to create and maintain multiple resume versions.
+- **Career Coaches** who need to assist clients with resume formatting.
+- **Developers** seeking a well-structured Django project with advanced features like custom PDF generation and cloud media storage.
 
+### 🔑 Key Benefits
+- **Multiple Templates** – Choose from modern, classic, creative, minimal, executive, and technical designs.
+- **Reliable PDF Export** – Uses WeasyPrint for high‑fidelity HTML to PDF conversion, with an automatic fallback to ReportLab on Windows systems where WeasyPrint dependencies are complex.
+- **Cloud Media Storage** – Integrated with Cloudinary for efficient handling of profile photos, project thumbnails, and uploaded files.
+- **User‑Friendly** – Clean, responsive interface with intuitive forms and profile management.
+- **Extensible** – Modular codebase (separate `users` and `resume` apps) that's easy to customize.
+
+---
+
+## ✨ Core Features
+
+- **User Authentication**: Sign up, log in, log out, password reset, and profile management with country and phone code selection.
+- **Resume Creation**: Build resumes using one of six built‑in templates (modern, classic, creative, minimal, executive, technical).
+- **Cover Letters**: Generate and manage professional cover letters tailored to specific jobs.
+- **Portfolio Generation**: Create and download a portfolio of projects to accompany your resume.
+- **PDF Export**:
+  - **Primary**: WeasyPrint for perfect HTML/CSS to PDF rendering (requires GTK on Linux/macOS).
+  - **Fallback**: ReportLab automatically used on Windows if WeasyPrint dependencies are missing, ensuring functionality everywhere.
+- **Cloudinary Integration**: Profile photos and other media are stored and served via Cloudinary for scalability and performance.
+- **Email Notifications**: SMTP integration for account verification and user alerts.
+- **Admin Panel**: Full Django admin customization for managing users, resumes, and site content.
+- **Responsive UI**: Modern, mobile‑friendly interface built with Bootstrap.
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer                | Technologies                                                                 |
+|----------------------|------------------------------------------------------------------------------|
+| **Backend**          | Python 3.12, Django 4.2+                                                     |
+| **Database**         | SQLite (default), PostgreSQL/MySQL configurable via `DATABASE_URL`           |
+| **Media Storage**    | Local (development) or Cloudinary (production)                               |
+| **PDF Generation**   | WeasyPrint (preferred), ReportLab (fallback)                                 |
+| **Frontend**         | Django Templates, HTML5, CSS3, JavaScript, Bootstrap                         |
+| **Forms**            | django‑crispy‑forms                                                          |
+| **Email**            | SMTP (configured via environment variables)                                  |
+| **Utilities**        | Custom country/phone code data, reusable PDF utilities                       |
+| **Deployment**       | Gunicorn, Nginx, Docker (optional), compatible with Heroku/AWS               |
+
+---
+
+## 🏗 System Architecture
+
+The following diagram illustrates the high‑level architecture of the AI Resume Builder application, showing how the different components interact.
+
+```mermaid
+graph TB
+    subgraph Client
+        Browser[Web Browser]
+    end
+
+    subgraph Server
+        Django[Django Application]
+        subgraph Apps
+            Users[users App]
+            Resume[resume App]
+        end
+        Views[Views]
+        Models[(Database)]
+    end
+
+    subgraph External Services
+        Cloudinary[Cloudinary Media Storage]
+        SMTP[SMTP Server]
+    end
+
+    subgraph PDF Engine
+        WeasyPrint[WeasyPrint]
+        ReportLab[ReportLab]
+    end
+
+    Browser --> Django
+    Django --> Users
+    Django --> Resume
+    Users --> Models
+    Resume --> Models
+    Resume --> PDF Engine
+    Django --> Cloudinary
+    Django --> SMTP
+```
+
+**Explanation:**
+- The user interacts with the Django application through a web browser.
+- The application is split into two main apps: `users` (handles authentication and profiles) and `resume` (handles resumes, cover letters, portfolios).
+- Data is stored in a database (SQLite by default, PostgreSQL in production).
+- Media files (profile photos, thumbnails) are stored in Cloudinary.
+- Email notifications are sent via an SMTP server.
+- When a user downloads a PDF, the `resume` app calls the PDF engine, which first attempts WeasyPrint and falls back to ReportLab if necessary.
+
+---
+
+## 🔄 Workflow: User Journey
+
+This flowchart shows the typical path a user takes through the application.
+
+```mermaid
+flowchart TD
+    Start([User visits site]) --> Register{Has account?}
+    Register -->|No| SignUp[Sign up]
+    Register -->|Yes| Login[Log in]
+    
+    SignUp --> Login
+    Login --> Profile[Edit Profile]
+    Profile --> Resume[Create/Edit Resume]
+    
+    Resume --> Preview[Preview Resume]
+    Preview --> Download{Download PDF?}
+    Download -->|Yes| PDF[Generate PDF]
+    Download -->|No| Back[Continue Editing]
+    
+    PDF --> Done([End])
+    Back --> Resume
+```
+
+**Steps:**
+1. User visits the site and either signs up or logs in.
+2. After login, they can edit their profile (add photo, phone, country).
+3. They create or edit a resume, choosing from various templates.
+4. They can preview the resume and, if satisfied, download it as a PDF.
+5. The PDF is generated using the dual‑engine fallback system.
+
+---
+
+## 📄 PDF Generation Decision Flow
+
+The following diagram explains the logic behind the PDF generation fallback mechanism.
+
+```mermaid
+flowchart TD
+    Start([PDF Request]) --> CheckWeasyPrint{WeasyPrint\navailable?}
+    CheckWeasyPrint -->|Yes| CheckGTK{GTK deps\npresent?}
+    CheckGTK -->|Yes| WeasyPrint[Generate PDF with WeasyPrint]
+    CheckGTK -->|No| ReportLab[Generate PDF with ReportLab]
+    CheckWeasyPrint -->|No| ReportLab
+    
+    WeasyPrint --> Success[PDF Success]
+    ReportLab --> Success
+    Success --> End([End])
+```
+
+**Explanation:**
+- When a PDF is requested, the system first checks if WeasyPrint is installed.
+- If WeasyPrint is available, it then checks if the necessary GTK libraries are present (common issue on Windows).
+- If both conditions are met, WeasyPrint generates a high‑quality PDF.
+- If either condition fails, the system gracefully falls back to ReportLab, which works on all platforms without extra dependencies.
+
+---
+
+## 📁 Project Structure
+
+```
+ai-resume-builder/
+├── manage.py                  # Django CLI
+├── requirements.txt           # Python dependencies
+├── db.sqlite3                 # Default SQLite database
+├── core/                      # Project settings, URLs, WSGI/ASGI
+│   ├── settings.py
+│   ├── urls.py
+│   └── ...
+├── users/                     # Custom user model & authentication
+│   ├── models.py
+│   ├── forms.py
+│   ├── login_views.py
+│   └── ...
+├── resume/                    # Main app: resume/cover letter logic
+│   ├── models.py
+│   ├── views.py
+│   ├── utils.py               # PDF generation (WeasyPrint/ReportLab)
+│   ├── countries_data.py       # Country list & phone codes
+│   └── ...
+├── templates/                 # HTML templates
+│   ├── base.html
+│   ├── resume/
+│   │   ├── profile_edit.html  # Phone code widget
+│   │   └── ...
+│   └── ...
+├── static/                    # Source static files (CSS, JS, images)
+├── staticfiles/               # Collected static files (production)
+├── media/                     # Local media uploads (dev)
+└── scripts/                   # Utility scripts
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+### Prerequisites
+- Python 3.12+
+- pip
+- Git (optional)
+- For WeasyPrint on Linux/macOS: GTK libraries (see [WeasyPrint Installation](https://doc.courtbouillon.org/weasyprint/stable/first_steps.html))
+
+### Step 1: Clone Repository
 ```bash
-git clone <repo-url>
+git clone https://github.com/themanishpndt/AI-Resume-Builder.git
 cd ai-resume-builder
 ```
 
-3. Create and activate a virtual environment (recommended)
-
-Windows PowerShell:
-
+### Step 2: Create Virtual Environment
+**Windows PowerShell**
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
-
-Command Prompt:
-
-```cmd
-python -m venv .venv
-.\.venv\Scripts\activate.bat
+**macOS / Linux**
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-4. Install dependencies
-
+### Step 3: Install Dependencies
 ```bash
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Notes:
-- The project includes `django-cloudinary-storage`, `django-crispy-forms`, `weasyprint`, and `reportlab` in `requirements.txt`.
-- On Windows, `weasyprint` installs but requires external GTK libraries for full functionality; the app falls back to ReportLab.
-
-5. Environment variables / `.env`
-Create a `.env` file or set environment variables for local development. Example `.env` entries used by `core/settings.py`:
-
-```
-SECRET_KEY=your-secret-key
+### Step 4: Configure Environment Variables
+Create a `.env` file in the project root (or set system environment variables):
+```env
+SECRET_KEY=your-strong-secret-key
 DEBUG=True
 ALLOWED_HOSTS=127.0.0.1,localhost
 DATABASE_URL=sqlite:///db.sqlite3
-CLOUDINARY_URL=cloudinary://<key>:<secret>@<cloud_name>  # optional in development
-EMAIL_HOST=smtp.example.com
+# Cloudinary (optional in development)
+CLOUDINARY_URL=cloudinary://<api_key>:<api_secret>@<cloud_name>
+# Email settings
+EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
-EMAIL_HOST_USER=you@example.com
-EMAIL_HOST_PASSWORD=yourpassword
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password
 EMAIL_USE_TLS=True
 ```
 
-6. Database migrations
-
+### Step 5: Database Migrations
 ```bash
 python manage.py migrate
 ```
 
-7. Create a superuser
-
+### Step 6: Create Superuser
 ```bash
 python manage.py createsuperuser
 ```
 
-8. Run development server
-
+### Step 7: Run Development Server
 ```bash
 python manage.py runserver
 ```
 
-Open http://127.0.0.1:8000/ and test features.
+Open `http://127.0.0.1:8000/` to access the application.
 
 ---
 
-Configuration Details
+## 🔧 Configuration Details
 
-- Settings file: [core/settings.py](core/settings.py)
-  - Database: default is SQLite (`db.sqlite3`) via `DATABASES` or can be configured with `DATABASE_URL`.
-  - Media storage: uses Cloudinary when `django-cloudinary-storage` is configured. In `core/settings.py` you will find Cloudinary related settings and instructions.
-  - Email: SMTP settings are read from env vars.
+### Settings (`core/settings.py`)
+- **Database**: Defaults to SQLite. To use PostgreSQL, set `DATABASE_URL` (requires `dj-database-url`).
+- **Cloudinary**: If `CLOUDINARY_URL` is present, media uploads are routed to Cloudinary; otherwise, local `media/` is used.
+- **Email**: SMTP settings read from environment variables.
+- **Static Files**: Use `python manage.py collectstatic` for production.
 
-- Cloudinary
-  - If you want media stored in Cloudinary, add `CLOUDINARY_URL` or configure `CLOUDINARY_*` settings in the environment. See `settings.py` for required keys and `django-cloudinary-storage` docs.
+### Cloudinary Setup
+1. Sign up at [Cloudinary](https://cloudinary.com/).
+2. Find your `CLOUDINARY_URL` in the dashboard.
+3. Add it to your `.env` file. Media uploads will automatically use Cloudinary.
 
-- WeasyPrint vs ReportLab
-  - `WeasyPrint` is the preferred renderer for HTML → PDF (better CSS support). On Windows it requires GTK and other system libraries (libgobject, pango, cairo). If these are missing, the project uses a ReportLab-based fallback implemented in `resume/utils.py`.
-  - File: [resume/utils.py](resume/utils.py) — contains the fallback `generate_pdf_with_reportlab()` and main `generate_pdf_from_html()` logic.
+### PDF Fallback Mechanism
+The file `resume/utils.py` contains:
+- `generate_pdf_from_html()` – attempts WeasyPrint.
+- `generate_pdf_with_reportlab()` – fallback function.
 
 ---
 
-Running tests
+## 🌐 API & Routes (Summary)
 
+| URL Pattern                | Description                          | Auth Required |
+|----------------------------|--------------------------------------|---------------|
+| `/`                        | Home page / dashboard                | No            |
+| `/signup/`                 | User registration                    | No            |
+| `/login/`                  | Login                                | No            |
+| `/logout/`                 | Logout                               | Yes           |
+| `/profile/`                | View/edit profile                    | Yes           |
+| `/resume/create/`          | Create a new resume                  | Yes           |
+| `/resume/<id>/`            | View resume                          | Yes (owner)   |
+| `/resume/<id>/download/`   | Download resume as PDF               | Yes (owner)   |
+| `/cover-letter/`           | Manage cover letters                 | Yes           |
+| `/portfolio/`              | Manage portfolio projects            | Yes           |
+| `/admin/`                  | Django admin panel                    | Superuser     |
+
+---
+
+## 🧪 Testing
+
+Run the test suite with:
 ```bash
 python manage.py test
 ```
 
-Note: Some tests might require external dependencies or environment variables.
+Tests cover:
+- User authentication flows.
+- Resume creation and validation.
+- PDF generation functions (with mocked dependencies).
+- Profile editing, including phone code selection.
 
 ---
 
-Static files & media
+## 🚀 Deployment
 
-- Development: static files are served by Django's `runserver` when `DEBUG=True`.
-- Production: run `python manage.py collectstatic` and serve static files via a web server or CDN.
+### Production-Ready Steps
+1. **Set `DEBUG=False`** and a strong `SECRET_KEY` in environment.
+2. **Configure a production database** (e.g., PostgreSQL) via `DATABASE_URL`.
+3. **Set up Cloudinary** for media storage.
+4. **Collect static files**:
+   ```bash
+   python manage.py collectstatic --noinput
+   ```
+5. **Serve with Gunicorn** (or similar) behind Nginx.
+6. **Enable HTTPS** (SSL/TLS).
 
+### Example Gunicorn Command
 ```bash
-python manage.py collectstatic --noinput
+gunicorn core.wsgi:application --bind 0.0.0.0:8000 --workers 4
 ```
 
-Media uploads:
-- In development, `media/` is used
-- In production, configure Cloudinary in env vars so uploaded media go to Cloudinary
+### Docker Deployment (Optional)
+A `Dockerfile` and `docker-compose.yml` can be added for containerized deployment.
 
 ---
 
-Troubleshooting & Platform Notes
+## 📈 Future Enhancements
 
-- WeasyPrint on Windows
-  - WeasyPrint requires GTK libs: `gobject-2.0`, `pango`, `cairo` etc. Installing these on Windows can be complex; see WeasyPrint docs: https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#installation
-  - The app has a ReportLab fallback. If you see errors mentioning `gobject-2.0-0` or `cannot load library 'gobject-2.0-0'`, PDF generation will still work via ReportLab.
-
-- Missing Python package errors
-  - Activate the virtualenv and run `pip install -r requirements.txt`.
-  - If `pip` warns about user installs or PATH, ensure your virtualenv is activated and `python` resolves to the venv interpreter.
-
-- Space in Windows path
-  - If you run Python using an absolute path with spaces, wrap it in quotes or use PowerShell's call operator: `& 'C:/path with spaces/.venv/Scripts/python.exe' manage.py runserver`.
+- [ ] **Additional Resume Templates** – More modern designs.
+- [ ] **AI‑Powered Suggestions** – Use LLMs to improve resume content.
+- [ ] **Export to DOCX** – Support for Microsoft Word format.
+- [ ] **Multi‑Language Support** – Internationalize the interface.
+- [ ] **Social Login** – OAuth with Google/LinkedIn.
+- [ ] **Analytics Dashboard** – Track resume views/downloads.
 
 ---
 
-Developer Notes & Useful Files
+## 📜 Limitations
 
-- PDF logic and fallback: [resume/utils.py](resume/utils.py)
-- Country list and phone codes (used in profile phone field and phone code dropdown): [resume/countries_data.py](resume/countries_data.py)
-- Profile edit form & phone country code widget: [users/forms.py](users/forms.py) and [templates/resume/profile_edit.html](templates/resume/profile_edit.html)
-- Where routes live: [core/urls.py](core/urls.py) and app `urls.py` files
+- **WeasyPrint on Windows**: Requires manual GTK installation for full functionality; otherwise, ReportLab fallback is used (ReportLab has limited CSS support).
+- **Email Sending**: Requires valid SMTP credentials; in development, emails are printed to console if no SMTP is configured.
 
 ---
 
-Contributing
+## 🤝 Contributing
 
-- Please open issues or PRs for improvements.
-- Follow PEP8 and use existing code style.
-- Run tests and ensure no failing tests before submitting PRs.
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository.
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit changes: `git commit -m 'Add your feature'`
+4. Push to branch: `git push origin feature/your-feature`
+5. Open a Pull Request.
+
+### Guidelines
+- Follow PEP8 coding standards.
+- Write tests for new functionality.
+- Update documentation as needed.
 
 ---
 
-License
+## 📄 License
 
-Add your license here (MIT, Apache 2.0, etc.) or remove this section if proprietary.
+This project is open‑source and available under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-Contact
+## 👨‍💻 Author
 
-For questions about this codebase, include your contact details or open an issue in the originating repository.
+**Manish Sharma**  
+📍 Ghaziabad, Uttar Pradesh, India  
+📞 +91 7982682852  
+📧 [manishsharma93155@gmail.com](mailto:manishsharma93155@gmail.com)  
+🔗 [LinkedIn](https://www.linkedin.com/in/themanishpndt)  
+💻 [GitHub](https://github.com/themanishpndt)  
+🌐 [Portfolio](https://themanishpndt.github.io/Portfolio/)
+
+---
+
+If you find this project helpful, please ⭐ it on [GitHub](https://github.com/themanishpndt/AI-Resume-Builder)! 🙌
