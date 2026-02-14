@@ -66,108 +66,123 @@ AI Resume Builder empowers users to build and manage their professional profiles
 
 ## 🏗 System Architecture
 
-The following diagram illustrates the high‑level architecture of the AI Resume Builder application, showing how the different components interact.
+### High‑Level Design
+
+The application follows a standard Django MTV (Model-Template-View) pattern, with additional services for PDF generation and cloud storage.
 
 ```mermaid
-graph TB
-    subgraph Client
-        Browser[Web Browser]
-    end
-
-    subgraph Server
-        Django[Django Application]
-        subgraph Apps
-            Users[users App]
-            Resume[resume App]
-        end
-        Views[Views]
-        Models[(Database)]
-    end
-
-    subgraph External Services
-        Cloudinary[Cloudinary Media Storage]
-        SMTP[SMTP Server]
-    end
-
-    subgraph PDF Engine
-        WeasyPrint[WeasyPrint]
-        ReportLab[ReportLab]
-    end
-
-    Browser --> Django
-    Django --> Users
-    Django --> Resume
-    Users --> Models
-    Resume --> Models
-    Resume --> PDF Engine
-    Django --> Cloudinary
-    Django --> SMTP
+graph TD
+    User[User Browser] --> Django[Django Application]
+    Django --> Auth[Authentication / users app]
+    Django --> Resume[Resume Management / resume app]
+    Django --> Portfolio[Portfolio / resume app]
+    
+    Auth --> DB[(Database)]
+    Resume --> DB
+    Portfolio --> DB
+    
+    Resume --> PDF[PDF Generator]
+    PDF --> WeasyPrint[WeasyPrint]
+    PDF --> ReportLab[ReportLab Fallback]
+    
+    Resume --> Cloudinary[Cloudinary Media Storage]
+    Portfolio --> Cloudinary
+    Auth --> Cloudinary
+    
+    Django --> Email[SMTP Email Service]
 ```
 
-**Explanation:**
-- The user interacts with the Django application through a web browser.
-- The application is split into two main apps: `users` (handles authentication and profiles) and `resume` (handles resumes, cover letters, portfolios).
-- Data is stored in a database (SQLite by default, PostgreSQL in production).
-- Media files (profile photos, thumbnails) are stored in Cloudinary.
-- Email notifications are sent via an SMTP server.
-- When a user downloads a PDF, the `resume` app calls the PDF engine, which first attempts WeasyPrint and falls back to ReportLab if necessary.
+### Data Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Browser
+    participant Django
+    participant Database
+    participant PDFEngine
+    participant Cloudinary
+    
+    User->>Browser: Fill resume form
+    Browser->>Django: POST /resume/create/
+    Django->>Database: Save resume data
+    Django-->>Browser: Return preview
+    
+    User->>Browser: Click "Download PDF"
+    Browser->>Django: GET /resume/<id>/download/
+    Django->>Database: Retrieve resume data
+    Django->>PDFEngine: Generate PDF (WeasyPrint/ReportLab)
+    PDFEngine-->>Django: PDF binary
+    Django-->>Browser: PDF file
+    
+    User->>Browser: Upload profile photo
+    Browser->>Django: POST /profile/edit/
+    Django->>Cloudinary: Upload image
+    Cloudinary-->>Django: Image URL
+    Django->>Database: Save URL
+    Django-->>Browser: Success message
+```
 
 ---
 
-## 🔄 Workflow: User Journey
+## 🔄 Workflow Explanation
 
-This flowchart shows the typical path a user takes through the application.
+1. **User Registration/Login**
+   - New users sign up via `/signup`, providing email and password.
+   - After login, they can edit their profile (add photo, phone, country).
 
-```mermaid
-flowchart TD
-    Start([User visits site]) --> Register{Has account?}
-    Register -->|No| SignUp[Sign up]
-    Register -->|Yes| Login[Log in]
-    
-    SignUp --> Login
-    Login --> Profile[Edit Profile]
-    Profile --> Resume[Create/Edit Resume]
-    
-    Resume --> Preview[Preview Resume]
-    Preview --> Download{Download PDF?}
-    Download -->|Yes| PDF[Generate PDF]
-    Download -->|No| Back[Continue Editing]
-    
-    PDF --> Done([End])
-    Back --> Resume
-```
+2. **Profile Management**
+   - Users can upload a profile photo (stored locally or Cloudinary), select country and phone code from a dropdown populated by `countries_data.py`.
 
-**Steps:**
-1. User visits the site and either signs up or logs in.
-2. After login, they can edit their profile (add photo, phone, country).
-3. They create or edit a resume, choosing from various templates.
-4. They can preview the resume and, if satisfied, download it as a PDF.
-5. The PDF is generated using the dual‑engine fallback system.
+3. **Resume Creation**
+   - Navigate to `/resume/create`, choose a template, and fill in sections (experience, education, skills).
+   - Resume data is saved to the database and associated with the user.
+
+4. **Resume Preview & Download**
+   - Preview the resume as a styled HTML page.
+   - Click "Download PDF" – the system calls `generate_pdf_from_html()` in `resume/utils.py`.
+     - If WeasyPrint is available and its dependencies are met, it generates a high‑quality PDF.
+     - Otherwise, it seamlessly falls back to ReportLab.
+
+5. **Cover Letters & Portfolio**
+   - Similar workflow for cover letters and portfolio projects.
+
+6. **Admin Oversight**
+   - Superusers can manage all content via the Django admin panel.
 
 ---
 
-## 📄 PDF Generation Decision Flow
+## 🧠 PDF Generation Logic
 
-The following diagram explains the logic behind the PDF generation fallback mechanism.
+The project implements a robust, dual‑engine PDF system:
+
+```python
+# Simplified logic from resume/utils.py
+def generate_pdf_from_html(html_string, output_path):
+    try:
+        # Attempt WeasyPrint (best quality)
+        from weasyprint import HTML
+        HTML(string=html_string).write_pdf(output_path)
+    except (ImportError, OSError) as e:
+        # Fallback to ReportLab
+        generate_pdf_with_reportlab(html_string, output_path)
+```
+
+The fallback process is visualized below:
 
 ```mermaid
 flowchart TD
-    Start([PDF Request]) --> CheckWeasyPrint{WeasyPrint\navailable?}
-    CheckWeasyPrint -->|Yes| CheckGTK{GTK deps\npresent?}
-    CheckGTK -->|Yes| WeasyPrint[Generate PDF with WeasyPrint]
-    CheckGTK -->|No| ReportLab[Generate PDF with ReportLab]
-    CheckWeasyPrint -->|No| ReportLab
-    
-    WeasyPrint --> Success[PDF Success]
-    ReportLab --> Success
-    Success --> End([End])
+    Start[Request PDF generation] --> CheckWeasyPrint{WeasyPrint<br/>importable?}
+    CheckWeasyPrint -->|Yes| CheckDeps{GTK/Pango/Cairo<br/>dependencies met?}
+    CheckDeps -->|Yes| WeasyPrint[Generate PDF using WeasyPrint]
+    CheckWeasyPrint -->|No| Fallback[Use ReportLab fallback]
+    CheckDeps -->|No| Fallback
+    WeasyPrint --> Success[PDF Successfully Generated]
+    Fallback --> Success
 ```
 
-**Explanation:**
-- When a PDF is requested, the system first checks if WeasyPrint is installed.
-- If WeasyPrint is available, it then checks if the necessary GTK libraries are present (common issue on Windows).
-- If both conditions are met, WeasyPrint generates a high‑quality PDF.
-- If either condition fails, the system gracefully falls back to ReportLab, which works on all platforms without extra dependencies.
+- **WeasyPrint** – Used when the required system libraries (GTK, Pango, Cairo) are present. Provides full CSS support.
+- **ReportLab** – Bundled fallback that works on all platforms, ensuring PDF export never fails.
 
 ---
 
@@ -309,7 +324,7 @@ The file `resume/utils.py` contains:
 | `/resume/<id>/download/`   | Download resume as PDF               | Yes (owner)   |
 | `/cover-letter/`           | Manage cover letters                 | Yes           |
 | `/portfolio/`              | Manage portfolio projects            | Yes           |
-| `/admin/`                  | Django admin panel                    | Superuser     |
+| `/admin/`                  | Django admin panel                   | Superuser     |
 
 ---
 
